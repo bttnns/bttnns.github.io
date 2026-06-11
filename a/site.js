@@ -1,16 +1,11 @@
 (function () {
   var btn = document.getElementById("theme-toggle");
+  var themeColor = document.getElementById("theme-color");
   var root = document.documentElement;
-  var term = document.querySelector(".term");
   var pre = document.querySelector(".term-body pre");
   var preHTML = pre ? pre.innerHTML : null; // pristine markup, restored on exit
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
   var order = ["system", "light", "professional", "night"];
-  var busy = false;
-
-  // background eases over while the terminal is hidden; hold a touch longer so
-  // the change has fully settled before the card fades back in.
-  var HOLD = 600;
 
   function current() {
     return root.dataset.theme || "system";
@@ -24,8 +19,8 @@
   // well-spaced accents. set inline on :root so it overrides the static night
   // block, and cleared when leaving night so other themes are untouched.
   var NIGHT_VARS = [
-    "--bg", "--panel", "--panel-bar", "--panel-line", "--ink",
-    "--key", "--string", "--comment", "--punct", "--glitch-op", "--shadow"
+    "--bg", "--panel", "--panel-bar", "--panel-line", "--panel-line-max", "--ink",
+    "--key", "--string", "--comment", "--punct", "--glitch-op", "--shadow", "--shadow-max"
   ];
 
   function rand(min, max) {
@@ -41,28 +36,44 @@
     var h = rand(0, 360);
     var key = (h + rand(140, 220)) % 360;   // bold, near-complementary accent
     var str = (h + rand(80, 140)) % 360;    // a clashing second accent
+
+    // a 6-layer glow whose colour-layer alphas scale with m (the black drop
+    // shadow stays put); same offsets/blur so the two pulse-ends interpolate.
+    function glow(m) {
+      function a(x) { return Math.min(x * m, 0.9).toFixed(2); }
+      return "0 2px 10px rgba(0, 0, 0, 0.6), 0 0 18px " +
+             hsl(key, 100, 65, a(0.45)) + ", 0 0 55px " +
+             hsl(key, 95, 62, a(0.42)) + ", 0 0 100px " +
+             hsl(key, 90, 60, a(0.32)) + ", 0 0 70px " +
+             hsl(str, 95, 60, a(0.34)) + ", 0 30px 90px " +
+             hsl(str, 90, 55, a(0.22));
+    }
+    var lineSat = rand(85, 100);
     return {
-      "--bg":         hsl(h, rand(60, 80), rand(5, 8)),
-      "--panel":      hsl(h, rand(55, 75), rand(9, 13)),
-      "--panel-bar":  hsl(h, rand(55, 75), rand(13, 18)),
-      "--panel-line": hsl(key, rand(85, 100), rand(26, 34)),
-      "--ink":        hsl(h, rand(35, 55), rand(90, 95)),
-      "--key":        hsl(key, 100, rand(62, 72)),
-      "--string":     hsl(str, 100, rand(58, 68)),
-      "--comment":    hsl(str, rand(60, 80), rand(58, 66)),
-      "--punct":      hsl(key, rand(65, 85), rand(46, 56)),
-      "--glitch-op":  rand(0.4, 0.6).toFixed(2),
-      "--shadow":     "0 2px 10px rgba(0, 0, 0, 0.6), 0 0 18px " +
-                      hsl(key, 100, 65, 0.45) + ", 0 0 55px " +
-                      hsl(key, 95, 62, 0.42) + ", 0 0 100px " +
-                      hsl(key, 90, 60, 0.32) + ", 0 0 70px " +
-                      hsl(str, 95, 60, 0.34) + ", 0 30px 90px " +
-                      hsl(str, 90, 55, 0.22)
+      "--bg":             hsl(h, rand(60, 80), rand(5, 8)),
+      "--panel":          hsl(h, rand(55, 75), rand(9, 13)),
+      "--panel-bar":      hsl(h, rand(55, 75), rand(13, 18)),
+      "--panel-line":     hsl(key, lineSat, rand(26, 34)),  // medium border
+      "--panel-line-max": hsl(key, 100, rand(52, 64)),      // peak border
+      "--ink":            hsl(h, rand(35, 55), rand(90, 95)),
+      "--key":            hsl(key, 100, rand(62, 72)),
+      "--string":         hsl(str, 100, rand(58, 68)),
+      "--comment":        hsl(str, rand(60, 80), rand(58, 66)),
+      "--punct":          hsl(key, rand(65, 85), rand(46, 56)),
+      "--glitch-op":      rand(0.4, 0.6).toFixed(2),
+      "--shadow":         glow(0.75),  // medium glow
+      "--shadow-max":     glow(1.5)    // peak glow
     };
   }
 
   function setNight(p) {
     Object.keys(p).forEach(function (v) { root.style.setProperty(v, p[v]); });
+  }
+
+  function syncTitlebar() {
+    if (themeColor) {
+      themeColor.content = getComputedStyle(root).getPropertyValue("--bg").trim();
+    }
   }
 
   // wrap each line of the yaml in a .ln span so the base (non-token) text on
@@ -120,6 +131,7 @@
       root.classList.remove("drift");
       stopNightCycle();
     }
+    syncTitlebar(); // one discrete update per switch, not sampling the fade
     render();
   }
 
@@ -127,43 +139,32 @@
     return order[(order.indexOf(current()) + 1) % order.length];
   }
 
+  // once the switch has settled on a dark night palette, kick off the slow
+  // ambient drift (CSS .drift + a fresh roll every 13s). harmless for others.
+  function afterSwitch() {
+    if (current() === "night") {
+      root.classList.add("drift");
+      startNightCycle();
+    }
+  }
+
   btn.addEventListener("click", function () {
     var next = nextTheme();
 
-    if (busy || reduce.matches || !term) {
+    // View Transitions API: the browser snapshots the page, runs apply() to
+    // swap the theme, then crossfades old -> new in one pass (CSS tunes the
+    // asymmetric in/out timing). fall back to an instant swap when it's
+    // unavailable or the user prefers reduced motion.
+    if (reduce.matches || !document.startViewTransition) {
       apply(next);
+      afterSwitch();
       return;
     }
-    busy = true;
-    var prevBg = getComputedStyle(root).getPropertyValue("--bg").trim();
 
-    // 1. fade the whole terminal away
-    term.classList.add("repainting");
-    term.addEventListener("transitionend", function out(e) {
-      if (e.propertyName !== "opacity") return;
-      term.removeEventListener("transitionend", out);
-
-      // 2. swap theme while hidden, letting the background ease over
-      apply(next);
-
-      // 3. only wait for the page background to settle if it actually changed;
-      //    otherwise just fade the window back in right away
-      var bgChanged = getComputedStyle(root).getPropertyValue("--bg").trim() !== prevBg;
-      setTimeout(function () {
-        term.classList.remove("repainting");
-        term.addEventListener("transitionend", function back(e2) {
-          if (e2.propertyName !== "opacity") return;
-          term.removeEventListener("transitionend", back);
-          busy = false;
-          // entry fade has settled on a dark palette: now start the slow drift
-          if (current() === "night") {
-            root.classList.add("drift");
-            startNightCycle();
-          }
-        });
-      }, bgChanged ? HOLD : 0);
-    });
+    var vt = document.startViewTransition(function () { apply(next); });
+    vt.finished.then(afterSwitch);
   });
 
+  syncTitlebar();
   render();
 })();

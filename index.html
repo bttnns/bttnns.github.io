@@ -7,14 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="color-scheme" content="light dark">
-    <meta name="theme-color" content="#faf7f2" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0c0f10" media="(prefers-color-scheme: dark)">
+    <!-- single explicit theme-color, updated once per theme switch by site.js so
+         the macOS titlebar steps cleanly instead of flashing during the fade -->
+    <meta name="theme-color" id="theme-color" content="#faf7f2">
 
     <meta name="description" content="Brian Tannous, Senior Software Engineer at Apple Cloud in Austin, TX. Platform engineering, Kubernetes, and developer tooling. Co-author of OpenShift for Developers (O'Reilly).">
     <meta name="author" content="Brian Tannous">
 
     <link rel="canonical" href="https://briantannous.com">
 
+    <link rel="preload" href="/a/font/ibm-plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
     <link href="/a/site.css" rel="stylesheet">
   </head>
   <body>

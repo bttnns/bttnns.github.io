@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/a/font/ibm-plex-mono-400.woff2") format("woff2");
+}
+
 :root {
   --bg:          #faf7f2;
   --glitch-op:   0.5;
@@ -96,7 +104,7 @@ body {
   padding: clamp(1rem, 4vw, 3rem) 0.75rem;
   background: var(--bg);
   color: var(--ink);
-  font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, "Cascadia Code", monospace;
+  font-family: "IBM Plex Mono", ui-monospace, "SF Mono", "JetBrains Mono", Menlo, "Cascadia Code", monospace;
   font-size: clamp(0.8rem, 0.72rem + 0.35vw, 0.92rem);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
@@ -126,14 +134,27 @@ body::before {
   border-radius: 12px;
   box-shadow: var(--shadow);
   overflow: hidden;
-  transition: opacity 400ms ease, box-shadow 500ms ease;
+  transition: box-shadow 500ms ease;
 }
 
-/* terminal fades out, background eases over while it is gone, then it fades back */
-.term.repainting { opacity: 0; }
-
-body { transition: background-color 500ms ease; }
-body::before { transition: opacity 500ms ease; }
+/* theme switching uses the View Transitions API (see site.js). the fade leans
+   dark: a near-black backdrop sits under the crossfade, and the old view clears
+   a bit faster than the new view arrives, so the midpoint reads dark rather than
+   flashing light, even when moving to or from the light theme. the night ambient
+   drift/pulse below are continuous animations and are untouched by this. */
+::view-transition { background-color: #0a0c0d; }
+::view-transition-old(root) {
+  animation-duration: 500ms;
+  animation-timing-function: ease;
+}
+::view-transition-new(root) {
+  animation-duration: 1100ms;
+  animation-timing-function: ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
 
 /* night ambient: once the entry fade has settled on a dark palette, site.js adds
    .drift and rolls a new palette every 13s. each colour fade then takes the full
@@ -141,7 +162,7 @@ body::before { transition: opacity 500ms ease; }
    themes. the entry itself uses the normal fast fade. motion permitting. */
 @media (prefers-reduced-motion: no-preference) {
   :root[data-theme="night"].drift .term {
-    transition: opacity 400ms ease, box-shadow 13s linear,
+    transition: box-shadow 13s linear,
                 background-color 13s linear, border-color 13s linear;
   }
   :root[data-theme="night"].drift .term-bar,
@@ -180,6 +201,29 @@ body::before { transition: opacity 500ms ease; }
   box-shadow: 0 0 10px var(--ink), 0 0 22px var(--ink);
 }
 
+/* night pulse: the border, the box glow and the pill breathe quickly between
+   medium and max brightness, independent of the slow 13s colour drift */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes night-glow {
+    from { box-shadow: var(--shadow);     border-color: var(--panel-line); }
+    to   { box-shadow: var(--shadow-max); border-color: var(--panel-line-max); }
+  }
+  @keyframes night-edge {
+    from { border-color: var(--panel-line); }
+    to   { border-color: var(--panel-line-max); }
+  }
+  :root[data-theme="night"] .term {
+    animation: night-glow 1.2s ease-in-out infinite alternate;
+  }
+  :root[data-theme="night"] .theme-toggle,
+  :root[data-theme="night"] .term-bar {
+    animation: night-edge 1.2s ease-in-out infinite alternate;
+  }
+  :root[data-theme="night"] .theme-toggle:hover {
+    animation: none;
+  }
+}
+
 .term-bar {
   display: flex;
   align-items: center;
@@ -207,20 +251,24 @@ body::before { transition: opacity 500ms ease; }
 
 .theme-toggle {
   font: inherit;
-  font-size: 0.78em;
+  font-size: 0.72em;
   color: var(--comment);
   background: none;
-  border: 0;
-  padding: 0;
+  border: 1px solid var(--panel-line);
+  border-radius: 999px;
+  padding: 0.4em 0.9em;
   cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease;
 }
 
-.theme-toggle:hover { color: var(--key); }
+.theme-toggle:hover {
+  color: var(--key);
+  border-color: var(--key);
+}
 
 .theme-toggle:focus-visible {
   outline: 2px solid var(--key);
   outline-offset: 2px;
-  border-radius: 2px;
 }
 
 .term-body {
