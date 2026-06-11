@@ -13,45 +13,77 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]):not([data-theme="professional"]) {
+  :root:not([data-theme="light"]):not([data-theme="professional"]):not([data-theme="night"]) {
     --bg:        #0c0f10;
     --glitch-op: 0.33;
     --shadow:    0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);
   }
 }
 
-:root[data-theme="dark"] {
-  --bg:        #0c0f10;
-  --glitch-op: 0.33;
-  --shadow:    0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);
+/* night: randomized by site.js (a dark window in a random hue with two vivid
+   accents). this synthwave palette is the static fallback when JS overrides
+   aren't applied. */
+:root[data-theme="night"] {
+  --bg:         #120a24;
+  --panel:      #1a1130;
+  --panel-bar:  #241640;
+  --panel-line: #3a2466;
+  --ink:        #f6e9ff;
+  --key:        #ff5fd2;
+  --comment:    #8a6bd6;
+  --punct:      #6f4fb0;
+  --string:     #36e6f0;
+  --glitch-op:  0.4;
+  --shadow:     0 2px 8px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(255, 95, 210, 0.18),
+                0 24px 60px rgba(54, 230, 240, 0.12);
+}
+
+/* light: warm off-white page, but a lifted graphite window (still dark) */
+:root[data-theme="light"] {
+  --panel:      #2f383d;
+  --panel-bar:  #39434a;
+  --panel-line: #46525a;
+}
+
+/* professional: understated near-monochrome, one muted slate-blue accent */
+:root[data-theme="professional"] {
+  --panel:      #16191c;
+  --panel-bar:  #1d2125;
+  --panel-line: #272c31;
+  --ink:        #eceff2;
+  --key:        #9db4c9;
+  --comment:    #6b7278;
+  --punct:      #49505a;
+  --string:     #c8c2ad;
 }
 
 /* four modes: system (@gateway, surgeon), light (@cloud, surgeon),
-   dark (@acl, networking expert, root prompt), professional
+   night (@acl, networking expert, root prompt), professional
    (@briantannous.com, sketch). colors follow the OS only in system. */
-.term .tt-light, .term .tt-dark, .term .tt-pro { display: none; }
+.term .tt-light, .term .tt-night, .term .tt-pro { display: none; }
 
 :root[data-theme="light"] .term .tt-sys { display: none; }
 :root[data-theme="light"] .term .tt-light { display: inline; }
 
-:root[data-theme="dark"] .term .tt-sys { display: none; }
-:root[data-theme="dark"] .term .tt-dark { display: inline; }
+:root[data-theme="night"] .term .tt-sys { display: none; }
+:root[data-theme="night"] .term .tt-night { display: inline; }
 
 :root[data-theme="professional"] .term .tt-sys { display: none; }
 :root[data-theme="professional"] .term .tt-pro { display: inline; }
 
-.term .theme-dark, .term .theme-pro { display: none; }
+.term .theme-night, .term .theme-pro { display: none; }
 
-:root[data-theme="dark"] .term .theme-sys { display: none; }
-:root[data-theme="dark"] .term span.theme-dark { display: inline; }
-:root[data-theme="dark"] .term img.theme-dark { display: block; }
+:root[data-theme="night"] .term .theme-sys { display: none; }
+:root[data-theme="night"] .term span.theme-night { display: inline; }
+:root[data-theme="night"] .term img.theme-night { display: block; }
 
 :root[data-theme="professional"] .term .theme-sys { display: none; }
 :root[data-theme="professional"] .term span.theme-pro { display: inline; }
 :root[data-theme="professional"] .term img.theme-pro { display: block; }
 
 .prompt::before { content: "%"; }
-:root[data-theme="dark"] .prompt::before { content: "#"; }
+:root[data-theme="night"] .prompt::before { content: "#"; }
 :root[data-theme="professional"] .prompt::before { content: "$"; }
 
 * { box-sizing: border-box; }
@@ -94,6 +126,58 @@ body::before {
   border-radius: 12px;
   box-shadow: var(--shadow);
   overflow: hidden;
+  transition: opacity 400ms ease, box-shadow 500ms ease;
+}
+
+/* terminal fades out, background eases over while it is gone, then it fades back */
+.term.repainting { opacity: 0; }
+
+body { transition: background-color 500ms ease; }
+body::before { transition: opacity 500ms ease; }
+
+/* night ambient: once the entry fade has settled on a dark palette, site.js adds
+   .drift and rolls a new palette every 13s. each colour fade then takes the full
+   13s (linear) so one flows into the next as a perpetual drift between random
+   themes. the entry itself uses the normal fast fade. motion permitting. */
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-theme="night"].drift .term {
+    transition: opacity 400ms ease, box-shadow 13s linear,
+                background-color 13s linear, border-color 13s linear;
+  }
+  :root[data-theme="night"].drift .term-bar,
+  :root[data-theme="night"].drift .term-title {
+    transition: color 6.5s linear, background-color 6.5s linear,
+                border-color 6.5s linear;
+  }
+  :root[data-theme="night"].drift body,
+  :root[data-theme="night"].drift pre,
+  :root[data-theme="night"].drift .c,
+  :root[data-theme="night"].drift .k,
+  :root[data-theme="night"].drift .p,
+  :root[data-theme="night"].drift .s,
+  :root[data-theme="night"].drift .prompt,
+  :root[data-theme="night"].drift .cursor,
+  :root[data-theme="night"].drift .ln,
+  :root[data-theme="night"].drift a {
+    transition: color 13s linear, background-color 13s linear,
+                border-color 13s linear, text-decoration-color 13s linear;
+  }
+  :root[data-theme="night"].drift body::before {
+    transition: opacity 13s linear;
+  }
+}
+
+/* night neon: make the text itself glow in its own colour */
+:root[data-theme="night"] .k,
+:root[data-theme="night"] .s,
+:root[data-theme="night"] .c,
+:root[data-theme="night"] .prompt,
+:root[data-theme="night"] .ln,
+:root[data-theme="night"] a {
+  text-shadow: 0 0 7px currentColor, 0 0 18px currentColor;
+}
+:root[data-theme="night"] .cursor {
+  box-shadow: 0 0 10px var(--ink), 0 0 22px var(--ink);
 }
 
 .term-bar {
@@ -141,6 +225,10 @@ body::before {
 
 .term-body {
   padding: 1.1rem 1.25rem 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term, body, body::before { transition: none; }
 }
 
 pre {

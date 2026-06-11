@@ -1,0 +1,72 @@
+name: Deploy (obfuscated) to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Assemble site into dist/
+        run: |
+          rsync -a --exclude='.git' --exclude='.github' --exclude='Makefile' ./ dist/
+          touch dist/.nojekyll
+
+      - name: Obfuscate JavaScript
+        run: |
+          npx -y javascript-obfuscator a/site.js --output dist/a/site.js \
+            --compact true \
+            --control-flow-flattening true \
+            --control-flow-flattening-threshold 0.75 \
+            --dead-code-injection true \
+            --dead-code-injection-threshold 0.3 \
+            --string-array true \
+            --string-array-encoding 'base64' \
+            --string-array-threshold 0.8 \
+            --identifier-names-generator hexadecimal \
+            --self-defending true \
+            --simplify true
+
+      - name: Minify CSS
+        run: npx -y clean-css-cli -o dist/a/site.css a/site.css
+
+      - name: Minify HTML
+        run: |
+          for f in index.html health.html; do
+            npx -y html-minifier-terser \
+              --collapse-whitespace \
+              --remove-comments \
+              --minify-css true \
+              "$f" -o "dist/$f"
+          done
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
