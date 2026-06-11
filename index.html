@@ -31,7 +31,7 @@
       }
 
       @media (prefers-color-scheme: dark) {
-        :root:not([data-theme="light"]) {
+        :root:not([data-theme="light"]):not([data-theme="professional"]) {
           --bg:        #0c0f10;
           --glitch-op: 0.33;
           --shadow:    0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);
@@ -44,12 +44,33 @@
         --shadow:    0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);
       }
 
-      /* portrait and imgcat filename swap only when theme is explicitly dark;
-         system mode always shows the masked photo even on a dark OS */
-      .term .dark-only { display: none; }
-      :root[data-theme="dark"] .term .light-only { display: none; }
-      :root[data-theme="dark"] .term span.dark-only { display: inline; }
-      :root[data-theme="dark"] .term img.dark-only { display: block; }
+      /* four modes: system (@gateway, surgeon), light (@cloud, surgeon),
+         dark (@acl, networking expert, root prompt), professional
+         (@briantannous.com, sketch). colors follow the OS only in system. */
+      .term .tt-light, .term .tt-dark, .term .tt-pro { display: none; }
+
+      :root[data-theme="light"] .term .tt-sys { display: none; }
+      :root[data-theme="light"] .term .tt-light { display: inline; }
+
+      :root[data-theme="dark"] .term .tt-sys { display: none; }
+      :root[data-theme="dark"] .term .tt-dark { display: inline; }
+
+      :root[data-theme="professional"] .term .tt-sys { display: none; }
+      :root[data-theme="professional"] .term .tt-pro { display: inline; }
+
+      .term .theme-dark, .term .theme-pro { display: none; }
+
+      :root[data-theme="dark"] .term .theme-sys { display: none; }
+      :root[data-theme="dark"] .term span.theme-dark { display: inline; }
+      :root[data-theme="dark"] .term img.theme-dark { display: block; }
+
+      :root[data-theme="professional"] .term .theme-sys { display: none; }
+      :root[data-theme="professional"] .term span.theme-pro { display: inline; }
+      :root[data-theme="professional"] .term img.theme-pro { display: block; }
+
+      .prompt::before { content: "%"; }
+      :root[data-theme="dark"] .prompt::before { content: "#"; }
+      :root[data-theme="professional"] .prompt::before { content: "$"; }
 
       * { box-sizing: border-box; }
 
@@ -163,8 +184,10 @@
 
       .portrait {
         display: block;
-        width: 100%;
+        width: auto;
         height: auto;
+        max-width: 100%;
+        max-height: 22rem;
         margin: 0.5rem auto 0.75rem;
         border-radius: 6px;
       }
@@ -212,13 +235,13 @@
     <main class="term">
       <div class="term-bar">
         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="term-title">bttnns@cloud: ~</span>
+        <span class="term-title"><span class="tt-sys">bttnns@gateway: ~</span><span class="tt-light">bttnns@cloud: ~</span><span class="tt-dark">bttnns@acl: ~</span><span class="tt-pro">brian@briantannous.com: ~</span></span>
         <button class="theme-toggle" id="theme-toggle" type="button">theme: system</button>
       </div>
       <div class="term-body">
-<pre><span class="prompt">%</span> <span class="c light-only">imgcat distributed-systems-surgeon.jpg</span><span class="c dark-only">imgcat networking-expert.jpg</span>
-<img class="portrait light-only" src="/a/i/distributed-systems-surgeon.jpg" alt="Brian Tannous in sunglasses and a purple face mask" width="980" height="1100" fetchpriority="high"><img class="portrait dark-only" src="/a/i/networking-expert.jpg" alt="Brian Tannous at night in a lab coat embroidered Networking Expert" width="1100" height="825">
-<span class="prompt">%</span> cat bttnns.yaml
+<pre><span class="prompt"></span> <span class="c theme-sys">imgcat distributed-systems-surgeon.jpg</span><span class="c theme-dark">imgcat networking-expert.jpg</span><span class="c theme-pro">imgcat brian-tannous.jpg</span>
+<img class="portrait theme-sys" src="/a/i/distributed-systems-surgeon.jpg" alt="Brian Tannous in sunglasses and a purple face mask" width="980" height="1100" fetchpriority="high"><img class="portrait theme-dark" src="/a/i/networking-expert.jpg" alt="Brian Tannous at night in a lab coat embroidered Networking Expert" width="1100" height="825"><img class="portrait theme-pro" src="/a/i/brian-tannous.jpg" alt="Sketch portrait of Brian Tannous" width="788" height="1100">
+<span class="prompt"></span> cat bttnns.yaml
 <span class="k">apiVersion</span><span class="p">:</span> bttnns.com/v1
 <span class="k">kind</span><span class="p">:</span> member-of-the-technical-staff
 <span class="k">metadata</span><span class="p">:</span>
@@ -228,6 +251,17 @@
   <span class="k">location</span><span class="p">:</span> austin-tx
   <span class="k">lat</span><span class="p">:</span> 30.27
   <span class="k">lon</span><span class="p">:</span> -97.74
+  <span class="k">about</span><span class="p">:</span> <span class="p">&gt;</span><span class="s bio">Fifteen years across platform engineering, developer advocacy, and a mobile startup. Most recently: registry services for Apple Cloud. Co-author of OpenShift for Developers, 2nd Edition (O'Reilly).</span>  <span class="k">hats</span><span class="p">:</span>
+    <span class="p">-</span> member-of-the-technical-staff
+    <span class="p">-</span> senior-software-engineer
+    <span class="p">-</span> site-reliability-engineer
+    <span class="p">-</span> platform-advocate
+    <span class="p">-</span> principal-developer-advocate
+    <span class="p">-</span> technical-lead
+    <span class="p">-</span> author
+    <span class="p">-</span> speaker
+    <span class="p">-</span> founder
+    <span class="p">-</span> cto
 <span class="k">spec</span><span class="p">:</span>
   <span class="k">stack</span><span class="p">:</span>
     <span class="p">-</span> kubernetes
@@ -241,15 +275,15 @@
     <span class="p">-</span> nginx
     <span class="p">-</span> grafana
     <span class="p">-</span> claude-code
-  <span class="k">bio</span><span class="p">:</span> <span class="p">&gt;</span><span class="s bio">Fifteen years across platform engineering, developer advocacy, and a mobile startup. Most recently: registry services for Apple Cloud. Co-author of OpenShift for Developers, 2nd Edition (O'Reilly).</span>  <span class="k">experience</span><span class="p">:</span>
-    <span class="p">-</span> apple-cloud
+  <span class="k">experience</span><span class="p">:</span>
+    <span class="p">-</span> apple
     <span class="p">-</span> red-hat
     <span class="p">-</span> citrix
-    <span class="p">-</span> gt-media <span class="p">(</span>founder<span class="p">)</span>
+    <span class="p">-</span> gt-media
   <span class="k">projects</span><span class="p">:</span>
     <span class="p">-</span> internal-kubernetes-registry
     <span class="p">-</span> <a href="https://learn.openshift.com">learn-openshift</a>
-    <span class="p">-</span> <a href="https://developers.redhat.com/e-books/openshift-for-developers">openshift-for-developers</a> <span class="p">(</span>book<span class="p">)</span>
+    <span class="p">-</span> <a href="https://developers.redhat.com/e-books/openshift-for-developers">openshift-for-developers-v2</a> <span class="p">(</span>book<span class="p">)</span>
     <span class="p">-</span> <a href="https://seekdroid.com">seekdroid</a>
     <span class="p">-</span> <a href="https://github.com/bttnns/rivflux">rivflux</a>
     <span class="p">-</span> <a href="https://github.com/bttnns/hover-dns">hover-dns</a>
@@ -266,7 +300,7 @@
       <span class="k">instagram</span><span class="p">:</span> <a href="https://instagram.com/bttnns/">instagram.com/bttnns</a>
 <span class="p">---</span>
 <span class="c"># 2026</span>
-<span class="prompt">%</span> <span class="cursor" aria-hidden="true"></span></pre>
+<span class="prompt"></span> <span class="cursor" aria-hidden="true"></span></pre>
       </div>
     </main>
     <script>
@@ -283,7 +317,7 @@
         }
 
         btn.addEventListener("click", function () {
-          var order = ["system", "dark", "light"];
+          var order = ["system", "light", "professional", "dark"];
           var next = order[(order.indexOf(current()) + 1) % order.length];
           if (next === "system") {
             delete root.dataset.theme;
