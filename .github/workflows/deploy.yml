@@ -24,14 +24,42 @@ jobs:
         with:
           node-version: 20
 
-      - name: Assemble site into dist/
+      - name: Stage source
+        run: rsync -a --exclude='.git' --exclude='.github' --exclude='Makefile' ./ stage/
+
+      - name: Obfuscate CSS class names
+        # Renames CSS classes to short hashes and rewrites them consistently
+        # across CSS, HTML and JS. ids:false keeps #theme-toggle/#theme-color,
+        # and the ignore list preserves the four classes site.js builds from
+        # string literals (.ln, .drift, .term-body pre) or shares with an id
+        # (theme-toggle); mangling those would break theme switching.
         run: |
-          rsync -a --exclude='.git' --exclude='.github' --exclude='Makefile' ./ dist/
+          npm i -D postcss postcss-cli postcss-obfuscator
+          cat > postcss.config.cjs <<'EOF'
+          module.exports = {
+            plugins: [
+              require('postcss-obfuscator')({
+                enable: true,
+                length: 6,
+                classMethod: 'random',
+                ids: false,
+                classIgnore: ['ln', 'drift', 'term-body', 'theme-toggle'],
+                srcPath: 'stage',
+                desPath: 'mangled',
+                extensions: ['.html', '.js'],
+                keepData: false,
+              })
+            ]
+          }
+          EOF
+          npx postcss stage/a/site.css -o mangled/a/site.css --config postcss.config.cjs
+
+      - name: Assemble dist/ (JS obfuscation + minify, from the class-mangled tree)
+        run: |
+          rsync -a mangled/ dist/
           touch dist/.nojekyll
 
-      - name: Obfuscate JavaScript
-        run: |
-          npx -y javascript-obfuscator a/site.js --output dist/a/site.js \
+          npx -y javascript-obfuscator mangled/a/site.js --output dist/a/site.js \
             --compact true \
             --control-flow-flattening true \
             --control-flow-flattening-threshold 0.75 \
@@ -44,17 +72,14 @@ jobs:
             --self-defending true \
             --simplify true
 
-      - name: Minify CSS
-        run: npx -y clean-css-cli -o dist/a/site.css a/site.css
+          npx -y clean-css-cli -o dist/a/site.css mangled/a/site.css
 
-      - name: Minify HTML
-        run: |
           for f in index.html health.html; do
             npx -y html-minifier-terser \
               --collapse-whitespace \
               --remove-comments \
               --minify-css true \
-              "$f" -o "dist/$f"
+              "mangled/$f" -o "dist/$f"
           done
 
       - uses: actions/upload-pages-artifact@v3
