@@ -3,43 +3,298 @@
   <head>
     <title>Brian Tannous</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#faf7f2" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0c0f10" media="(prefers-color-scheme: dark)">
 
-    <link href="/a/bootstrap.min.css" rel="stylesheet">
-    <link href="/a/bootstrap-dark-plugin.min.css" rel="stylesheet">
-    <link href="/a/main.css" rel="stylesheet">
-
-    <meta name="theme-color" content="#111111" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#eeeeee" media="(prefers-color-scheme: dark)">
-
-    <meta name="description" content="Brian Tannous">
+    <meta name="description" content="Brian Tannous, Senior Software Engineer at Apple Cloud in Austin, TX. Platform engineering, Kubernetes, and developer tooling. Co-author of OpenShift for Developers (O'Reilly).">
     <meta name="author" content="Brian Tannous">
 
     <link rel="canonical" href="https://briantannous.com">
 
+    <style>
+      :root {
+        --bg:          #faf7f2;
+        --glitch-op:   0.5;
+        --panel:       #14181a;
+        --panel-bar:   #1d2326;
+        --panel-line:  #242c2f;
+        --ink:         #e8e6df;
+        --comment:     #707a73;
+        --key:         #4cc69e;
+        --punct:       #57635c;
+        --string:      #e6d3a3;
+        --shadow:      0 2px 6px rgba(15, 19, 17, 0.25), 0 24px 60px rgba(15, 19, 17, 0.35);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg:        #0c0f10;
+          --glitch-op: 0.33;
+          --shadow:    0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);
+        }
+      }
+
+      :root[data-theme="dark"] {
+        --bg:        #0c0f10;
+        --glitch-op: 0.33;
+        --shadow:    0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);
+      }
+
+      /* portrait and imgcat filename swap only when theme is explicitly dark;
+         system mode always shows the masked photo even on a dark OS */
+      .term .dark-only { display: none; }
+      :root[data-theme="dark"] .term .light-only { display: none; }
+      :root[data-theme="dark"] .term span.dark-only { display: inline; }
+      :root[data-theme="dark"] .term img.dark-only { display: block; }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100svh;
+        display: grid;
+        place-items: center;
+        padding: clamp(1rem, 4vw, 3rem) 0.75rem;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, "Cascadia Code", monospace;
+        font-size: clamp(0.8rem, 0.72rem + 0.35vw, 0.92rem);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: -55%;
+        z-index: 0;
+        transform: rotate(-12deg);
+        background: url("/a/i/glitch.svg") repeat;
+        background-size: 560px 560px;
+        opacity: var(--glitch-op);
+        pointer-events: none;
+        -webkit-mask-image: radial-gradient(ellipse 55% 45% at 50% 50%, transparent 30%, black 80%);
+                mask-image: radial-gradient(ellipse 55% 45% at 50% 50%, transparent 30%, black 80%);
+      }
+
+      .term {
+        position: relative;
+        z-index: 1;
+        width: min(27rem, 100%);
+        background: var(--panel);
+        border: 1px solid var(--panel-line);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .term-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.65rem 0.9rem;
+        background: var(--panel-bar);
+        border-bottom: 1px solid var(--panel-line);
+      }
+
+      .dot {
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+      }
+      .dot:nth-child(1) { background: #f5655b; }
+      .dot:nth-child(2) { background: #f6bd3b; }
+      .dot:nth-child(3) { background: #43c645; }
+
+      .term-title {
+        flex: 1;
+        text-align: center;
+        color: var(--comment);
+        font-size: 0.78em;
+      }
+
+      .theme-toggle {
+        font: inherit;
+        font-size: 0.78em;
+        color: var(--comment);
+        background: none;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+      }
+
+      .theme-toggle:hover { color: var(--key); }
+
+      .theme-toggle:focus-visible {
+        outline: 2px solid var(--key);
+        outline-offset: 2px;
+        border-radius: 2px;
+      }
+
+      .term-body {
+        padding: 1.1rem 1.25rem 1.25rem;
+      }
+
+      pre {
+        margin: 0;
+        font: inherit;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .bio {
+        display: block;
+        white-space: normal;
+        padding-left: 4ch;
+      }
+
+      .c { color: var(--comment); }
+      .c a { color: var(--ink); }
+      .k { color: var(--key); }
+      .p { color: var(--punct); }
+      .s { color: var(--string); }
+
+      .prompt { color: var(--key); }
+
+      .portrait {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin: 0.5rem auto 0.75rem;
+        border-radius: 6px;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: underline;
+        text-decoration-color: var(--punct);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+
+      a:hover, a:focus-visible {
+        color: var(--key);
+        text-decoration-color: var(--key);
+      }
+
+      a:focus-visible {
+        outline: 2px solid var(--key);
+        outline-offset: 2px;
+        border-radius: 2px;
+      }
+
+      .cursor {
+        display: inline-block;
+        width: 0.55em;
+        height: 1.1em;
+        margin-left: 1px;
+        background: var(--ink);
+        vertical-align: text-bottom;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+    </style>
   </head>
   <body>
-    <div class="card text-center mt-2" style="width: 23rem;">
-      <img src="/a/i/bttnns.jpeg" class="card-img-top" alt="bttnns">
-      <div class="card-body">
-        <p class="h3 mb-3 fs-2">Brian Tannous</p>
-        <p class="fs-6 fst-italic">⚡️</p>
-        <div class="d-grid gap-2">
-          <a class="btn btn-primary btn-lg" href="mailto:brian@briantannous.com" role="button">Contact</a>
-          <a class="btn btn-primary" href="/at/bttnns" role="button">♩</a>
-          <a class="btn btn-primary" href="http://instagram.com/bttnns/" role="button">instagram</a>
-          <a class="btn btn-primary" rel="me" href="https://infosec.exchange/@bttnns" role="button">Mastodon</a>
-          <a class="btn btn-primary" href="https://www.linkedin.com/in/bttnns/" role="button">LinkedIn</a>
-          <a class="btn btn-primary" href="https://github.com/bttnns" role="button">GitHub</a>
-          <a class="btn btn-primary btn-sm" href="https://developers.redhat.com/e-books/openshift-for-developers" role="button">OpenShift for Developers</a>
-          <a class="btn btn-secondary btn-sm" href="https://www.amazon.com/OpenShift-Developers-Guide-Impatient-Beginners/dp/109810336X/" role="button">Or as a real book!</a>
-        </div>
-        <div class="card-footer mt-2 lane-8">2026</div>
+    <h1 class="visually-hidden">Brian Tannous, Senior Software Engineer, Apple Cloud, Austin, TX</h1>
+    <main class="term">
+      <div class="term-bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="term-title">bttnns@cloud: ~</span>
+        <button class="theme-toggle" id="theme-toggle" type="button">theme: system</button>
       </div>
-    </div>
+      <div class="term-body">
+<pre><span class="prompt">%</span> <span class="c light-only">imgcat distributed-systems-surgeon.jpg</span><span class="c dark-only">imgcat networking-expert.jpg</span>
+<img class="portrait light-only" src="/a/i/distributed-systems-surgeon.jpg" alt="Brian Tannous in sunglasses and a purple face mask" width="980" height="1100" fetchpriority="high"><img class="portrait dark-only" src="/a/i/networking-expert.jpg" alt="Brian Tannous at night in a lab coat embroidered Networking Expert" width="1100" height="825">
+<span class="prompt">%</span> cat bttnns.yaml
+<span class="k">apiVersion</span><span class="p">:</span> bttnns.com/v1
+<span class="k">kind</span><span class="p">:</span> Engineer
+<span class="k">metadata</span><span class="p">:</span>
+  <span class="k">firstName</span><span class="p">:</span> Brian
+  <span class="k">lastName</span><span class="p">:</span> Tannous
+  <span class="k">email</span><span class="p">:</span> <a href="mailto:brian@briantannous.com">brian@briantannous.com</a>
+  <span class="k">location</span><span class="p">:</span> austin-tx
+  <span class="k">lat</span><span class="p">:</span> 30.27
+  <span class="k">lon</span><span class="p">:</span> -97.74
+<span class="k">spec</span><span class="p">:</span>
+  <span class="k">stack</span><span class="p">:</span>
+    <span class="p">-</span> kubernetes
+    <span class="p">-</span> go
+    <span class="p">-</span> python
+    <span class="p">-</span> scala
+    <span class="p">-</span> typescript
+    <span class="p">-</span> react
+    <span class="p">-</span> android
+    <span class="p">-</span> ios
+    <span class="p">-</span> nginx
+    <span class="p">-</span> grafana
+    <span class="p">-</span> claude-code
+  <span class="k">bio</span><span class="p">:</span> <span class="p">&gt;</span><span class="s bio">Fifteen years across platform engineering, developer advocacy, and a mobile startup. Most recently: registry services for Apple Cloud. Co-author of OpenShift for Developers, 2nd Edition (O'Reilly).</span>  <span class="k">experience</span><span class="p">:</span>
+    <span class="p">-</span> apple-cloud
+    <span class="p">-</span> red-hat
+    <span class="p">-</span> citrix
+    <span class="p">-</span> gt-media <span class="p">(</span>founder<span class="p">)</span>
+  <span class="k">projects</span><span class="p">:</span>
+    <span class="p">-</span> internal-kubernetes-registry
+    <span class="p">-</span> <a href="https://learn.openshift.com">learn-openshift</a>
+    <span class="p">-</span> <a href="https://developers.redhat.com/e-books/openshift-for-developers">openshift-for-developers</a> <span class="p">(</span>book<span class="p">)</span>
+    <span class="p">-</span> <a href="https://seekdroid.com">seekdroid</a>
+    <span class="p">-</span> <a href="https://github.com/bttnns/rivflux">rivflux</a>
+    <span class="p">-</span> <a href="https://github.com/bttnns/hover-dns">hover-dns</a>
+    <span class="p">-</span> <a href="https://github.com/bttnns/server-health-monitor">server-health-monitor</a>
+    <span class="p">-</span> <a href="https://github.com/bttnns/evcc-solar-energy-dashboards">evcc-solar-energy-dashboards</a>
+    <span class="p">-</span> <a href="https://glancedeck.com/">glance-deck</a>
+    <span class="p">-</span> <a href="https://pelicans.wtf/">pelicans.wtf</a>
+  <span class="k">links</span><span class="p">:</span>
+    <span class="k">professional</span><span class="p">:</span>
+      <span class="k">github</span><span class="p">:</span>   <a href="https://github.com/bttnns">github.com/bttnns</a>
+      <span class="k">linkedin</span><span class="p">:</span> <a href="https://www.linkedin.com/in/bttnns/">linkedin.com/in/bttnns</a>
+    <span class="k">social</span><span class="p">:</span>
+      <span class="k">mastodon</span><span class="p">:</span>  <a rel="me" href="https://infosec.exchange/@bttnns">infosec.exchange/@bttnns</a>
+      <span class="k">instagram</span><span class="p">:</span> <a href="https://instagram.com/bttnns/">instagram.com/bttnns</a>
+<span class="p">---</span>
+<span class="c"># 2026</span>
+<span class="prompt">%</span> <span class="cursor" aria-hidden="true"></span></pre>
+      </div>
+    </main>
+    <script>
+      (function () {
+        var btn = document.getElementById("theme-toggle");
+        var root = document.documentElement;
+
+        function current() {
+          return root.dataset.theme || "system";
+        }
+
+        function render() {
+          btn.textContent = "theme: " + current();
+        }
+
+        btn.addEventListener("click", function () {
+          var order = ["system", "dark", "light"];
+          var next = order[(order.indexOf(current()) + 1) % order.length];
+          if (next === "system") {
+            delete root.dataset.theme;
+          } else {
+            root.dataset.theme = next;
+          }
+          render();
+        });
+
+        render();
+      })();
+    </script>
   </body>
 </html>
