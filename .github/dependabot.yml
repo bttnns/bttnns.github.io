@@ -1,3 +1,4 @@
+# Dependabot config: monthly, grouped updates.
 version: 2
 updates:
   # Keep the Actions pinned in .github/workflows up to date.
