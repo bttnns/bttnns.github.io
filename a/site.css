@@ -20,11 +20,21 @@
   --shadow:      0 2px 6px rgba(15, 19, 17, 0.25), 0 24px 60px rgba(15, 19, 17, 0.35);
 }
 
+/* system auto-dark: follow the OS into dark mode by adopting the professional
+   (dark) palette, so auto-dark and the explicit professional theme match. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]):not([data-theme="professional"]):not([data-theme="night"]) {
-    --bg:        #0c0f10;
-    --glitch-op: 0.33;
-    --shadow:    0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);
+    --bg:         #08090b;
+    --panel:      #101317;
+    --panel-bar:  #16191d;
+    --panel-line: #20262c;
+    --ink:        #eceff2;
+    --key:        #9db4c9;
+    --comment:    #6b7278;
+    --punct:      #49505a;
+    --string:     #c8c2ad;
+    --glitch-op:  0.33;
+    --shadow:     0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);
   }
 }
 
@@ -54,16 +64,20 @@
   --panel-line: #46525a;
 }
 
-/* professional: understated near-monochrome, one muted slate-blue accent */
+/* professional: the dark theme. understated near-monochrome on a dark page,
+   one muted slate-blue accent. system auto-dark (below) mirrors this palette. */
 :root[data-theme="professional"] {
-  --panel:      #16191c;
-  --panel-bar:  #1d2125;
-  --panel-line: #272c31;
+  --bg:         #08090b;
+  --panel:      #101317;
+  --panel-bar:  #16191d;
+  --panel-line: #20262c;
   --ink:        #eceff2;
   --key:        #9db4c9;
   --comment:    #6b7278;
   --punct:      #49505a;
   --string:     #c8c2ad;
+  --glitch-op:  0.33;
+  --shadow:     0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);
 }
 
 /* four modes: system (@gateway, surgeon), light (@cloud, surgeon),
@@ -128,7 +142,9 @@ body::before {
 .term {
   position: relative;
   z-index: 1;
-  width: min(27rem, 100%);
+  /* grow to use available width: full-width on small screens, widening up to a
+     comfortable cap on larger ones (gives the long project comments more room) */
+  width: min(46rem, 100%);
   background: var(--panel);
   border: 1px solid var(--panel-line);
   border-radius: 12px;
