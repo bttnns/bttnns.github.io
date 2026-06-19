@@ -27,6 +27,13 @@ jobs:
       - name: Stage source
         run: rsync -a --exclude='.git' --exclude='.github' --exclude='Makefile' ./ stage/
 
+      - name: Inject cache-busting version into asset URLs
+        run: |
+          SHORT="${{ github.sha }}"
+          SHORT="${SHORT:0:8}"
+          sed -i "s|/a/site\.css\"|/a/site.css?v=$SHORT\"|" stage/index.html
+          sed -i "s|/a/site\.js\"|/a/site.js?v=$SHORT\"|" stage/index.html
+
       - name: Obfuscate CSS class names
         # Renames CSS classes to short hashes and rewrites them consistently
         # across CSS, HTML and JS. ids:false keeps #theme-toggle/#theme-color,
