@@ -1,1 +1,241 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kubernete — k7e</title>
+  <meta name="description" content="Kubernete (k7e) — run the same demo shape on EKS, AKS, GKE, hosted OpenShift, and more." />
+  <style>
+    :root {
+      --bg: #070b14;
+      --panel: #10182a;
+      --text: #e8eefc;
+      --muted: #9aa8c7;
+      --accent: #3d8bfd;
+      --accent2: #6ee7b7;
+      --line: rgba(255,255,255,0.08);
+      --code: #0b1220;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% -10%, #1a2a4a 0%, var(--bg) 55%), var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(1040px, calc(100% - 2rem)); margin: 0 auto; }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 0; border-bottom: 1px solid var(--line);
+    }
+    .logo { font-weight: 700; letter-spacing: -0.02em; }
+    .logo span { color: var(--accent2); font-weight: 600; margin-left: 0.4rem; font-size: 0.85rem; }
+    nav { display: flex; flex-wrap: wrap; gap: 1rem; color: var(--muted); font-size: 0.95rem; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--accent), #6c5ce7);
+      color: white; border: 0; border-radius: 999px;
+      padding: 0.75rem 1.2rem; font-weight: 600; cursor: pointer;
+    }
+    .btn.secondary {
+      background: transparent; border: 1px solid var(--line); color: var(--text);
+    }
+    .hero { padding: 4.5rem 0 3rem; display: grid; gap: 1.25rem; }
+    .eyebrow {
+      display: inline-flex; gap: 0.5rem; align-items: center;
+      color: var(--accent2); font-size: 0.85rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    h1 { font-size: clamp(2.4rem, 6vw, 4rem); line-height: 1.05; margin: 0; letter-spacing: -0.03em; }
+    h2 { font-size: 1.6rem; margin: 0 0 0.75rem; letter-spacing: -0.02em; }
+    .lede { max-width: 42rem; color: var(--muted); font-size: 1.125rem; margin: 0; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 0.5rem; }
+    .grid {
+      display: grid; gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      padding: 1rem 0 2.5rem;
+    }
+    .card {
+      background: color-mix(in srgb, var(--panel) 88%, black);
+      border: 1px solid var(--line); border-radius: 1rem; padding: 1.25rem;
+    }
+    .card h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+    .card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+    .section { padding: 0.5rem 0 2.5rem; }
+    .section > p { color: var(--muted); max-width: 46rem; margin: 0 0 1.25rem; }
+    .cloud {
+      display: grid; gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    .cloud article {
+      background: color-mix(in srgb, var(--panel) 88%, black);
+      border: 1px solid var(--line); border-radius: 1rem; padding: 1.25rem;
+      display: grid; gap: 0.65rem;
+    }
+    .cloud h3 { margin: 0; font-size: 1.1rem; }
+    .tag {
+      display: inline-flex; width: fit-content;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em;
+      text-transform: uppercase; color: var(--accent2);
+      border: 1px solid rgba(110,231,183,0.35); border-radius: 999px;
+      padding: 0.2rem 0.55rem;
+    }
+    .cloud p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+    .cloud ol { margin: 0; padding-left: 1.15rem; color: var(--muted); font-size: 0.92rem; }
+    .cloud li { margin: 0.25rem 0; }
+    pre {
+      margin: 0; padding: 0.75rem 0.85rem; border-radius: 0.65rem;
+      background: var(--code); border: 1px solid var(--line);
+      color: #d7e3ff; font-size: 0.8rem; overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .extras {
+      margin-top: 1rem; padding: 1rem 1.15rem; border-radius: 1rem;
+      border: 1px dashed var(--line); color: var(--muted); font-size: 0.95rem;
+    }
+    .extras strong { color: var(--text); }
+    .cta {
+      margin: 1rem 0 3rem; padding: 1.75rem; border-radius: 1.25rem;
+      border: 1px solid var(--line);
+      background: linear-gradient(135deg, rgba(61,139,253,0.15), rgba(110,231,183,0.08));
+      display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;
+    }
+    .cta h2 { margin: 0; font-size: 1.4rem; }
+    .cta p { margin: 0.35rem 0 0; color: var(--muted); }
+    footer {
+      border-top: 1px solid var(--line); padding: 1.5rem 0 2.5rem;
+      color: var(--muted); font-size: 0.9rem;
+      display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">Kubernete <span>k7e</span></div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#run">Run everywhere</a>
+        <a href="#cta">Get started</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">Demo · intentional spelling</div>
+      <h1>Orchestrate calmly.<br />Ship as <em>Kubernete</em>.</h1>
+      <p class="lede">
+        A polished marketing demo for <strong>Kubernete</strong> — short form <strong>k7e</strong>.
+        Same control-plane energy across the major clouds and hosted OpenShift, without borrowing the wrong brand.
+      </p>
+      <div class="actions">
+        <a class="btn" href="#run">See cloud runbooks</a>
+        <a class="btn secondary" href="#features">Features</a>
+      </div>
+    </section>
+
+    <section class="grid" id="features">
+      <article class="card">
+        <h3>Declarative by default</h3>
+        <p>Describe the desired state once. Let the control plane chase it.</p>
+      </article>
+      <article class="card">
+        <h3>Portable clusters</h3>
+        <p>Same shape from laptop demos to production-ish playgrounds.</p>
+      </article>
+      <article class="card">
+        <h3>Honest branding</h3>
+        <p>It's Kubernete / k7e — not a lookalike acronym from a different product.</p>
+      </article>
+    </section>
+
+    <section class="section" id="run">
+      <h2>Run everywhere</h2>
+      <p>
+        High-level k7e demo path on the usual hosted platforms. Swap in your account, region, and kubeconfig — commands are illustrative, not a full production playbook.
+      </p>
+      <div class="cloud">
+        <article>
+          <span class="tag">AWS</span>
+          <h3>Amazon EKS</h3>
+          <p>Create a managed cluster, then apply the k7e demo manifests.</p>
+          <ol>
+            <li>Provision cluster with <code>eksctl</code> or the EKS console.</li>
+            <li>Update kubeconfig for the cluster.</li>
+            <li>Deploy the demo workload and expose a service/ingress.</li>
+          </ol>
+          <pre>eksctl create cluster --name k7e-demo --region us-east-1
+aws eks update-kubeconfig --name k7e-demo --region us-east-1
+kubectl apply -f https://example.com/k7e/demo.yaml</pre>
+        </article>
+
+        <article>
+          <span class="tag">Azure</span>
+          <h3>Azure AKS</h3>
+          <p>Spin up AKS, pull credentials, ship the same k7e manifests.</p>
+          <ol>
+            <li>Create a resource group + AKS cluster.</li>
+            <li>Fetch admin credentials into kubeconfig.</li>
+            <li>Apply the demo and verify pods/services.</li>
+          </ol>
+          <pre>az group create -n k7e-rg -l eastus
+az aks create -g k7e-rg -n k7e-demo --generate-ssh-keys
+az aks get-credentials -g k7e-rg -n k7e-demo
+kubectl apply -f https://example.com/k7e/demo.yaml</pre>
+        </article>
+
+        <article>
+          <span class="tag">Google Cloud</span>
+          <h3>Google GKE</h3>
+          <p>Autopilot or Standard — same k7e apply path once credentials are wired.</p>
+          <ol>
+            <li>Create a GKE cluster in your project/zone.</li>
+            <li>Get credentials via <code>gcloud</code>.</li>
+            <li>Apply the demo manifests.</li>
+          </ol>
+          <pre>gcloud container clusters create k7e-demo --zone us-central1-a
+gcloud container clusters get-credentials k7e-demo --zone us-central1-a
+kubectl apply -f https://example.com/k7e/demo.yaml</pre>
+        </article>
+
+        <article>
+          <span class="tag">OpenShift</span>
+          <h3>Hosted OpenShift</h3>
+          <p>ROSA, Azure Red Hat OpenShift, or any managed OpenShift — use <code>oc</code> where you prefer it.</p>
+          <ol>
+            <li>Create / open a hosted OpenShift cluster (ROSA, ARO, or provider console).</li>
+            <li>Log in with <code>oc login</code> (or kubeconfig from the console).</li>
+            <li>Create a project/namespace and apply the k7e demo.</li>
+          </ol>
+          <pre>oc login --server=https://api.example.openshift.com:6443
+oc new-project k7e-demo
+oc apply -f https://example.com/k7e/demo.yaml
+# kubectl works too once kubeconfig is set</pre>
+        </article>
+      </div>
+
+      <div class="extras">
+        <strong>Also fine for demos:</strong>
+        DigitalOcean Kubernetes (DOKS), Linode/Akamai LKE, or a quick vanilla
+        <code>kubeadm</code> / kind / minikube cluster locally — same
+        <code>kubectl apply</code> once you have a context.
+      </div>
+    </section>
+
+    <section class="cta" id="cta">
+      <div>
+        <h2>Ready for the k7e demo?</h2>
+        <p>One static page. Pick a cloud above, apply the manifests, ship.</p>
+      </div>
+      <a class="btn" href="https://github.com/bttnns/bttnns.github.io/tree/main/kubernete">View on GitHub</a>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Kubernete (k7e)</div>
+      <div>Demo marketing site · GitHub Pages</div>
+    </footer>
+  </div>
+  <script>document.getElementById('y').textContent = new Date().getFullYear()</script>
+</body>
+</html>
