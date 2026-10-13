@@ -1,230 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-scope="phosphor">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Support: Approach Control</title>
-<meta name="description" content="Support for Approach Control: ATC Sim by Brian Tannous.">
-<meta name="theme-color" content="#030b08">
+<meta name="description" content="Help with Approach Control: ATC Sim. Answers about playing, PRO, Apple Watch and your data.">
+<meta name="theme-color" content="#000d08">
 <meta property="og:title" content="Support: Approach Control">
-<meta property="og:description" content="Support for Approach Control: ATC Sim by Brian Tannous.">
-<meta property="og:image" content="https://bttnns.com/atc/img/scope.png">
+<meta property="og:description" content="Help with Approach Control: ATC Sim.">
+<meta property="og:image" content="https://bttnns.com/atc/img/card.jpg">
 <link rel="icon" href="/atc/img/icon.png">
 <link rel="apple-touch-icon" href="/atc/img/icon.png">
-<style>
-:root{
-  color-scheme: light dark;
-  --bg:#dff3ea; --fg:#07160f; --muted:#3b5547; --accent:#0c9f55; --accent-2:#0a84c6;
-  --tint:rgba(255,255,255,.16); --rim-hi:rgba(255,255,255,.95); --rim-lo:rgba(255,255,255,.12);
-  --shade:rgba(8,50,32,.28); --sweep:rgba(12,159,85,.38); --ring:rgba(12,159,85,.16);
-  --o1:#34d399; --o2:#38bdf8; --o3:#fbbf24; --o4:#a78bfa; --blip:#0c9f55;
-  --glow:rgba(255,255,255,.55);
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
-  --bg:#02080a; --fg:#eafff4; --muted:#a2bfb0; --accent:#7dffa8; --accent-2:#6fd3ff;
-  --tint:rgba(255,255,255,.045); --rim-hi:rgba(255,255,255,.85); --rim-lo:rgba(255,255,255,.07);
-  --shade:rgba(0,0,0,.6); --sweep:rgba(125,255,168,.34); --ring:rgba(125,255,168,.14);
-  --o1:#10b981; --o2:#0ea5e9; --o3:#f59e0b; --o4:#8b5cf6; --blip:#7dffa8;
-  --glow:rgba(255,255,255,.22);
-}}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;min-height:100vh;background:var(--bg);color:var(--fg);
-  font:17px/1.55 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;overflow-x:hidden}
-a{color:inherit}
-.wrap{width:min(68rem,calc(100% - 2.5rem));margin:0 auto}
-
-/* The world the glass looks onto: a live radar with real colour in it, so there is something to bend */
-.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg)}
-.orb{position:absolute;border-radius:50%;filter:blur(50px);opacity:.6;will-change:transform}
-.orb.a{width:46vmax;height:46vmax;left:-12vmax;top:-14vmax;background:var(--o1);animation:o1 26s ease-in-out infinite alternate}
-.orb.b{width:42vmax;height:42vmax;right:-14vmax;top:6vmax;background:var(--o2);animation:o2 31s ease-in-out infinite alternate}
-.orb.c{width:30vmax;height:30vmax;left:30vmax;bottom:-12vmax;background:var(--o3);opacity:.5;animation:o3 34s ease-in-out infinite alternate}
-.orb.d{width:26vmax;height:26vmax;left:-6vmax;bottom:8vmax;background:var(--o4);opacity:.42;animation:o2 29s ease-in-out -9s infinite alternate}
-@keyframes o1{to{transform:translate(14vmax,10vmax) scale(1.15)}}
-@keyframes o2{to{transform:translate(-12vmax,12vmax) scale(.9)}}
-@keyframes o3{to{transform:translate(-14vmax,-8vmax) scale(1.2)}}
-.radar{position:absolute;left:68%;top:42%;width:150vmax;height:150vmax;transform:translate(-50%,-50%);
-  -webkit-mask-image:radial-gradient(circle,#000 8%,transparent 62%);mask-image:radial-gradient(circle,#000 8%,transparent 62%)}
-.radar .rings{position:absolute;inset:0;border-radius:50%;
-  background:repeating-radial-gradient(circle,transparent 0 9vmax,var(--ring) 9vmax calc(9vmax + 2px))}
-.radar .cross{position:absolute;inset:0;
-  background:linear-gradient(var(--ring),var(--ring)) center/2px 100% no-repeat,linear-gradient(var(--ring),var(--ring)) center/100% 2px no-repeat}
-.radar .sweep{position:absolute;inset:0;border-radius:50%;
-  background:conic-gradient(from 0deg,transparent 0 292deg,var(--sweep) 358deg,transparent 360deg);animation:spin 9s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.blip{position:absolute;width:.7rem;height:.7rem;border-radius:50%;background:var(--blip);
-  box-shadow:0 0 .9rem .25rem var(--blip);animation:ping 4.5s ease-out infinite}
-.blip::after{content:"";position:absolute;left:50%;top:50%;width:5rem;height:2px;transform-origin:0 50%;
-  background:linear-gradient(90deg,var(--blip),transparent)}
-@keyframes ping{0%,100%{opacity:.25}50%{opacity:1}}
-@media (prefers-reduced-motion:reduce){.orb,.radar .sweep,.blip,.phone,.pill{animation:none!important}*{scroll-behavior:auto!important}}
-
-/* Liquid Glass. Real parts: a light tint, strong saturation of what is behind, a lit rim that
-   fades around the edge (top-left bright, bottom-right catching light), an inner glow, and
-   (Chromium) a displacement lens that bends the backdrop at the edges. */
-.glass{--mx:30%;--my:0%;position:relative;isolation:isolate;border-radius:30px;
-  background:linear-gradient(160deg,rgba(255,255,255,.10),var(--tint) 45%,rgba(255,255,255,.02));
-  -webkit-backdrop-filter:blur(9px) saturate(210%) brightness(1.08) contrast(1.04);
-  backdrop-filter:blur(9px) saturate(210%) brightness(1.08) contrast(1.04);
-  box-shadow:
-    inset 0 0 22px -6px var(--glow),
-    inset 0 18px 24px -18px rgba(255,255,255,.55),
-    inset 0 -14px 20px -16px rgba(0,0,0,.35),
-    0 1px 1px rgba(0,0,0,.18),
-    0 30px 60px -22px var(--shade)}
-.refract .glass{-webkit-backdrop-filter:blur(7px) url(#lens) saturate(210%) brightness(1.08);backdrop-filter:blur(7px) url(#lens) saturate(210%) brightness(1.08)}
-.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
-  background:radial-gradient(60% 90% at var(--mx) var(--my),rgba(255,255,255,.30),transparent 62%);opacity:.9;transition:opacity .3s}
-.glass::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
-  background:linear-gradient(135deg,var(--rim-hi),var(--rim-lo) 28%,var(--rim-lo) 68%,var(--rim-hi));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
-  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
-
-nav{position:sticky;top:max(.9rem,env(safe-area-inset-top));z-index:10;margin:.9rem auto 0;
-  width:min(46rem,calc(100% - 1.5rem));border-radius:999px;padding:.5rem .55rem .5rem .9rem;
-  display:flex;align-items:center;gap:.5rem}
-nav .brand{display:flex;align-items:center;gap:.6rem;font-weight:650;letter-spacing:-.01em;text-decoration:none;margin-right:auto;white-space:nowrap}
-nav .brand img{width:30px;height:30px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
-nav a.link{font-size:.92rem;text-decoration:none;color:var(--muted);padding:.5rem .85rem;border-radius:999px;transition:background .2s,color .2s}
-nav a.link:hover{color:var(--fg);background:rgba(255,255,255,.14)}
-
-.btn{--mx:30%;--my:0%;position:relative;display:inline-flex;align-items:center;gap:.5rem;font:600 1rem/1 inherit;padding:1rem 1.6rem;border-radius:999px;text-decoration:none;color:var(--fg);
-  background:linear-gradient(160deg,rgba(255,255,255,.18),var(--tint));
-  -webkit-backdrop-filter:blur(9px) saturate(210%) brightness(1.1);backdrop-filter:blur(9px) saturate(210%) brightness(1.1);
-  box-shadow:inset 0 0 18px -6px var(--glow),inset 0 10px 14px -10px rgba(255,255,255,.7),0 14px 30px -12px var(--shade);
-  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
-.btn::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
-  background:linear-gradient(135deg,var(--rim-hi),var(--rim-lo) 35%,var(--rim-lo) 65%,var(--rim-hi));
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
-  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
-.btn:hover{transform:translateY(-2px) scale(1.02)}
-.btn.primary{background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 78%,#fff 22%),color-mix(in srgb,var(--accent) 62%,#04210f));color:#031a0c;text-shadow:0 1px 0 rgba(255,255,255,.35)}
-.btn[aria-disabled=true]{cursor:default}
-.btn[aria-disabled=true]:hover{transform:none}
-
-.hero{display:grid;grid-template-columns:1.02fr .98fr;gap:2rem;align-items:center;padding:4.2rem 0 3rem}
-.hero .icon{width:96px;height:96px;border-radius:22.5%;margin-bottom:1.6rem;
-  box-shadow:0 22px 44px -12px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.14),0 0 70px -6px var(--accent)}
-.eyebrow{font:600 .78rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:0 0 .9rem}
-h1{font-size:clamp(2.7rem,6.6vw,4.8rem);line-height:1.01;letter-spacing:-.04em;margin:0 0 1.1rem;font-weight:780}
-h1 span{background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lede{font-size:1.2rem;color:color-mix(in srgb,var(--fg) 82%,transparent);text-shadow:0 1px 14px rgba(0,0,0,.25);max-width:32rem;margin:0 0 2rem}
-.cta{display:flex;flex-wrap:wrap;gap:.8rem}
-.note{font-size:.88rem;color:var(--muted);margin-top:1rem}
-
-.phones{position:relative;height:37rem;display:flex;justify-content:center}
-.phone{position:absolute;width:min(15.5rem,44vw);border-radius:2.2rem;padding:7px;
-  background:linear-gradient(150deg,rgba(255,255,255,.35),rgba(255,255,255,.06) 40%,rgba(255,255,255,.2));
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.35),0 44px 80px -24px rgba(0,0,0,.75)}
-.phone img{display:block;width:100%;height:auto;border-radius:1.75rem}
-.phone.a{left:50%;top:1rem;transform:translateX(-98%) rotate(-5deg);animation:float 9s ease-in-out infinite}
-.phone.b{left:50%;top:3.4rem;transform:translateX(-2%) rotate(4deg);animation:float 9s ease-in-out -4.5s infinite}
-@keyframes float{50%{translate:0 -12px}}
-/* glass laid over the phones so the lens bends the actual screens */
-.pill{position:absolute;z-index:3;display:flex;align-items:baseline;gap:.5rem;padding:.85rem 1.2rem;border-radius:999px;font-weight:700;animation:float 7s ease-in-out infinite}
-.pill b{font:700 1.5rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent);letter-spacing:-.02em}
-.pill small{font:600 .72rem/1 ui-monospace,Menlo,monospace;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
-.pill.p1{left:6%;top:15rem;animation-delay:-2s}
-.pill.p2{right:0;top:19rem;animation-delay:-5s}
-.pill.p3{right:10%;bottom:3.5rem;animation-delay:-1s}
-
-section{padding:2.4rem 0}
-h2{font-size:clamp(1.8rem,3.6vw,2.6rem);letter-spacing:-.03em;margin:0 0 .6rem;font-weight:740}
-.sub{color:var(--muted);margin:0 0 2rem;max-width:36rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.1rem}
-.card{padding:1.6rem 1.6rem 1.7rem;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
-.card:hover{transform:translateY(-4px)}
-.card h3{margin:1rem 0 .4rem;font-size:1.14rem;letter-spacing:-.01em}
-.card p{margin:0;color:var(--muted);font-size:.98rem}
-.glyph{width:2.9rem;height:2.9rem;border-radius:1rem;display:grid;place-items:center;font-size:1.3rem;color:#04210f;
-  background:linear-gradient(150deg,color-mix(in srgb,var(--accent) 90%,#fff),color-mix(in srgb,var(--accent-2) 80%,#fff));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 8px 18px -6px var(--accent)}
-.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1.1rem}
-.tier{padding:1.9rem}
-.tier h3{margin:0 0 .3rem;font-size:1.35rem;letter-spacing:-.015em}
-.tier .tag{font:600 .74rem/1 ui-monospace,Menlo,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:.9rem}
-.tier ul{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:.6rem}
-.tier li{padding-left:1.5rem;position:relative;color:var(--muted);font-size:.97rem}
-.tier li::before{content:"";position:absolute;left:0;top:.45em;width:.75rem;height:.75rem;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%,#fff,var(--accent) 62%);box-shadow:0 0 12px var(--accent)}
-.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem}
-.chip{font:600 .85rem/1 ui-monospace,Menlo,monospace;letter-spacing:.06em;padding:.55rem .85rem;border-radius:999px;
-  background:rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),inset 0 0 0 1px rgba(255,255,255,.12)}
-.chip.free{color:var(--accent)}
-
-.page{padding:3.5rem 0 3rem;max-width:44rem;margin:0 auto}
-.page h1{font-size:clamp(2.2rem,5vw,3.2rem)}
-.panel{padding:1.6rem 1.7rem;margin:1.1rem 0}
-.panel p{margin:.5rem 0}
-.faq{display:grid;gap:.8rem;margin-top:1rem}
-.faq .panel{margin:0;padding:1.25rem 1.5rem;border-radius:24px}
-.faq h3{margin:0 0 .35rem;font-size:1.05rem}
-.faq p{margin:0;color:var(--muted);font-size:.98rem}
-.faq a,.panel a{text-decoration-thickness:1px;text-underline-offset:3px}
-
-footer{margin:3rem 0 1.4rem;padding:1.2rem 1.7rem;border-radius:999px;display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;justify-content:space-between;color:var(--muted);font-size:.9rem}
-footer a{text-decoration:none}footer a:hover{color:var(--fg)}
-.legal{font-size:.8rem;color:var(--muted);text-align:center;margin:0 auto 2.5rem;max-width:40rem;padding:0 1rem}
-
-@media (max-width:52rem){
-  .hero{grid-template-columns:1fr;padding-top:3rem}
-  .phones{height:27rem}
-  .phone{width:min(13rem,42vw)}
-  .pill.p1{top:11rem}.pill.p2{top:14rem;right:-2%}.pill.p3{bottom:1.5rem}
-  .orb{opacity:.4}
-  nav a.link.hide{display:none}
-}
-@media (max-width:30rem){footer{border-radius:30px}nav a.link:last-child{display:none}}
-</style>
+<script>document.documentElement.classList.add("js");try{var s=localStorage.getItem("atc.scope");if(s)document.documentElement.setAttribute("data-scope",s)}catch(e){}</script>
+<link rel="stylesheet" href="/atc/assets/atc.css">
 </head>
 <body>
-<div class="bg" aria-hidden="true">
-  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div><div class="orb d"></div>
-  <div class="radar"><div class="rings"></div><div class="cross"></div><div class="sweep"></div></div>
-  <span class="blip" style="left:58%;top:30%;animation-delay:-.5s"></span>
-  <span class="blip" style="left:78%;top:46%;animation-delay:-2s"></span>
-  <span class="blip" style="left:66%;top:62%;animation-delay:-3.3s"></span>
-  <span class="blip" style="left:88%;top:24%;animation-delay:-1.2s"></span>
-  <span class="blip" style="left:46%;top:54%;animation-delay:-2.7s"></span>
-</div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feImage href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%20preserveAspectRatio%3D%27none%27%3E%3Cdefs%3E%3ClinearGradient%20id%3D%27x%27%20x1%3D%270%27%20x2%3D%271%27%20y1%3D%270%27%20y2%3D%270%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27rgb%28255%2C0%2C0%29%27/%3E%3Cstop%20offset%3D%27.06%27%20stop-color%3D%27rgb%28128%2C0%2C0%29%27/%3E%3Cstop%20offset%3D%27.94%27%20stop-color%3D%27rgb%28128%2C0%2C0%29%27/%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27rgb%280%2C0%2C0%29%27/%3E%3C/linearGradient%3E%3ClinearGradient%20id%3D%27y%27%20x1%3D%270%27%20x2%3D%270%27%20y1%3D%270%27%20y2%3D%271%27%3E%3Cstop%20offset%3D%270%27%20stop-color%3D%27rgb%280%2C255%2C0%29%27/%3E%3Cstop%20offset%3D%27.06%27%20stop-color%3D%27rgb%280%2C128%2C0%29%27/%3E%3Cstop%20offset%3D%27.94%27%20stop-color%3D%27rgb%280%2C128%2C0%29%27/%3E%3Cstop%20offset%3D%271%27%20stop-color%3D%27rgb%280%2C0%2C0%29%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%27100%27%20height%3D%27100%27%20fill%3D%27black%27/%3E%3Crect%20width%3D%27100%27%20height%3D%27100%27%20fill%3D%27url%28%23x%29%27%20style%3D%27mix-blend-mode%3Ascreen%27/%3E%3Crect%20width%3D%27100%27%20height%3D%27100%27%20fill%3D%27url%28%23y%29%27%20style%3D%27mix-blend-mode%3Ascreen%27/%3E%3C/svg%3E" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="m"/><feDisplacementMap in="SourceGraphic" in2="m" scale="34" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
-<script>
-if(/Chrome\//.test(navigator.userAgent)&&!/Edg\//.test(navigator.userAgent)||/Chromium|CriOS/.test(navigator.userAgent))document.documentElement.classList.add("refract");
-addEventListener("pointermove",e=>{document.querySelectorAll(".glass,.btn").forEach(el=>{const r=el.getBoundingClientRect();el.style.setProperty("--mx",(e.clientX-r.left)+"px");el.style.setProperty("--my",(e.clientY-r.top)+"px")})},{passive:true});
-</script>
-<nav class="glass" aria-label="Main">
-  <a class="brand" href="/atc"><img src="/atc/img/icon.png" alt="" width="30" height="30">Approach Control</a>
-  <a class="link hide" href="/atc#play">How it plays</a>
-  <a class="link hide" href="/atc#pro">PRO</a>
-  <a class="link" href="/atc/support">Support</a>
-  <a class="link" href="/privacy">Privacy</a>
+<a class="skip" href="#main">Skip to content</a>
+<div class="field" aria-hidden="true"></div>
+
+<nav class="nav glass" aria-label="Main">
+  <a class="brand" href="/atc"><img src="/atc/img/icon.png" alt="" width="30" height="30"><span>Approach Control</span></a>
+  <a class="link opt" href="/atc#play">How it plays</a>
+  <a class="link" href="/atc#pro">PRO</a>
+  <a class="link" href="/atc/support" aria-current="page">Support</a>
+  <button class="themebtn" type="button" aria-label="Change theme" aria-haspopup="menu" aria-expanded="false"></button>
 </nav>
 
-<main class="wrap"><div class="page">
-  <p class="eyebrow">Approach Control</p>
-  <h1>Support</h1>
-  <div class="glass panel">
-    <p>Something broken, a question, or an idea? Email <a href="mailto:atc@t5s.io">atc@t5s.io</a>. I read everything and reply as soon as I can.</p>
-    <p>The quickest way is Send Feedback in the app (Settings, or How to Play). It opens a message in your Mail app with your app version, device model and iOS version filled in, and you can read and change all of it before you send.</p>
-  </div>
-  <h2 style="margin-top:2.2rem">PRO and purchases</h2>
-  <div class="faq">
-<div class="glass panel"><h3>What is free?</h3><p>San Diego on the Graveyard shift. PRO unlocks everything else.</p></div>
-<div class="glass panel"><h3>Restore a purchase</h3><p>Open Settings, tap PRO, then Restore at the top of the page. Use the same Apple Account you subscribed with.</p></div>
-<div class="glass panel"><h3>Manage or cancel</h3><p>Once subscribed, Manage Subscription is on the PRO page and in Settings. You can also do it in your Apple Account settings on your device. Cancel at least 24 hours before the end of the period to avoid the next charge.</p></div>
-<div class="glass panel"><h3>Refunds</h3><p>Apple handles refunds. Request one at <a href="https://reportaproblem.apple.com">reportaproblem.apple.com</a>.</p></div>
-<div class="glass panel"><h3>Family Sharing</h3><p>PRO can be shared with your family through Apple Family Sharing.</p></div>
-  </div>
-  <h2 style="margin-top:2.2rem">Your data</h2>
-  <div class="glass panel"><p>The game has no account and no server. Your settings, logbook and saved shifts live on your device. Read the full <a href="/privacy">Privacy Policy</a>.</p></div>
-</div></main>
+<main id="main" class="wrap">
+<div class="doc">
+  <p class="kicker">Approach Control</p>
+  <h1>How can we help?</h1>
+  <p class="lede">Find a quick answer below, or write to us. A real person reads every message.</p>
 
-<footer class="glass wrap">
+  <div class="glass contact">
+    <div>
+      <p class="kicker" style="margin-bottom:.4rem">Email</p>
+      <div class="addr">atc@t5s.io</div>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="mailto:atc@t5s.io?subject=Approach%20Control">Write to us</a>
+      <button class="btn" type="button" id="copy">Copy address</button>
+    </div>
+  </div>
+  <div class="glass panel">
+    <p><strong>Fastest way:</strong> tap Send Feedback in the app, in Settings or How to Play. It adds your app version, device and iOS version for you. You can read and change all of it before you send.</p>
+  </div>
+
+  <h2 style="margin-top:3rem">Answers</h2>
+  <input class="search" id="q" type="search" placeholder="Search answers" aria-label="Search answers" autocomplete="off">
+  <p class="empty" id="none" hidden>No answers match. Write to us at atc@t5s.io.</p>
+
+  <div class="faq" id="faq">
+    <p class="kicker" style="margin:.8rem 0 .2rem">The beta</p>
+    <details class="glass"><summary>How do I join the beta?</summary><div><p>Install TestFlight from the App Store on your iPhone or iPad. Then open <a href="https://testflight.apple.com/join/QJRMzY2c">this link</a> and tap Accept.</p></div></details>
+    <details class="glass"><summary>How do I report a bug in the beta?</summary><div><p>Use Send Feedback in the app, or take a screenshot and share it with TestFlight. Both reach us.</p></div></details>
+
+    <p class="kicker" style="margin:1.6rem 0 .2rem">Playing</p>
+    <details class="glass"><summary>How do I land a plane?</summary><div><p>Turn it toward the dashed line that leads to the runway, and bring it down. When the ILS button lights up, tap it. The plane flies itself down to the runway.</p></div></details>
+    <details class="glass"><summary>Why is the ILS button dark?</summary><div><p>The plane isn’t ready yet. It has to be heading for the line gently, and low enough. The note under the button tells you what’s missing.</p></div></details>
+    <details class="glass"><summary>What counts as too close?</summary><div><p>Two planes less than 3 miles apart, and less than 1,000 feet above or below each other. It costs points and part of your margin. If your margin runs out, the shift ends early.</p></div></details>
+    <details class="glass"><summary>How long is a shift?</summary><div><p>A shift ends after 30 landings or 45 minutes, whichever comes first.</p></div></details>
+    <details class="glass"><summary>What is X?</summary><div><p>X hurries one plane along. It turns, climbs and descends faster, but its landing earns no points. X comes with PRO, and you can set how strong it is in Settings.</p></div></details>
+
+    <p class="kicker" style="margin:1.6rem 0 .2rem">PRO and purchases</p>
+    <details class="glass"><summary>What is free?</summary><div><p>San Diego on the Graveyard shift, the full shift, not a demo. The tutorial, How to Play and the glossary are free too. PRO unlocks everything else.</p><p><a href="/atc#pro">See what PRO adds</a>.</p></div></details>
+    <details class="glass"><summary>How much is PRO?</summary><div><p>Try it free for a week, then it’s $4.99 a year. The free week is for new subscribers. Cancel at least 24 hours before it ends, and you won’t be charged.</p></div></details>
+    <details class="glass"><summary>How do I restore PRO?</summary><div><p>Open Settings, tap PRO, then tap Restore at the top. Use the same Apple Account you subscribed with.</p></div></details>
+    <details class="glass"><summary>How do I cancel?</summary><div><p>Tap Manage Subscription on the PRO page or in Settings. You can also cancel in your Apple Account settings on your device. Cancel at least 24 hours before it renews to avoid the next charge.</p></div></details>
+    <details class="glass"><summary>Can I get a refund?</summary><div><p>Apple handles all refunds. Ask for one at <a href="https://reportaproblem.apple.com">reportaproblem.apple.com</a>.</p></div></details>
+    <details class="glass"><summary>Can my family use PRO?</summary><div><p>Yes. PRO works with Apple Family Sharing.</p></div></details>
+    <details class="glass"><summary>I bought PRO in an early version.</summary><div><p>It stays yours. You don’t need to subscribe.</p></div></details>
+
+    <p class="kicker" style="margin:1.6rem 0 .2rem">Apple Watch</p>
+    <details class="glass"><summary>The watch says PRO is locked.</summary><div><p>The watch app unlocks when your iPhone has PRO. Open the game on your iPhone so it can tell your watch.</p></div></details>
+    <details class="glass"><summary>What does the watch show?</summary><div><p>Your shift: the airport, its traffic, your points, margin, landings and violations. It taps you when planes get close or a pilot calls an emergency. Between shifts, you can play a small game with the Digital Crown.</p></div></details>
+
+    <p class="kicker" style="margin:1.6rem 0 .2rem">Your data</p>
+    <details class="glass"><summary>Do my settings sync between devices?</summary><div><p>Yes, if you use iCloud. Your game settings sync through your own iCloud account. Your logbook and saved shifts stay on each device.</p></div></details>
+    <details class="glass"><summary>How do I move my logbook to a new device?</summary><div><p>It comes with your device backup when you restore. You can also export it as a file from the Approach Log, and import it on the other device.</p></div></details>
+    <details class="glass"><summary>Does the game collect my data?</summary><div><p>No. There is no account and no server. Everything stays on your device. Read the full <a href="/privacy">privacy policy</a>.</p></div></details>
+  </div>
+</div>
+</main>
+
+<footer class="foot glass wrap">
   <span>Brian Tannous · GT Media, LLC</span>
-  <span><a href="/atc/support">Support</a> · <a href="/privacy">Privacy Policy</a> · <a href="https://bttnns.com">bttnns.com</a></span>
+  <nav aria-label="Footer"><a href="/atc">Approach Control</a><a href="/atc/support">Support</a><a href="/privacy">Privacy</a><a href="https://bttnns.com">bttnns.com</a></nav>
 </footer>
-<p class="legal">For entertainment only. Not for real-world navigation. Not affiliated with the FAA, any airline or any aircraft maker. The airlines are made up; the aircraft types are real.</p>
+<p class="legal">For fun only. Not for real navigation. Not affiliated with the FAA, any airline, or any aircraft maker.</p>
+
+<script src="/atc/assets/scope.js"></script>
+<script>
+(function () {
+  var copy = document.getElementById("copy");
+  copy.addEventListener("click", function () {
+    var done = function () { copy.textContent = "Copied"; setTimeout(function () { copy.textContent = "Copy address"; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText("atc@t5s.io").then(done, function () {});
+  });
+  var q = document.getElementById("q"), items = document.querySelectorAll("#faq details"), heads = document.querySelectorAll("#faq > .kicker");
+  q.addEventListener("input", function () {
+    var t = q.value.trim().toLowerCase(), any = false;
+    items.forEach(function (d) {
+      var hit = !t || d.textContent.toLowerCase().indexOf(t) > -1;
+      d.hidden = !hit; if (hit) any = true;
+      d.open = !!t && hit;
+    });
+    heads.forEach(function (h) { h.hidden = !!t; });
+    document.getElementById("none").hidden = any;
+  });
+})();
+</script>
 </body>
 </html>
