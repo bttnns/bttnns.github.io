@@ -1,4 +1,4 @@
-/* Approach Control site: the theme switcher, and a live radar scope drawn from the app's own
+/* Approach Traffic Control site: the theme switcher, and a live radar scope drawn from the app's own
    airport files (airports.js). The traffic is a light demo, not the game's engine. */
 (function () {
   "use strict";
@@ -376,6 +376,7 @@
     g.font = (small ? 9 : 10.5) + "px ui-monospace,SFMono-Regular,Menlo,monospace";
     g.textAlign = "center";
     a.fixes.forEach(function (f) {
+      if (f.r !== "landmark") return;
       var q = self.P(f.p[0], f.p[1]);
       if (q[0] < -40 || q[1] < -20 || q[0] > self.w + 40 || q[1] > self.h + 20) return;
       var lm = f.r === "landmark";

@@ -1,4 +1,4 @@
-/* Approach Control site. The look is the app's own: a radar field, glowing monospaced
+/* Approach Traffic Control site. The look is the app's own: a radar field, glowing monospaced
    readouts, small tracked kickers, and dark glass. Every colour comes from the scope theme
    on <html data-scope>, the same palettes the app draws with (App/Scope/ScopePalette.swift). */
 
@@ -330,3 +330,4 @@ footer.foot nav{display:flex;gap:1.2rem;flex-wrap:wrap}
 .beats{grid-template-columns:repeat(3,1fr)}
 @media (max-width:60rem){.beats{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:40rem){.beats{grid-template-columns:1fr}.port .map{aspect-ratio:4/5}.port .info{right:1rem;max-width:none}}
+@media (prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}}
