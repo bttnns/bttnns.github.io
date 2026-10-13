@@ -41,58 +41,46 @@
       <img class="icon" src="/atc/img/icon.png" alt="Approach Control app icon" width="84" height="84">
       <p class="kicker">Air traffic control for iPhone and iPad</p>
       <h1>Bring every plane <span class="ink">in safely.</span></h1>
-      <p class="lede">You run the radar. Turn the planes, bring them down, and line them up with the runway. <strong>Keep them three miles apart.</strong></p>
+      <p class="lede">You run the radar. Turn the planes, bring them down, and line them up with the runway.</p>
       <div class="cta">
         <a class="btn primary" href="https://testflight.apple.com/join/QJRMzY2c">Join the beta</a>
-        <a class="btn" href="#pro">See what PRO adds</a>
+        <a class="btn" href="#pro">See PRO</a>
       </div>
-      <p class="note"><strong style="color:var(--fg)">Coming soon to the App Store.</strong> Play the free beta now on TestFlight. San Diego is free. No ads. No account.</p>
+      <p class="note"><strong style="color:var(--fg)">Coming soon to the App Store.</strong> San Diego is free. No ads. No account.</p>
     </div>
   </div>
 </header>
 
 <section id="play" class="wrap">
-  <div class="head reveal">
-    <p class="kicker">How it plays</p>
-    <h2>Pick a plane. Give the order.</h2>
-    <p>Every plane you land earns points. Every mistake costs them. A shift ends after 30 landings or 45 minutes.</p>
-  </div>
-  <div class="steps">
-    <div class="glass step reveal"><p class="kicker">Turn</p><div class="readout">HDG 228</div><p>Drag from a plane to point it where you want it to go.</p></div>
-    <div class="glass step reveal"><p class="kicker">Descend</p><div class="readout">8,000</div><p>Drag ALT to bring it down. Drag SPD to slow it.</p></div>
-    <div class="glass step reveal"><p class="kicker">Land</p><div class="readout">ILS 27</div><p>Line it up with the dashed line. Tap ILS, and it lands itself.</p></div>
-    <div class="glass step reveal"><p class="kicker">Keep apart</p><div class="readout">3 NM</div><p>Three miles apart, or 1,000 feet above or below. Too close costs you.</p></div>
-  </div>
-  <div class="split" style="margin-top:clamp(3rem,7vw,5rem)">
+  <div class="split">
     <div class="reveal">
-      <p class="kicker">Built for touch</p>
-      <h2>Everything on one card.</h2>
-      <p class="lede">Tap a plane and its card opens. Altitude, speed and heading are big and easy to change. Hold, Direct and Hand Off are one tap away.</p>
-      <p class="lede">Departures climb out through your airspace too. Get them to the edge, and keep them clear of the arrivals.</p>
+      <p class="kicker">How it plays</p>
+      <h2>Pick a plane. Give the order.</h2>
+      <p class="lede">Land 30 planes in 45 minutes. Keep them three miles apart.</p>
+      <div class="steps tight">
+        <div class="glass step"><div class="readout">HDG</div><p>Drag from a plane to turn it.</p></div>
+        <div class="glass step"><div class="readout">ALT</div><p>Drag to bring it down.</p></div>
+        <div class="glass step"><div class="readout">ILS</div><p>Line it up. Tap ILS. It lands itself.</p></div>
+        <div class="glass step"><div class="readout">3 NM</div><p>Too close costs you points.</p></div>
+      </div>
     </div>
     <div class="phones reveal">
       <div class="phone"><img src="/atc/img/card.jpg" alt="The card for a selected plane, with altitude, speed and heading" width="600" height="1305" loading="lazy"></div>
       <div class="phone"><img src="/atc/img/scope.jpg" alt="The radar scope over San Diego with planes inbound" width="600" height="1305" loading="lazy"></div>
     </div>
   </div>
-  <div class="glass rules reveal" aria-label="The rules">
-    <div>Shift<b>45:00</b></div><div>Landings<b>30</b></div><div>Separation<b>3 NM</b></div><div>Or<b>1,000 FT</b></div>
-  </div>
 </section>
 
 <section id="airports" class="wrap">
   <div class="head reveal">
     <p class="kicker">Five airports</p>
-    <h2>Real airspace. Real landmarks.</h2>
-    <p>Each map is drawn from the real coastline, runways and routes. San Diego is free. The other four come with PRO.</p>
+    <h2>Real airspace.</h2>
+    <p>Real coastlines, runways and landmarks. San Diego is free.</p>
   </div>
   <div class="tabs" role="tablist" aria-label="Airports" id="port-tabs"></div>
   <div class="port reveal">
-    <div class="map">
-      <canvas id="port-scope" aria-label="Live radar map of the selected airport"></canvas>
-      <div class="glass hud" aria-hidden="true"><div>LDG<b id="p-ldg">0</b></div><div>DEP<b id="p-dep">0</b></div><div>SPEED<b>8×</b></div></div>
-    </div>
-    <div class="glass info" id="port-info" aria-live="polite"></div>
+    <div class="map"><canvas id="port-scope" aria-label="Live radar map of the selected airport"></canvas>
+      <div class="glass info" id="port-info" aria-live="polite"></div></div>
   </div>
 </section>
 
@@ -102,256 +90,49 @@
       <p class="kicker">Approach Control</p>
       <div class="readout pro-word">PRO</div>
       <div class="lines"><p>San Diego is free.</p><p class="ink">PRO unlocks everything else.</p></div>
-      <p class="lede">More airports, busier shifts, weather, emergencies, a new daily shift every day, and Apple Watch.</p>
     </div>
     <div class="glass price reveal">
       <span class="trial">Free for a week</span>
       <div><span class="readout amount">$4.99</span><span class="per">/ YEAR</span></div>
-      <p class="dim" style="margin:.5rem 0 0">About 42 cents a month.</p>
       <ul>
-        <li>Four more airports and three busier shifts</li>
-        <li>Weather, emergencies and the daily shift</li>
-        <li>Six more themes and seven app icons</li>
-        <li>Apple Watch</li>
-        <li>Share it with your family</li>
-        <li>No ads, ever</li>
+        <li>Every airport and every shift</li>
+        <li>Weather, emergencies and the daily</li>
+        <li>Seven themes and Apple Watch</li>
+        <li>Share with your family. No ads.</li>
       </ul>
       <a class="btn primary" href="https://testflight.apple.com/join/QJRMzY2c">Join the beta</a>
-      <p class="fine">Coming soon to the App Store.</p>
-      <p class="fine"><strong style="color:var(--fg)">In the beta, PRO is free to try.</strong> Tap Claim PRO on the PRO page.</p>
-      <p class="fine">The free week is for new subscribers. PRO renews each year until you cancel. Cancel at least 24 hours before it renews, in your Apple Account settings. If you bought PRO in an early version, it stays yours.</p>
+      <p class="fine"><strong style="color:var(--fg)">Free to try in the beta.</strong> Renews yearly. Cancel any time in your Apple Account settings.</p>
     </div>
   </div>
 
   <div class="beats">
-    <div class="glass beat reveal"><p class="kicker">Airports</p><div class="readout codes"><b class="free">SAN</b><span>AUS</span><span>PBI</span><span>PIT</span><span>SEA</span></div><p>Add Austin, Palm Beach, Pittsburgh and Seattle. San Diego stays free.</p></div>
-    <div class="glass beat reveal"><p class="kicker">Busier shifts</p><div class="readout">20<small>14</small></div><p>On Holiday Rush the planes keep coming, up to 20 at a time. Evening Push builds to 14. Day Shift gets busier as you get better.</p></div>
-    <div class="glass beat reveal"><p class="kicker">Every day</p><div class="readout"><span id="days">9,782</span><small>DAYS</small></div><p>A new daily shift every day. Play any date back to January 1, 2000. Leave a shift and pick it up later.</p></div>
-    <div class="glass beat reveal"><p class="kicker">Weather</p><div class="readout r-storm">STORM</div><p>Storms drift across the scope. Keep your planes out of them.</p></div>
-    <div class="glass beat reveal"><p class="kicker">Emergencies</p><div class="readout r-viol">MEDICAL<small>FUEL</small></div><p>Low fuel, a fire, an engine failure, a medical emergency, or lost cabin pressure. Land that plane first.</p></div>
-    <div class="glass beat reveal"><p class="kicker">Overtime</p><div class="readout r-warn">2×</div><p>Stay on after a shift, and every point counts double. Run out of margin, and Keep Going gives you one more chance.</p></div>
-    <div class="glass beat reveal"><p class="kicker">Open shift</p><div class="readout">∞</div><p>No clock and no margin. Just play.</p></div>
-    <div class="glass beat reveal"><p class="kicker">Game speed</p><div class="readout">10×<small>0.5×</small></div><p>Slow to half speed when it gets busy. Speed up to 10× when it’s quiet. 1× and 2× are free.</p></div>
-    <div class="glass beat reveal"><p class="kicker">X</p><div class="readout" style="color:var(--fg);text-shadow:none">IMU412<span class="xkey">X</span></div><p>Hurry one plane along. It turns, climbs and descends faster. Its landing earns no points.</p></div>
-    <div class="glass beat reveal"><p class="kicker">Practice</p><div class="readout">OFF</div><p>Practice Mode turns off the margin and stars, so you can learn with nothing at stake. Add pilot errors. Turn off departures. Set your own rules.</p></div>
-    <div class="glass beat reveal"><p class="kicker">Themes</p><div class="readout">7</div><p>Six more looks for the scope, each with a matching app icon. <a href="#themes">Try them on this page.</a></p></div>
-    <div class="glass beat reveal"><p class="kicker">Apple Watch</p><div class="readout r-warn">X</div><p>Follow your shift on your wrist, and feel a tap when planes get close. Between shifts, fly a small game with the Digital Crown.</p></div>
-  </div>
-
-  <div class="glass compare reveal" role="region" aria-label="Free and PRO compared" tabindex="0">
-    <table>
-      <thead><tr><th scope="col">What you get</th><th scope="col">Free</th><th scope="col" class="pro">PRO</th></tr></thead>
-      <tbody>
-        <tr><td>San Diego</td><td><i class="yes" aria-label="Yes"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Austin, Palm Beach, Pittsburgh and Seattle</td><td><i class="no" aria-label="No"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Graveyard shift</td><td><i class="yes" aria-label="Yes"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Day Shift, Evening Push and Holiday Rush</td><td><i class="no" aria-label="No"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Tutorial, How to Play and glossary</td><td><i class="yes" aria-label="Yes"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Weather and emergencies</td><td><i class="no" aria-label="No"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Daily shift, and every date since 2000</td><td><i class="no" aria-label="No"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Resume Shift</td><td><i class="no" aria-label="No"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Overtime, Keep Going and Open Shift</td><td><i class="no" aria-label="No"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Practice Mode and your own rules</td><td><i class="no" aria-label="No"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Game speed</td><td class="part">1× and 2×</td><td class="pro part">0.5× to 10×</td></tr>
-        <tr><td>Themes</td><td class="part">Phosphor</td><td class="pro part">All 7</td></tr>
-        <tr><td>App icons</td><td class="part">1</td><td class="pro part">8</td></tr>
-        <tr><td>Apple Watch</td><td><i class="no" aria-label="No"></i></td><td class="pro"><i class="yes" aria-label="Yes"></i></td></tr>
-        <tr><td>Ads</td><td class="part">None</td><td class="pro part">None</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section id="daily" class="wrap">
-  <div class="head reveal">
-    <p class="kicker">The daily</p>
-    <h2>Every date is a different shift.</h2>
-    <p>Holidays, big events, and a few days we made up. Each one changes the traffic.</p>
-  </div>
-  <div class="days">
-    <div class="glass day reveal"><div class="when">March 14</div><h3>Pi Day</h3><p>The shift is 31.4 minutes long.</p></div>
-    <div class="glass day reveal"><div class="when">April 1</div><h3>April Fools</h3><p>Around minute twenty, the runways turn around.</p></div>
-    <div class="glass day reveal"><div class="when">February 29</div><h3>Leap Day</h3><p>The day barely exists, so the clock runs fast.</p></div>
-    <div class="glass day reveal"><div class="when">Your birthday</div><h3>Your Birthday</h3><p>Clear skies and light traffic. The pilots know.</p></div>
-    <div class="glass day reveal"><div class="when">After Thanksgiving</div><h3>Homeward Sunday</h3><p>The busiest day in the game. Everyone flies home at once.</p></div>
-    <div class="glass day reveal"><div class="when">Made up</div><h3>Heavy Metal Day</h3><p>Somebody booked every widebody in the country.</p></div>
-    <div class="glass day reveal"><div class="when">Made up</div><h3>Freight Night</h3><p>Only the freight airlines are flying tonight.</p></div>
-    <div class="glass day reveal"><div class="when">Made up</div><h3>Fog Bank Friday</h3><p>The fog came in and stayed. No storms today.</p></div>
+    <div class="glass beat reveal"><p class="kicker">Airports</p><div class="readout codes"><b class="free">SAN</b><span>AUS</span><span>PBI</span><span>PIT</span><span>SEA</span></div><p>Four more airports, each harder than the last.</p></div>
+    <div class="glass beat reveal"><p class="kicker">Shifts</p><div class="readout">RUSH</div><p>Day Shift, Evening Push and Holiday Rush. Busier every time.</p></div>
+    <div class="glass beat reveal"><p class="kicker">Every day</p><div class="readout"><span id="days">9,782</span><small>DAYS</small></div><p>A new shift every day. Play any date since 2000.</p></div>
+    <div class="glass beat reveal"><p class="kicker">Weather</p><div class="readout r-storm">STORM</div><p>Storms drift across the scope. Fly around them.</p></div>
+    <div class="glass beat reveal"><p class="kicker">Emergencies</p><div class="readout r-viol">MAYDAY</div><p>Land that plane first. Keep everyone else moving.</p></div>
+    <div class="glass beat reveal"><p class="kicker">Apple Watch</p><div class="readout r-warn">WATCH</div><p>Your shift on your wrist. A tap when planes get close.</p></div>
   </div>
 </section>
 
 <section id="themes" class="wrap">
   <div class="head reveal">
     <p class="kicker">Seven themes</p>
-    <h2>Change the whole scope.</h2>
-    <p>Phosphor is free. The other six come with PRO, each with its own app icon. Tap one to see this page in it.</p>
+    <h2>Make it yours.</h2>
+    <p>Tap one to see this page in it. Phosphor is free.</p>
   </div>
   <div class="themes" id="theme-grid"></div>
-</section>
-
-<section id="watch" class="wrap">
-  <div class="split">
-    <div class="watches reveal">
-      <div class="watch"><img src="/atc/img/watch-live.png" alt="Apple Watch showing live traffic and a Getting close alert" width="422" height="514" loading="lazy"></div>
-      <div class="watch" style="margin-top:2.5rem"><img src="/atc/img/watch-game.png" alt="The small game on Apple Watch" width="422" height="514" loading="lazy"></div>
-    </div>
-    <div class="reveal">
-      <p class="kicker">Apple Watch · PRO</p>
-      <h2>Your shift, on your wrist.</h2>
-      <p class="lede">See the traffic, your points and your landings. Feel a tap when planes get close or a pilot calls an emergency.</p>
-      <p class="lede">Between shifts, play a small game. Steer with the Digital Crown.</p>
-    </div>
-  </div>
-</section>
-
-<section id="why" class="wrap">
-  <div class="glass letter reveal">
-    <p class="kicker">Why PRO</p>
-    <p>Made by one person who loves general aviation. I spent years as a Kubernetes engineer at a big tech company you likely know. Then came a reorg, my pet got cancer and died, and a manager told me I would never be a software developer. I was let go. So I built this. Turns out he was wrong.</p>
-    <p>I have always wanted to learn to fly, but lessons cost a fortune. PRO goes into my flying fund, and into my mortgage, because once the singularity shows up I am going to need it.</p>
-    <p class="sig">For Harv.</p>
-  </div>
-</section>
-
-<section id="private" class="wrap">
-  <div class="head reveal">
-    <p class="kicker">Private by design</p>
-    <h2>Your game stays on your device.</h2>
-    <p>No sign-up, no servers, no tracking. <a href="/privacy">Read the privacy policy.</a></p>
-  </div>
-  <div class="pillars">
-    <div class="glass pillar reveal"><div class="readout">NO ACCOUNT</div><p>Nothing to sign up for. Open it and play.</p></div>
-    <div class="glass pillar reveal"><div class="readout">NO SERVERS</div><p>The game never sends your data to us.</p></div>
-    <div class="glass pillar reveal"><div class="readout">NO TRACKING</div><p>No ads, no analytics, no ad ID.</p></div>
-    <div class="glass pillar reveal"><div class="readout">OFFLINE</div><p>Play anywhere. No signal needed.</p></div>
-  </div>
-</section>
-
-<section class="wrap" aria-label="The airlines">
-  <div class="head center reveal" style="text-align:center">
-    <p class="kicker">The airlines are made up</p>
-    <h2>The planes are real.</h2>
-  </div>
-  <div class="marquee" aria-hidden="true"><div class="row" id="airlines"></div></div>
-</section>
-
-<section id="faq" class="wrap">
-  <div class="head reveal"><p class="kicker">Questions</p><h2>Good to know.</h2></div>
-  <div class="faq">
-    <details class="glass reveal"><summary>How do I join the beta?</summary><div><p>Install TestFlight from the App Store on your iPhone or iPad. Then open <a href="https://testflight.apple.com/join/QJRMzY2c">this link</a> and tap Accept.</p></div></details>
-    <details class="glass reveal"><summary>Is it really free?</summary><div><p>Yes. San Diego on the Graveyard shift is the full game, not a demo. Play as long as you like.</p></div></details>
-    <details class="glass reveal"><summary>How much is PRO?</summary><div><p>Try it free for a week. Then it’s $4.99 a year. You can share it with your family.</p></div></details>
-    <details class="glass reveal"><summary>Does it work on iPad?</summary><div><p>Yes. On iPad the scope fills the screen. With PRO, there’s an Apple Watch app too.</p></div></details>
-    <details class="glass reveal"><summary>Do I need the internet?</summary><div><p>No. The whole game works offline.</p></div></details>
-    <details class="glass reveal"><summary>Is this real air traffic control training?</summary><div><p>No. It’s a game, made with care. Don’t use it to fly.</p></div></details>
-  </div>
-  <p class="note">More answers on the <a href="/atc/support">support page</a>.</p>
-</section>
-
-<section class="wrap">
-  <div class="glass final reveal">
-    <p class="kicker">Approach Control</p>
-    <h2>Ready for your first shift?</h2>
-    <p class="lede" style="margin-inline:auto">Coming soon to the App Store. Play the free beta on TestFlight today.</p>
-    <div class="cta"><a class="btn primary" href="https://testflight.apple.com/join/QJRMzY2c">Join the beta</a><a class="btn" href="/atc/support">Support</a></div>
-  </div>
 </section>
 </main>
 
 <footer class="foot glass wrap">
   <span>Brian Tannous · GT Media, LLC</span>
-  <nav aria-label="Footer"><a href="/atc">Approach Control</a><a href="/atc/support">Support</a><a href="/privacy">Privacy</a><a href="https://bttnns.com">bttnns.com</a></nav>
+  <nav aria-label="Footer"><a href="/atc/support">Support</a><a href="/privacy">Privacy</a><a href="https://bttnns.com">bttnns.com</a></nav>
 </footer>
 <p class="legal">For fun only. Not for real navigation. Not affiliated with the FAA, any airline, or any aircraft maker.</p>
 
 <script src="/atc/assets/airports.js"></script>
 <script src="/atc/assets/scope.js"></script>
-<script>
-(function () {
-  var S = window.ATCScope, pad = S.pad;
-  function clock(sec) { return Math.floor(sec / 60) + ":" + pad(sec % 60, 2); }
-
-  // Days of the daily, counted the way the app counts them: every date from 1 Jan 2000 to today.
-  var now = new Date();
-  var days = Math.floor((Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) - Date.UTC(2000, 0, 1)) / 864e5) + 1;
-  document.getElementById("days").textContent = days.toLocaleString("en-US");
-
-  // The hero scope, with the tapped plane's card.
-  var card = document.getElementById("hero-card"), hero = document.querySelector(".hero");
-  var wide = matchMedia("(min-width: 52rem)").matches;
-  var picked = false;
-  var heroScope = S.mount(document.getElementById("hero-scope"), {
-    icao: "KSAN", busy: true, focus: wide ? [0.68, 0.5] : [0.5, 0.42], cover: true, zoom: wide ? 1.3 : 1.5, centerOnField: true,
-    onStats: function (st, sc) {
-      document.getElementById("h-ldg").textContent = st.ldg + "/30";
-      document.getElementById("h-dep").textContent = st.dep;
-      document.getElementById("h-clock").textContent = clock(Math.round(st.clock));
-      if (!picked && wide) {
-        var a = sc.planes.filter(function (p) { return p.kind === "arr" && p.leg === 0; })[0];
-        if (a) { sc.sel = a; picked = true; }
-      }
-    },
-    onSelect: function (p, sc) {
-      if (!p) { card.hidden = true; return; }
-      card.hidden = false;
-      card.innerHTML = '<div class="cs">' + p.cs + '</div><div class="who">' + p.type + " · " + (p.kind === "arr" ? "ARR" : "DEP") + "<br>" + p.al + '</div>' +
-        '<div class="rows"><div>ALT<b>' + Math.round(p.alt / 100) * 100 + '</b></div><div>SPD<b>' + Math.round(p.spd) + '</b></div><div>HDG<b>' + pad(p.hdg, 3) + "</b></div></div>";
-      var q = sc.P(p.x, p.y), r = hero.getBoundingClientRect();
-      var x = Math.min(Math.max(q[0] + 24, 12), r.width - card.offsetWidth - 12);
-      var y = Math.min(Math.max(q[1] - card.offsetHeight - 20, 70), r.height - card.offsetHeight - 80);
-      card.style.left = x + "px"; card.style.top = y + "px";
-    }
-  });
-  addEventListener("pointerdown", function () { picked = true; }, { once: true });
-
-  // Airports
-  var PORTS = [
-    { icao: "KSAN", code: "SAN", free: true, line: "One runway between the ocean and the hills. The best place to learn." },
-    { icao: "KAUS", code: "AUS", line: "Two long parallel runways in the Texas Hill Country. A step busier than San Diego." },
-    { icao: "KPIT", code: "PIT", line: "Four runways and three rivers. Plenty of room, and plenty of traffic." },
-    { icao: "KPBI", code: "PBI", line: "Three runways on the Florida coast. Storms roll in often." },
-    { icao: "KSEA", code: "SEA", line: "Three tight parallel runways, Mt. Rainier on the map, and storms most days. The hardest airport in the game." }
-  ];
-  var tabs = document.getElementById("port-tabs"), info = document.getElementById("port-info");
-  var portScope = S.mount(document.getElementById("port-scope"), {
-    icao: "KSAN", centerOnField: false,
-    onStats: function (st) { document.getElementById("p-ldg").textContent = st.ldg; document.getElementById("p-dep").textContent = st.dep; }
-  });
-  function weather(x) { return x < 0.2 ? "Rare" : x < 0.5 ? "Often" : "Most days"; }
-  function show(port) {
-    var a = ATC_AIRPORTS[port.icao];
-    portScope.o.weather = !port.free; portScope.o.emergencies = !port.free; portScope.o.busy = !port.free;
-    portScope.setAirport(port.icao); portScope.resize();
-    tabs.querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-selected", String(b.dataset.icao === port.icao)); });
-    var lms = a.fixes.filter(function (f) { return f.r === "landmark"; });
-    info.innerHTML = '<p class="kicker">' + port.icao + ' <span class="badge' + (port.free ? " solid" : "") + '">' + (port.free ? "FREE" : "PRO") + "</span></p>" +
-      "<h3>" + a.name + "</h3><p class=\"dim\" style=\"margin:.2rem 0 0\">" + port.line + "</p>" +
-      '<div class="facts"><div>Runways<b>' + a.runways.length / 2 + "</b></div><div>Landmarks<b>" + lms.length + "</b></div>" +
-      "<div>Weather<b>" + weather(a.storm) + "</b></div><div>Arrival gates<b>" + a.fixes.filter(function (f) { return f.r === "entry"; }).length + "</b></div></div>" +
-      '<p class="kicker" style="margin:.4rem 0 .3rem">On the map</p><div class="lm">' +
-      lms.slice(0, 10).map(function (l) { return "<span>" + l.n + "</span>"; }).join("") + "</div>";
-  }
-  PORTS.forEach(function (p) {
-    var b = document.createElement("button");
-    b.setAttribute("role", "tab"); b.dataset.icao = p.icao;
-    b.innerHTML = p.code + "<small>" + (p.free ? "FREE" : "PRO") + "</small>";
-    b.addEventListener("click", function () { show(p); });
-    tabs.appendChild(b);
-  });
-  show(PORTS[0]);
-
-  // Themes
-  var grid = document.getElementById("theme-grid");
-  grid.innerHTML = S.themes.map(function (t) {
-    return '<button class="theme" data-theme-pick="' + t.id + '" aria-pressed="false"><img src="/atc/img/icon-' + t.id + '.png" alt="" width="60" height="60" loading="lazy">' +
-      "<div><b>" + t.name + "</b><span>" + t.line + '</span><div class="t' + (t.free ? " free" : "") + '">' + (t.free ? "FREE" : "PRO") + "</div></div></button>";
-  }).join("");
-  S.setTheme(document.documentElement.getAttribute("data-scope"));
-
-  // Made-up airlines
-  var row = ATC_AIRLINES.map(function (a) { return "<span><b>" + a.c + "</b>" + a.n + "</span>"; }).join("");
-  document.getElementById("airlines").innerHTML = row + row;
-})();
-</script>
+<script src="/atc/assets/landing.js"></script>
 </body>
 </html>

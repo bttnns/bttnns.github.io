@@ -90,10 +90,6 @@
     return (cur + (d > 0 ? max : -max) + 360) % 360;
   }
   function pad(n, w) { n = String(Math.max(0, Math.round(n))); while (n.length < w) n = "0" + n; return n; }
-  function weighted(airlines, group) {
-    var pool = airlines.filter(function (a) { return a.g === group; });
-    return pool.length ? pick(pool) : pick(airlines);
-  }
 
   function Scope(canvas, opts) {
     this.c = canvas;
@@ -148,7 +144,7 @@
     this.exits = a.fixes.filter(function (f) { return f.r === "departure_exit"; });
     this.storms = [];
     if (this.o.weather) {
-      var n = Math.max(1, Math.min(a.cells, Math.round(a.storm * 4)));
+      var n = 2;
       for (var i = 0; i < n; i++) {
         this.storms.push({ x: rnd(this.box.x0 * .6, this.box.x1 * .6), y: rnd(this.box.y0 * .6, this.box.y1 * .6),
           r: rnd(3.5, 6.5), vx: rnd(-.04, .04), vy: rnd(-.04, .04), seed: Math.random() * 10 });
@@ -197,11 +193,9 @@
     var s = Math.sign((e.p[0] * side[0] + e.p[1] * side[1])) || 1;
     var join = [rw.p[0] + back[0] * 12 + side[0] * s * 4, rw.p[1] + back[1] * 12 + side[1] * s * 4];
     var faf = [rw.p[0] + back[0] * 7, rw.p[1] + back[1] * 7];
-    var group = Math.random() < .2 ? "regional" : Math.random() < .12 ? "cargo" : "mainline";
-    var al = weighted(window.ATC_AIRLINES, group);
     var emerg = this.o.emergencies && Math.random() < .14 ? pick(["FUEL", "MEDICAL", "ENGINE"]) : null;
     this.planes.push({
-      kind: "arr", cs: al.c + Math.floor(rnd(12, 990)), al: al.n, type: pick(this.a.fleet),
+      kind: "arr", cs: pick(window.ATC_AIRLINES) + Math.floor(rnd(12, 990)),
       x: e.p[0], y: e.p[1], alt: e.a || 10000, spd: 280, hdg: hdgTo(join[0] - e.p[0], join[1] - e.p[1]),
       route: [join, faf, rw.p], leg: 0, rw: rwId, trail: [], emerg: emerg
     });
@@ -213,9 +207,8 @@
     if (!rw) return;
     if (this.planes.some(function (p) { return p.kind === "dep" && Math.hypot(p.x - rw.p[0], p.y - rw.p[1]) < 6; })) return;
     var v = hdgVec(rw.h), ex = pick(this.exits);
-    var al = weighted(window.ATC_AIRLINES, Math.random() < .25 ? "regional" : "mainline");
     this.planes.push({
-      kind: "dep", cs: al.c + Math.floor(rnd(12, 990)), al: al.n, type: pick(this.a.fleet),
+      kind: "dep", cs: pick(window.ATC_AIRLINES) + Math.floor(rnd(12, 990)),
       x: rw.p[0] + v[0] * rw.l, y: rw.p[1] + v[1] * rw.l, alt: 400, spd: 170, hdg: rw.h,
       route: [[rw.p[0] + v[0] * 5, rw.p[1] + v[1] * 5], ex.p], leg: 0, trail: []
     });
@@ -334,8 +327,8 @@
     // Geography
     a.bg.forEach(function (b) {
       path(b.p, b.c);
-      if (b.c && (b.k === "sea" || b.k === "water")) { g.fillStyle = k.furn; g.globalAlpha = .1; g.fill(); }
-      g.globalAlpha = b.k === "peaks" ? .35 : .45; g.strokeStyle = k.furn; g.lineWidth = 1; g.stroke();
+      if (b.c && b.k === "w") { g.fillStyle = k.furn; g.globalAlpha = .1; g.fill(); }
+      g.globalAlpha = .45; g.strokeStyle = k.furn; g.lineWidth = 1; g.stroke();
       g.globalAlpha = 1;
     });
     // Range rings around the field
@@ -391,7 +384,7 @@
       g.beginPath();
       if (lm) { g.arc(q[0], q[1], 1.8, 0, Math.PI * 2); g.fill(); }
       else { g.moveTo(q[0], q[1] - 4); g.lineTo(q[0] + 4, q[1] + 3); g.lineTo(q[0] - 4, q[1] + 3); g.closePath(); g.stroke(); }
-      g.fillText(f.n, q[0], q[1] + (lm ? 13 : 15));
+      if (f.n) g.fillText(f.n, q[0], q[1] + 13);
       g.globalAlpha = 1;
     });
     // Sweep

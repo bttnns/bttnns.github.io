@@ -316,3 +316,17 @@ footer.foot nav{display:flex;gap:1.2rem;flex-wrap:wrap}
 .glass .kicker,.head .kicker,.doc .kicker{color:var(--ink);font-size:.74rem;line-height:1.4}
 .split>*,.port>*,.pro-hero>*{min-width:0}
 .phones .phone{flex:1 1 0;min-width:0}
+.steps.tight{grid-template-columns:1fr 1fr;gap:.7rem;margin-top:1.4rem}
+.steps.tight .step{padding:1.1rem 1.2rem}
+.steps.tight .readout{font-size:1.6rem;margin:0 0 .5rem}
+.steps.tight p{font-size:.92rem}
+.beats{grid-template-columns:repeat(auto-fill,minmax(17rem,1fr))}
+.port .info{justify-content:center}
+.port .info h3{margin:.4rem 0 .5rem}
+.port{grid-template-columns:1fr}
+.port .map{aspect-ratio:16/9}
+.port .info{position:absolute;left:1rem;bottom:1rem;max-width:22rem;padding:1.1rem 1.3rem;background:color-mix(in srgb,var(--field) 72%,transparent)}
+.port .info p.dim{margin:0;font-size:.95rem}
+.beats{grid-template-columns:repeat(3,1fr)}
+@media (max-width:60rem){.beats{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:40rem){.beats{grid-template-columns:1fr}.port .map{aspect-ratio:4/5}.port .info{right:1rem;max-width:none}}

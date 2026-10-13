@@ -60,7 +60,6 @@
     <details class="glass"><summary>Why is the ILS button dark?</summary><div><p>The plane isn’t ready yet. It has to be heading for the line gently, and low enough. The note under the button tells you what’s missing.</p></div></details>
     <details class="glass"><summary>What counts as too close?</summary><div><p>Two planes less than 3 miles apart, and less than 1,000 feet above or below each other. It costs points and part of your margin. If your margin runs out, the shift ends early.</p></div></details>
     <details class="glass"><summary>How long is a shift?</summary><div><p>A shift ends after 30 landings or 45 minutes, whichever comes first.</p></div></details>
-    <details class="glass"><summary>What is X?</summary><div><p>X hurries one plane along. It turns, climbs and descends faster, but its landing earns no points. X comes with PRO, and you can set how strong it is in Settings.</p></div></details>
 
     <p class="kicker" style="margin:1.6rem 0 .2rem">PRO and purchases</p>
     <details class="glass"><summary>What is free?</summary><div><p>San Diego on the Graveyard shift, the full shift, not a demo. The tutorial, How to Play and the glossary are free too. PRO unlocks everything else.</p><p><a href="/atc#pro">See what PRO adds</a>.</p></div></details>
@@ -90,25 +89,6 @@
 <p class="legal">For fun only. Not for real navigation. Not affiliated with the FAA, any airline, or any aircraft maker.</p>
 
 <script src="/atc/assets/scope.js"></script>
-<script>
-(function () {
-  var copy = document.getElementById("copy");
-  copy.addEventListener("click", function () {
-    var done = function () { copy.textContent = "Copied"; setTimeout(function () { copy.textContent = "Copy address"; }, 1800); };
-    if (navigator.clipboard) navigator.clipboard.writeText("atc@t5s.io").then(done, function () {});
-  });
-  var q = document.getElementById("q"), items = document.querySelectorAll("#faq details"), heads = document.querySelectorAll("#faq > .kicker");
-  q.addEventListener("input", function () {
-    var t = q.value.trim().toLowerCase(), any = false;
-    items.forEach(function (d) {
-      var hit = !t || d.textContent.toLowerCase().indexOf(t) > -1;
-      d.hidden = !hit; if (hit) any = true;
-      d.open = !!t && hit;
-    });
-    heads.forEach(function (h) { h.hidden = !!t; });
-    document.getElementById("none").hidden = any;
-  });
-})();
-</script>
+<script src="/atc/assets/support.js"></script>
 </body>
 </html>
