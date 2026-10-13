@@ -335,3 +335,21 @@ footer.foot nav{display:flex;gap:1.2rem;flex-wrap:wrap}
 .simple-pro p{margin:0}
 .simple-pro .big{font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:780;letter-spacing:-.03em;line-height:1.15;margin-bottom:.3rem}
 @media (max-width:36rem){.simple-pro{grid-template-columns:1fr}}
+/* PRO showcase */
+.pro-mark{font-size:clamp(4.5rem,11vw,7.5rem);margin-bottom:.6rem}
+.showcase{position:relative;aspect-ratio:16/9;border-radius:30px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line),0 40px 80px -40px rgba(0,0,0,.8)}
+.showcase canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.showcase .bar{position:absolute;left:1rem;right:1rem;bottom:1rem;display:flex;flex-wrap:wrap;gap:.8rem;justify-content:space-between;align-items:center;padding:.6rem .7rem;border-radius:999px;background:color-mix(in srgb,var(--field) 70%,transparent)}
+.showcase .tabs{margin:0}
+.showcase .tabs button{padding:.6rem .9rem;font-size:.9rem}
+.swatches{display:flex;gap:.45rem;padding-right:.3rem}
+.swatches .sw{all:unset;cursor:pointer;width:28px;height:28px;border-radius:50%;transition:transform .2s}
+.swatches .sw:hover{transform:scale(1.12)}
+.swatches .sw[aria-pressed=true]{outline:2px solid var(--fg);outline-offset:2px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-top:1rem}
+.tile{padding:1.3rem 1.4rem}
+.tile .readout{font-size:clamp(1.8rem,3.2vw,2.4rem);margin-bottom:.6rem}
+.tile p{margin:0;color:var(--fg2);font-size:.95rem}
+.watch-row{margin-top:clamp(3.5rem,8vw,6rem)}
+@media (max-width:52rem){.tiles{grid-template-columns:1fr 1fr}.showcase{aspect-ratio:4/5;border-radius:24px}.showcase .bar{border-radius:22px;justify-content:center}}
+.showcase{background:var(--field);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 30%,transparent),0 0 80px -30px color-mix(in srgb,var(--ink) 50%,transparent)}

@@ -39,17 +39,58 @@
   </div>
 </header>
 
-<section class="wrap" id="pro">
-  <div class="glass simple-pro">
-    <div>
-      <p class="kicker">Free</p>
-      <p class="big">San Diego.</p>
-      <p class="dim">No ads. No account.</p>
+<section class="wrap" id="play">
+  <div class="split">
+    <div class="reveal">
+      <p class="kicker">How it plays</p>
+      <h2>Tap a plane. Drag to turn it.</h2>
+      <p class="lede">Bring it down, line it up, and tap ILS. It lands itself. Keep everyone three miles apart.</p>
+      <p class="lede"><strong>San Diego is free.</strong> The whole shift, not a demo. No ads. No account.</p>
     </div>
-    <div>
-      <p class="kicker">PRO</p>
-      <p class="big">Everything else.</p>
-      <p class="dim">$7.99 a year. First month free.</p>
+    <div class="phones reveal">
+      <div class="phone"><img src="/atc/img/card.jpg" alt="The card for a selected plane, with altitude, speed and heading" width="600" height="1305" loading="lazy"></div>
+      <div class="phone"><img src="/atc/img/scope.jpg" alt="The radar scope over San Diego" width="600" height="1305" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="pro">
+  <div class="head reveal">
+    <div class="readout pro-mark">PRO</div>
+    <h2>Then it gets wild.</h2>
+    <p>Bigger airports. Storms. Emergencies. Holiday rushes. All on one scope.</p>
+  </div>
+  <div class="showcase reveal">
+    <canvas id="pro-scope" aria-label="A live PRO scope with storms and emergencies"></canvas>
+    <div class="glass bar">
+      <div class="tabs" role="tablist" aria-label="Airports" id="port-tabs"></div>
+      <div class="swatches" aria-label="Themes">
+        <button class="sw" data-sw="phosphor" data-theme-pick="phosphor" aria-label="Phosphor"></button>
+        <button class="sw" data-sw="paper" data-theme-pick="paper" aria-label="Paper"></button>
+        <button class="sw" data-sw="voltage" data-theme-pick="voltage" aria-label="Voltage"></button>
+        <button class="sw" data-sw="ember" data-theme-pick="ember" aria-label="Ember"></button>
+        <button class="sw" data-sw="blueprint" data-theme-pick="blueprint" aria-label="Blueprint"></button>
+        <button class="sw" data-sw="arcade" data-theme-pick="arcade" aria-label="Arcade"></button>
+        <button class="sw" data-sw="lantern" data-theme-pick="lantern" aria-label="Lantern"></button>
+      </div>
+    </div>
+  </div>
+  <div class="tiles">
+    <div class="glass tile reveal"><div class="readout r-storm">STORM</div><p>Weather drifts across the scope.</p></div>
+    <div class="glass tile reveal"><div class="readout r-viol">MAYDAY</div><p>Land the emergency first.</p></div>
+    <div class="glass tile reveal"><div class="readout">RUSH</div><p>Holiday traffic that never stops.</p></div>
+    <div class="glass tile reveal"><div class="readout r-warn">DAILY</div><p>A new shift every day.</p></div>
+  </div>
+  <div class="split watch-row">
+    <div class="watches reveal">
+      <div class="watch"><img src="/atc/img/watch-live.png" alt="Apple Watch with live traffic" width="422" height="514" loading="lazy"></div>
+      <div class="watch"><img src="/atc/img/watch-game.png" alt="The small game on Apple Watch" width="422" height="514" loading="lazy"></div>
+    </div>
+    <div class="reveal">
+      <p class="kicker">Apple Watch</p>
+      <h2>Your shift, on your wrist.</h2>
+      <p class="lede">Feel a tap when planes get close. Play a tiny game between shifts.</p>
+      <div class="cta"><a class="btn primary" href="https://testflight.apple.com/join/QJRMzY2c">Join the beta</a></div>
     </div>
   </div>
 </section>

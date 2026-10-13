@@ -51,7 +51,7 @@
         '<span class="tag' + (t.free ? " free" : "") + '">' + (t.free ? "FREE" : "PRO") + "</span></button>";
     }).join("");
     btn.parentNode.appendChild(pop);
-    pop.querySelectorAll(".sw").forEach(function (sw) {
+    document.querySelectorAll(".sw[data-sw]").forEach(function (sw) {
       var probe = document.createElement("i");
       probe.setAttribute("data-scope", sw.getAttribute("data-sw"));
       probe.style.display = "none";
@@ -146,8 +146,8 @@
     if (this.o.weather) {
       var n = 2;
       for (var i = 0; i < n; i++) {
-        this.storms.push({ x: rnd(this.box.x0 * .6, this.box.x1 * .6), y: rnd(this.box.y0 * .6, this.box.y1 * .6),
-          r: rnd(3.5, 6.5), vx: rnd(-.04, .04), vy: rnd(-.04, .04), seed: Math.random() * 10 });
+        this.storms.push({ x: rnd(-24, 24), y: rnd(-20, 20),
+          r: rnd(6, 10), vx: rnd(-.04, .04), vy: rnd(-.04, .04), seed: Math.random() * 10 });
       }
     }
     this.spawnT = 0;
@@ -193,7 +193,7 @@
     var s = Math.sign((e.p[0] * side[0] + e.p[1] * side[1])) || 1;
     var join = [rw.p[0] + back[0] * 12 + side[0] * s * 4, rw.p[1] + back[1] * 12 + side[1] * s * 4];
     var faf = [rw.p[0] + back[0] * 7, rw.p[1] + back[1] * 7];
-    var emerg = this.o.emergencies && Math.random() < .14 ? pick(["FUEL", "MEDICAL", "ENGINE"]) : null;
+    var emerg = this.o.emergencies && Math.random() < .3 ? pick(["FUEL", "MEDICAL", "ENGINE"]) : null;
     this.planes.push({
       kind: "arr", cs: pick(window.ATC_AIRLINES) + Math.floor(rnd(12, 990)),
       x: e.p[0], y: e.p[1], alt: e.a || 10000, spd: 280, hdg: hdgTo(join[0] - e.p[0], join[1] - e.p[1]),
@@ -344,7 +344,7 @@
       var q = self.P(st.x, st.y), R = st.r * s;
       var grd = g.createRadialGradient(q[0], q[1], 0, q[0], q[1], R);
       grd.addColorStop(0, k.storm); grd.addColorStop(1, "transparent");
-      g.globalAlpha = .38; g.fillStyle = grd;
+      g.globalAlpha = .55; g.fillStyle = grd;
       g.beginPath();
       for (var i = 0; i <= 12; i++) {
         var ang = i / 12 * Math.PI * 2, rr2 = R * (0.75 + 0.25 * Math.sin(ang * 3 + st.seed));
