@@ -1,48 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Support: Approach Control</title>
-  <meta name="description" content="Support for Approach Control: ATC Sim by Brian Tannous." />
-  <style>
-    :root { color-scheme: light dark; --fg: #111; --muted: #555; --bg: #fafafa; --card: #fff; --line: #e5e5e5; }
-    @media (prefers-color-scheme: dark) {
-      :root { --fg: #e8eefc; --muted: #9aa8c7; --bg: #070b14; --card: #10182a; --line: rgba(255,255,255,0.08); }
-    }
-    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--fg); line-height: 1.55; }
-    main { width: min(40rem, calc(100% - 2rem)); margin: 0 auto; padding: 2.5rem 0 4rem; }
-    h1 { font-size: 1.75rem; letter-spacing: -0.02em; margin: 0 0 0.35rem; }
-    h2 { font-size: 1.1rem; margin: 1.75rem 0 0.5rem; }
-    p { margin: 0.55rem 0; }
-    ul { margin: 0.4rem 0 0.6rem; padding-left: 1.2rem; }
-    a { color: inherit; }
-    header p { color: var(--muted); font-size: 0.95rem; margin: 0 0 1.75rem; }
-    section { background: var(--card); border: 1px solid var(--line); border-radius: 0.85rem; padding: 1.1rem 1.2rem; margin: 1rem 0; }
-    footer { margin-top: 2.5rem; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); padding-top: 1rem; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Approach Control: ATC Sim</title>
+<meta name="description" content="Bring every plane in safely. A single-player air traffic control game for iPhone and iPad. No ads, no account, everything on your device.">
+<meta name="theme-color" content="#030b08">
+<meta property="og:title" content="Approach Control: ATC Sim">
+<meta property="og:description" content="Bring every plane in safely. A single-player air traffic control game for iPhone and iPad. No ads, no account, everything on your device.">
+<meta property="og:image" content="https://bttnns.com/atc/img/scope.png">
+<link rel="icon" href="/atc/img/icon.png">
+<link rel="apple-touch-icon" href="/atc/img/icon.png">
+<style>
+:root{
+  color-scheme: light dark;
+  --bg:#eaf6f0; --fg:#0b1a14; --muted:#41584d; --accent:#0f9d58; --accent-2:#0a7fb8;
+  --glass-a:rgba(255,255,255,.62); --glass-b:rgba(255,255,255,.28);
+  --edge:rgba(255,255,255,.85); --edge-dim:rgba(255,255,255,.35); --shade:rgba(16,60,40,.18);
+  --orb1:rgba(52,211,153,.55); --orb2:rgba(56,189,248,.45); --orb3:rgba(190,242,100,.40);
+  --ring:rgba(15,157,88,.10);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --bg:#030b08; --fg:#e9fff3; --muted:#9bb9a9; --accent:#7dffa8; --accent-2:#6fd3ff;
+  --glass-a:rgba(255,255,255,.12); --glass-b:rgba(255,255,255,.04);
+  --edge:rgba(255,255,255,.38); --edge-dim:rgba(255,255,255,.08); --shade:rgba(0,0,0,.55);
+  --orb1:rgba(16,185,129,.45); --orb2:rgba(14,116,144,.50); --orb3:rgba(77,124,15,.35);
+  --ring:rgba(125,255,168,.07);
+}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--fg);
+  font:17px/1.55 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* the backdrop the glass refracts: soft light orbs over faint radar rings */
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg)}
+.bg::before{content:"";position:absolute;inset:-20%;
+  background:
+    radial-gradient(38% 34% at 18% 14%,var(--orb1),transparent 70%),
+    radial-gradient(42% 38% at 86% 28%,var(--orb2),transparent 70%),
+    radial-gradient(40% 36% at 52% 92%,var(--orb3),transparent 72%);
+  filter:blur(30px);animation:drift 28s ease-in-out infinite alternate}
+.bg::after{content:"";position:absolute;left:50%;top:38%;width:160vmax;height:160vmax;transform:translate(-50%,-50%);
+  background:repeating-radial-gradient(circle,transparent 0 11vmax,var(--ring) 11vmax calc(11vmax + 1.5px));
+  -webkit-mask-image:radial-gradient(circle,#000 0,transparent 55%);mask-image:radial-gradient(circle,#000 0,transparent 55%)}
+@keyframes drift{from{transform:translate3d(-2%,-1%,0) scale(1)}to{transform:translate3d(3%,2%,0) scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.bg::before{animation:none}*{scroll-behavior:auto!important}}
+
+a{color:inherit}
+.wrap{width:min(68rem,calc(100% - 2.5rem));margin:0 auto}
+
+/* Liquid Glass: blurred, saturated, lit from above with a hairline specular edge */
+.glass{position:relative;isolation:isolate;border-radius:28px;
+  background:linear-gradient(145deg,var(--glass-a),var(--glass-b));
+  -webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%);
+  border:1px solid var(--edge-dim);
+  box-shadow:inset 0 1.5px 0 var(--edge),inset 0 -1px 0 var(--edge-dim),inset 1px 0 0 var(--edge-dim),0 24px 60px -18px var(--shade)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:radial-gradient(120% 80% at 12% -10%,rgba(255,255,255,.35),transparent 55%)}
+
+/* nav pill */
+nav{position:sticky;top:max(.9rem,env(safe-area-inset-top));z-index:10;margin:.9rem auto 0;
+  width:min(46rem,calc(100% - 1.5rem));border-radius:999px;padding:.55rem .6rem .55rem 1rem;
+  display:flex;align-items:center;gap:.8rem}
+nav .brand{display:flex;align-items:center;gap:.6rem;font-weight:650;letter-spacing:-.01em;text-decoration:none;margin-right:auto;white-space:nowrap}
+nav .brand img{width:30px;height:30px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+nav a.link{font-size:.92rem;text-decoration:none;color:var(--muted);padding:.45rem .8rem;border-radius:999px;transition:background .2s,color .2s}
+nav a.link:hover{color:var(--fg);background:var(--edge-dim)}
+
+.btn{display:inline-flex;align-items:center;gap:.5rem;font:600 1rem/1 inherit;padding:.95rem 1.5rem;border-radius:999px;text-decoration:none;
+  color:var(--fg);border:1px solid var(--edge-dim);
+  background:linear-gradient(145deg,var(--glass-a),var(--glass-b));
+  -webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:inset 0 1.5px 0 var(--edge),0 10px 28px -10px var(--shade);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 85%,#fff),color-mix(in srgb,var(--accent) 60%,#000));
+  color:#04210f;border-color:rgba(255,255,255,.4)}
+.btn[aria-disabled=true]{cursor:default;opacity:.92}
+.btn[aria-disabled=true]:hover{transform:none}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:2rem;align-items:center;padding:4.5rem 0 3rem}
+.hero .icon{width:92px;height:92px;border-radius:22.5%;box-shadow:0 18px 40px -10px rgba(0,0,0,.55),0 0 0 1px var(--edge-dim),0 0 60px -5px var(--accent);margin-bottom:1.6rem}
+.eyebrow{font:600 .78rem/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:0 0 .9rem}
+h1{font-size:clamp(2.6rem,6.4vw,4.6rem);line-height:1.02;letter-spacing:-.035em;margin:0 0 1.1rem;font-weight:760}
+h1 span{background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:1.2rem;color:var(--muted);max-width:32rem;margin:0 0 2rem}
+.cta{display:flex;flex-wrap:wrap;gap:.8rem}
+.note{font-size:.88rem;color:var(--muted);margin-top:1rem}
+
+.phones{position:relative;height:36rem;display:flex;justify-content:center}
+.phone{position:absolute;width:min(15.5rem,44vw);border-radius:2.1rem;padding:6px;
+  background:linear-gradient(145deg,var(--glass-a),var(--glass-b));border:1px solid var(--edge-dim);
+  box-shadow:inset 0 1.5px 0 var(--edge),0 40px 70px -20px var(--shade),0 0 0 1px rgba(0,0,0,.25)}
+.phone img{display:block;width:100%;height:auto;border-radius:1.7rem}
+.phone.a{left:50%;top:1rem;transform:translateX(-96%) rotate(-5deg);animation:float 9s ease-in-out infinite}
+.phone.b{left:50%;top:3.2rem;transform:translateX(-4%) rotate(4deg);animation:float 9s ease-in-out -4.5s infinite}
+@keyframes float{50%{translate:0 -12px}}
+@media (prefers-reduced-motion:reduce){.phone{animation:none!important}}
+
+/* sections */
+section{padding:2.2rem 0}
+h2{font-size:clamp(1.7rem,3.4vw,2.4rem);letter-spacing:-.025em;margin:0 0 .6rem;font-weight:720}
+.sub{color:var(--muted);margin:0 0 2rem;max-width:36rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:1.1rem}
+.card{padding:1.5rem 1.5rem 1.6rem}
+.card h3{margin:.9rem 0 .4rem;font-size:1.12rem;letter-spacing:-.01em}
+.card p{margin:0;color:var(--muted);font-size:.98rem}
+.glyph{width:2.7rem;height:2.7rem;border-radius:.9rem;display:grid;place-items:center;font-size:1.3rem;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 35%,transparent),color-mix(in srgb,var(--accent-2) 25%,transparent));
+  box-shadow:inset 0 1px 0 var(--edge),0 6px 16px -6px var(--shade)}
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr));gap:1.1rem}
+.tier{padding:1.8rem}
+.tier h3{margin:0 0 .3rem;font-size:1.3rem}
+.tier .tag{font:600 .74rem/1 ui-monospace,Menlo,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:.9rem}
+.tier ul{list-style:none;margin:1rem 0 0;padding:0;display:grid;gap:.55rem}
+.tier li{padding-left:1.5rem;position:relative;color:var(--muted);font-size:.97rem}
+.tier li::before{content:"";position:absolute;left:0;top:.5em;width:.7rem;height:.7rem;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff,var(--accent) 60%);box-shadow:0 0 10px var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem}
+.chip{font:600 .85rem/1 ui-monospace,Menlo,monospace;letter-spacing:.06em;padding:.5rem .8rem;border-radius:999px;border:1px solid var(--edge-dim);
+  background:linear-gradient(145deg,var(--glass-a),var(--glass-b));box-shadow:inset 0 1px 0 var(--edge)}
+.chip.free{color:var(--accent)}
+
+/* support / prose pages */
+.page{padding:3.5rem 0 3rem;max-width:44rem;margin:0 auto}
+.page h1{font-size:clamp(2.2rem,5vw,3.2rem)}
+.panel{padding:1.6rem 1.7rem;margin:1.1rem 0}
+.panel p{margin:.5rem 0}
+.faq{display:grid;gap:.8rem;margin-top:1rem}
+.faq .panel{margin:0;padding:1.2rem 1.5rem}
+.faq h3{margin:0 0 .35rem;font-size:1.05rem}
+.faq p{margin:0;color:var(--muted);font-size:.98rem}
+.faq a,.panel a{text-decoration-thickness:1px;text-underline-offset:3px}
+
+footer{margin:3rem 0 2.5rem;padding:1.2rem 1.6rem;border-radius:999px;display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;justify-content:space-between;color:var(--muted);font-size:.9rem}
+footer a{text-decoration:none}footer a:hover{color:var(--fg)}
+.legal{font-size:.8rem;color:var(--muted);text-align:center;margin:0 auto 2.5rem;max-width:40rem;padding:0 1rem}
+
+@media (max-width:52rem){
+  .hero{grid-template-columns:1fr;padding-top:3rem;text-align:left}
+  .phones{height:26rem}
+  .phone{width:min(13rem,42vw)}
+  nav a.link.hide{display:none}
+}
+@media (max-width:30rem){nav a.link:last-child{display:none}footer{border-radius:28px}}
+</style>
 </head>
 <body>
-  <main>
-    <header>
-      <h1>Support</h1>
-      <p>Approach Control: ATC Sim</p>
-    </header>
-    <section>
-      <p>Something broken, a question, or an idea? Email <a href="mailto:atc@t5s.io">atc@t5s.io</a>. I read everything and reply as soon as I can.</p>
-      <p>The quickest way is Send Feedback in the app (Settings, or How to Play). It opens a message in your Mail app with your app version, device model and iOS version filled in, and you can read and change all of it before you send.</p>
-    </section>
-    <h2>PRO and purchases</h2>
-    <ul>
-      <li><strong>What is free?</strong> San Diego on the Graveyard shift. PRO unlocks everything else.</li>
-      <li><strong>Restore a purchase.</strong> Open Settings, tap PRO, then Restore at the top of the page. Use the same Apple Account you subscribed with.</li>
-      <li><strong>Manage or cancel.</strong> Once subscribed, Manage Subscription is on the PRO page and in Settings. You can also do it in your Apple Account settings on your device. Cancel at least 24 hours before the end of the period to avoid the next charge.</li>
-      <li><strong>Refunds.</strong> Apple handles refunds. Request one at <a href="https://reportaproblem.apple.com">reportaproblem.apple.com</a>.</li>
-      <li><strong>Family Sharing.</strong> PRO can be shared with your family through Apple Family Sharing.</li>
-    </ul>
-    <h2>Your data</h2>
-    <p>The game has no account and no server. Your settings, logbook and saved shifts live on your device. Read the full <a href="/privacy">Privacy Policy</a>.</p>
-    <footer>Brian Tannous · <a href="https://bttnns.com">bttnns.com</a></footer>
-  </main>
+<div class="bg" aria-hidden="true"></div>
+<nav class="glass" aria-label="Main">
+  <a class="brand" href="/atc"><img src="/atc/img/icon.png" alt="" width="30" height="30">Approach Control</a>
+  <a class="link hide" href="/atc#play">How it plays</a>
+  <a class="link hide" href="/atc#pro">PRO</a>
+  <a class="link" href="/atc/support">Support</a>
+  <a class="link" href="/privacy">Privacy</a>
+</nav>
+
+<main class="wrap">
+  <div class="hero">
+    <div>
+      <img class="icon" src="/atc/img/icon.png" alt="Approach Control app icon" width="92" height="92">
+      <p class="eyebrow">ATC Sim for iPhone and iPad</p>
+      <h1>Bring every plane <span>in safely.</span></h1>
+      <p class="lede">You are the approach controller. Turn them, bring them down, line them up with the runway, and hand them to the tower. Keep everyone three miles apart.</p>
+      <div class="cta">
+        <a class="btn primary" aria-disabled="true">Coming soon to the App Store</a>
+        <a class="btn" href="/atc/support">Support</a>
+      </div>
+      <p class="note">San Diego is free for the whole shift. No ads. No account.</p>
+    </div>
+    <div class="phones" aria-label="Screenshots of the radar scope">
+      <div class="phone a"><img src="/atc/img/scope.png" alt="The radar scope over San Diego with planes inbound" width="720" height="1566"></div>
+      <div class="phone b"><img src="/atc/img/orders.png" alt="The order card for a selected plane, with altitude, speed and heading" width="720" height="1566"></div>
+    </div>
+  </div>
+
+  <section id="play">
+    <h2>Pick a plane. Give the order.</h2>
+    <p class="sub">A shift ends at 30 landings or 45 minutes, whichever comes first. Points for every landing, and a cost for every mistake.</p>
+    <div class="grid">
+      <div class="glass card"><div class="glyph">&#x2197;</div><h3>Drag to turn</h3><p>Tap a plane and drag from it to set a heading. Drag ALT to bring it down and SPD to slow it.</p></div>
+      <div class="glass card"><div class="glyph">&#x25CE;</div><h3>Line up the ILS</h3><p>Point it at the dashed line to the runway and the ILS button lights up. Tap it and the plane flies itself down.</p></div>
+      <div class="glass card"><div class="glyph">&#x25B3;</div><h3>Keep them apart</h3><p>Three miles, or a thousand feet above or below. Get too close and it costs you points and margin.</p></div>
+      <div class="glass card"><div class="glyph">&#x1F512;</div><h3>Private by design</h3><p>No account, no server, no tracking. Your settings and logbook stay on your device.</p></div>
+    </div>
+  </section>
+
+  <section id="pro">
+    <h2>Free to fly. PRO for the rest.</h2>
+    <p class="sub">PRO is a yearly subscription you can share with your family.</p>
+    <div class="tiers">
+      <div class="glass tier">
+        <div class="tag">Free</div>
+        <h3>San Diego</h3>
+        <div class="chips"><span class="chip free">SAN</span></div>
+        <ul>
+          <li>The whole Graveyard shift, not a demo</li>
+          <li>The tutorial, How to Play and the glossary</li>
+          <li>Light, Dark or System appearance, and the Phosphor theme</li>
+        </ul>
+      </div>
+      <div class="glass tier">
+        <div class="tag">PRO</div>
+        <h3>Everything else</h3>
+        <div class="chips"><span class="chip">SAN</span><span class="chip">AUS</span><span class="chip">PBI</span><span class="chip">PIT</span><span class="chip">SEA</span></div>
+        <ul>
+          <li>Austin, Palm Beach, Pittsburgh and Seattle</li>
+          <li>Day Shift, Evening Push and Holiday Rush</li>
+          <li>Weather, emergencies and overtime</li>
+          <li>Six more themes and seven more app icons</li>
+          <li>A small scope on Apple Watch</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="glass wrap">
+  <span>Brian Tannous · GT Media, LLC</span>
+  <span><a href="/atc/support">Support</a> · <a href="/privacy">Privacy Policy</a> · <a href="https://bttnns.com">bttnns.com</a></span>
+</footer>
+<p class="legal">For entertainment only. Not for real-world navigation. Not affiliated with the FAA, any airline or any aircraft maker. The airlines are made up; the aircraft types are real.</p>
 </body>
 </html>
