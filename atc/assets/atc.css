@@ -331,3 +331,7 @@ footer.foot nav{display:flex;gap:1.2rem;flex-wrap:wrap}
 @media (max-width:60rem){.beats{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:40rem){.beats{grid-template-columns:1fr}.port .map{aspect-ratio:4/5}.port .info{right:1rem;max-width:none}}
 @media (prefers-reduced-motion:reduce){.js .reveal{opacity:1;transform:none;transition:none}}
+.simple-pro{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;padding:clamp(1.6rem,4vw,2.6rem);margin-top:-2rem}
+.simple-pro p{margin:0}
+.simple-pro .big{font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:780;letter-spacing:-.03em;line-height:1.15;margin-bottom:.3rem}
+@media (max-width:36rem){.simple-pro{grid-template-columns:1fr}}
