@@ -353,3 +353,13 @@ footer.foot nav{display:flex;gap:1.2rem;flex-wrap:wrap}
 .watch-row{margin-top:clamp(3.5rem,8vw,6rem)}
 @media (max-width:52rem){.tiles{grid-template-columns:1fr 1fr}.showcase{aspect-ratio:4/5;border-radius:24px}.showcase .bar{border-radius:22px;justify-content:center}}
 .showcase{background:var(--field);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ink) 30%,transparent),0 0 80px -30px color-mix(in srgb,var(--ink) 50%,transparent)}
+/* Apple Watch: a real case shape, the screen at its true aspect, and the crown and button. */
+.watches{gap:clamp(1rem,3vw,2rem);align-items:center}
+.watch{position:relative;width:min(15rem,44%);aspect-ratio:422/514;padding:9px;border-radius:30%/25%;
+  background:linear-gradient(145deg,#3a3d40,#16181a 45%,#2b2e31);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),inset 0 0 0 4px #050606,0 30px 60px -28px #000}
+.watch img{display:block;width:100%;height:100%;object-fit:cover;border-radius:27%/22%}
+.watch::before{content:"";position:absolute;right:-7px;top:24%;width:8px;height:15%;border-radius:3px;
+  background:linear-gradient(90deg,#2a2d30,#5a5e62 60%,#2a2d30);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.watch::after{content:"";position:absolute;right:-4px;top:47%;width:5px;height:18%;border-radius:2px;background:#24272a}
+.watch:nth-child(2){margin-top:3rem}
