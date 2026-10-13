@@ -25,7 +25,9 @@ jobs:
           node-version: 20
 
       - name: Stage source
-        run: rsync -a --exclude='.git' --exclude='.github' --exclude='Makefile' ./ stage/
+        # The Approach Control pages (/atc, /privacy) ship as written: they have their
+        # own CSS and JS, and the class mangler below must not touch them.
+        run: rsync -a --exclude='.git' --exclude='.github' --exclude='Makefile' --exclude='/atc' --exclude='/privacy' ./ stage/
 
       - name: Inject cache-busting version into asset URLs
         run: |
@@ -64,6 +66,7 @@ jobs:
       - name: Assemble dist/ (JS obfuscation + minify, from the class-mangled tree)
         run: |
           rsync -a mangled/ dist/
+          rsync -a atc privacy dist/
           touch dist/.nojekyll
 
           npx -y javascript-obfuscator mangled/a/site.js --output dist/a/site.js \
