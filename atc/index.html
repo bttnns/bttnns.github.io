@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Approach Traffic Control</title>
-<meta name="description" content="An air traffic control game for iPhone and iPad. San Diego is free. No ads, no account.">
+<meta name="description" content="Bring every plane in safely. Planes show up at the edge of your radar. San Diego is free to play.">
 <meta name="theme-color" content="#000d08">
 <meta property="og:title" content="Approach Traffic Control">
-<meta property="og:description" content="Bring every plane in safely. San Diego is free.">
-<meta property="og:image" content="https://bttnns.com/atc/img/card.jpg">
+<meta property="og:description" content="Planes show up at the edge of your radar. Bring them down, line them up, and tap ILS to land.">
+<meta property="og:image" content="https://bttnns.com/atc/img/radar.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/atc/img/icon.png">
 <link rel="apple-touch-icon" href="/atc/img/icon.png">
@@ -27,14 +27,13 @@
 
 <main id="main">
 <header class="hero">
-  <canvas class="scope" id="hero-scope" aria-label="A live radar scope over San Diego"></canvas>
+  <canvas class="scope" id="hero-scope" aria-label="A live radar over San Diego"></canvas>
   <div class="wrap inner">
     <div class="copy">
       <img class="icon" src="/atc/img/icon.png" alt="Approach Traffic Control app icon" width="84" height="84">
       <h1>Bring every plane <span class="ink">in safely.</span></h1>
-      <p class="lede">An air traffic control game for iPhone and iPad.</p>
-      <div class="cta"><a class="btn primary" href="https://testflight.apple.com/join/QJRMzY2c">Join the beta</a></div>
-      <p class="note">Coming soon to the App Store.</p>
+      <p class="lede">Planes show up at the edge of your radar. Bring them down, line them up, and tap ILS to land.</p>
+      <div class="cta"><a class="store" href="https://apps.apple.com/us/app/approach-traffic-control/id6811415379"><img src="/atc/img/app-store.svg" alt="Download on the App Store" width="120" height="40"></a></div>
     </div>
   </div>
 </header>
@@ -42,14 +41,16 @@
 <section class="wrap" id="play">
   <div class="split">
     <div class="reveal">
-      <p class="kicker">How it plays</p>
-      <h2>Tap a plane. Drag to turn it.</h2>
-      <p class="lede">Bring it down, line it up, and tap ILS. It lands itself. Keep everyone three miles apart.</p>
-      <p class="lede"><strong>San Diego is free.</strong> The whole shift, not a demo. No ads. No account.</p>
+      <p class="kicker">How to Play</p>
+      <h2>Drag to turn it. Tap to land it.</h2>
+      <p class="lede">Line a plane up with the runway, tap ILS, and it flies itself down. Keep everyone 3 miles apart, or 1,000 feet up and down.</p>
+      <p class="lede"><strong>San Diego is free to play.</strong> No ads and no account.</p>
     </div>
-    <div class="phones reveal">
-      <div class="phone"><img src="/atc/img/card.jpg" alt="The card for a selected plane, with altitude, speed and heading" width="600" height="1305" loading="lazy"></div>
-      <div class="phone"><img src="/atc/img/scope.jpg" alt="The radar scope over San Diego" width="600" height="1305" loading="lazy"></div>
+    <div class="frames reveal" tabindex="0" aria-label="Screens from the game">
+      <img src="/atc/img/radar.jpg" alt="Bring every plane in safely. The radar scope over San Diego." width="1000" height="2174" loading="lazy">
+      <img src="/atc/img/order.jpg" alt="Pick a plane. Give the order. The card for a selected plane." width="1000" height="2174" loading="lazy">
+      <img src="/atc/img/home.jpg" alt="Your shift, your way. Home, with today’s airport and shift." width="1000" height="2174" loading="lazy">
+      <img src="/atc/img/log.jpg" alt="Watch yourself improve. The Approach Log." width="1000" height="2174" loading="lazy">
     </div>
   </div>
 </section>
@@ -57,11 +58,11 @@
 <section class="wrap" id="pro">
   <div class="head reveal">
     <div class="readout pro-mark">PRO</div>
-    <h2>Then it gets wild.</h2>
-    <p>Bigger airports. Storms. Emergencies. Holiday rushes. All on one scope.</p>
+    <h2>Get the whole game.</h2>
+    <p>San Diego is free to play. PRO adds four more airports, busier shifts, weather and emergencies, a new shift every day, and more ways to play.</p>
   </div>
   <div class="showcase reveal">
-    <canvas id="pro-scope" aria-label="A live PRO scope with storms and emergencies"></canvas>
+    <canvas id="pro-scope" aria-label="A live radar with storms and emergencies"></canvas>
     <div class="glass bar">
       <div class="tabs" role="tablist" aria-label="Airports" id="port-tabs"></div>
       <div class="swatches" aria-label="Themes">
@@ -76,10 +77,10 @@
     </div>
   </div>
   <div class="tiles">
-    <div class="glass tile reveal"><div class="readout r-storm">STORM</div><p>Weather drifts across the scope.</p></div>
-    <div class="glass tile reveal"><div class="readout r-viol">MAYDAY</div><p>Land the emergency first.</p></div>
-    <div class="glass tile reveal"><div class="readout">RUSH</div><p>Holiday traffic that never stops.</p></div>
-    <div class="glass tile reveal"><div class="readout r-warn">DAILY</div><p>A new shift every day.</p></div>
+    <div class="glass tile reveal"><div class="readout r-storm">STORM</div><p>Weather drifts across your radar. Steer planes around it.</p></div>
+    <div class="glass tile reveal"><div class="readout r-viol">EMERGENCY</div><p>Land this one first, before time runs out.</p></div>
+    <div class="glass tile reveal"><div class="readout">RUSH</div><p>On Holiday Rush the planes keep coming.</p></div>
+    <div class="glass tile reveal"><div class="readout r-warn">DAILY</div><p>A new shift every day, the same for everyone.</p></div>
   </div>
   <div class="split watch-row">
     <div class="watches reveal">
@@ -89,18 +90,18 @@
     <div class="reveal">
       <p class="kicker">Apple Watch</p>
       <h2>Your shift, on your wrist.</h2>
-      <p class="lede">Feel a tap when planes get close. Play a tiny game between shifts.</p>
-      <div class="cta"><a class="btn primary" href="https://testflight.apple.com/join/QJRMzY2c">Join the beta</a></div>
+      <p class="lede">Follow your shift on your wrist, and feel a tap when planes get close. Between shifts, fly a quick game with the Digital Crown.</p>
+      <div class="cta"><a class="store" href="https://apps.apple.com/us/app/approach-traffic-control/id6811415379"><img src="/atc/img/app-store.svg" alt="Download on the App Store" width="120" height="40"></a></div>
     </div>
   </div>
 </section>
 </main>
 
 <footer class="foot glass wrap">
-  <span>Brian Tannous · GT Media, LLC</span>
-  <nav aria-label="Footer"><a href="/atc/support">Support</a><a href="/privacy">Privacy</a></nav>
+  <span>GT Media, LLC</span>
+  <nav aria-label="Footer"><a href="/atc/support">Support</a><a href="/privacy">Privacy</a><a href="https://bttnns.com">bttnns.com</a></nav>
 </footer>
-<p class="legal">For fun only. Not for real navigation. Not affiliated with the FAA, any airline, or any aircraft maker.</p>
+<p class="legal">Just a game, not for real-world flying. Not connected to the FAA, any airline or any plane maker.</p>
 
 <script src="/atc/assets/airports.js"></script>
 <script src="/atc/assets/scope.js"></script>

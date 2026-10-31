@@ -98,6 +98,8 @@ img{max-width:100%}
 .btn[aria-disabled=true]{cursor:default}.btn[aria-disabled=true]:hover{transform:none}
 .btn svg{width:1.1em;height:1.1em}
 .cta{display:flex;flex-wrap:wrap;gap:.7rem}
+.store{display:inline-block;line-height:0}
+.store img{display:block;height:3.25rem;width:auto}
 
 /* Type */
 h1,h2,h3{letter-spacing:-.025em;line-height:1.08;margin:0}
@@ -151,11 +153,8 @@ section{padding:clamp(3.5rem,8vw,6.5rem) 0 0}
 .step p{margin:0;color:var(--fg2);font-size:.97rem}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(1.5rem,5vw,4.5rem);align-items:center}
 @media (max-width:52rem){.split{grid-template-columns:1fr}}
-.phone{border-radius:2.6rem;padding:8px;background:#0b0f0d;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 40px 80px -30px rgba(0,0,0,.85);max-width:19rem}
-.phone img{display:block;width:100%;height:auto;border-radius:2.1rem}
-.phones{display:flex;gap:1rem;justify-content:center;align-items:flex-start}
-.phones .phone:nth-child(2){margin-top:3rem}
-@media (max-width:30rem){.phones .phone{max-width:48%}}
+.frames{display:flex;gap:.85rem;width:min(100%,22rem);justify-self:center;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding-bottom:.35rem}
+.frames img{flex:0 0 min(20rem,84%);width:min(20rem,84%);height:auto;scroll-snap-align:start;scroll-snap-stop:always;border-radius:1.5rem}
 
 .rules{display:flex;flex-wrap:wrap;gap:.6rem 2.2rem;margin-top:2.4rem;padding:1.4rem 1.6rem;justify-content:space-between}
 .rules div{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--fg2)}
@@ -315,7 +314,6 @@ footer.foot nav{display:flex;gap:1.2rem;flex-wrap:wrap}
 }
 .glass .kicker,.head .kicker,.doc .kicker{color:var(--ink);font-size:.74rem;line-height:1.4}
 .split>*,.port>*,.pro-hero>*{min-width:0}
-.phones .phone{flex:1 1 0;min-width:0}
 .steps.tight{grid-template-columns:1fr 1fr;gap:.7rem;margin-top:1.4rem}
 .steps.tight .step{padding:1.1rem 1.2rem}
 .steps.tight .readout{font-size:1.6rem;margin:0 0 .5rem}
