@@ -25,7 +25,7 @@ jobs:
           node-version: 20
 
       - name: Stage source
-        run: rsync -a --exclude='.git' --exclude='.github' --exclude='Makefile' --exclude='/atc' --exclude='/privacy' ./ stage/
+        run: rsync -a --exclude='.git' --exclude='.github' --exclude='Makefile' --exclude='/atc' --exclude='/privacy' --exclude='/folds' ./ stage/
 
       - name: Inject cache-busting version into asset URLs
         run: |
@@ -64,7 +64,7 @@ jobs:
       - name: Assemble dist/ (JS obfuscation + minify, from the class-mangled tree)
         run: |
           rsync -a mangled/ dist/
-          cp -R atc privacy dist/
+          cp -R atc privacy folds dist/
           touch dist/.nojekyll
 
           npx -y javascript-obfuscator mangled/a/site.js --output dist/a/site.js \
