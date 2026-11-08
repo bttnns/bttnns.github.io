@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Fold Stats</title><style>/* Fold Stats page style. Baked into the shortcut at build time, and also copied to
+   iCloud Drive > Shortcuts > fold-stats-style.txt, which Fold Stats applies on top on
+   every run, so edits show up without re-importing the shortcut.
+   Amber = open, blue = closed, gray hatching = no data yet. */
+:root{color-scheme:light dark;--bg:#F2F2EF;--card:#FFFFFF;--ink:#15161A;--dim:#6C7078;--open:#F29A12;--closed:#4A72D9;--none:#E6E7E9}
+@media (prefers-color-scheme:dark){:root{--bg:#000;--card:#141518;--ink:#F4F2EC;--dim:#8E9198;--open:#FFB547;--closed:#5B82F0;--none:#202226}}
+*{box-sizing:border-box}
+html,body{margin:0!important;padding:0!important;width:100%!important;max-width:none!important;min-width:0!important;background:var(--bg);color:var(--ink)}
+/* Quick Look narrows <body> on the cover screen; pin the content to the full page width. */
+main{position:absolute;left:0;right:0;top:0}
+body{font:15px/1.25 -apple-system,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%}
+main{padding:16px 18px 96px;display:grid;gap:14px}
+header{display:flex;align-items:flex-start;gap:12px;padding:2px 4px 2px}
+.dot{flex:none;width:14px;height:14px;margin-top:10px;border-radius:50%;background:var(--closed)}
+header.open .dot{background:var(--open);box-shadow:0 0 0 5px color-mix(in srgb,var(--open) 25%,transparent)}
+.state{font-size:34px;font-weight:700;letter-spacing:-.02em;text-transform:capitalize;line-height:1.1}
+.state span{font-weight:500;color:var(--dim);margin-left:6px}
+.since{font-size:13px;color:var(--dim);margin-top:3px}
+.panel{background:var(--card);border-radius:20px;padding:14px 16px}
+h2{display:flex;justify-content:space-between;align-items:baseline;gap:8px;white-space:nowrap;margin:0 0 11px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+h2 b{font-size:13.5px;letter-spacing:0;text-transform:none;color:var(--open)}
+.strip{position:relative;height:40px;border-radius:10px;overflow:hidden;background:repeating-linear-gradient(135deg,var(--none) 0 4px,transparent 4px 8px)}
+.strip i{position:absolute;top:0;bottom:0;right:0;left:calc((var(--t) - var(--s)) / 864 * 1%)}
+.strip i.open{background:var(--open)}
+.strip i.closed{background:var(--closed)}
+.strip .future{position:absolute;top:0;bottom:0;right:0;left:calc((var(--now) - var(--s)) / 864 * 1%);background:var(--none);border-left:2px solid var(--ink)}
+.ticks{position:relative;height:14px;margin-top:7px;font-size:11.5px;color:var(--dim)}
+.ticks span{position:absolute;transform:translateX(-50%)}
+.ticks span:first-child{transform:none}
+.ticks span:last-child{transform:translateX(-100%)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+.row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:baseline;gap:6px;font-size:15.5px}
+.row .k{display:flex;align-items:center;gap:6px}
+.row .k:before{content:"";width:8px;height:8px;border-radius:2px;background:var(--c)}
+.row.o{--c:var(--open)}
+.row.c{--c:var(--closed)}
+.row em{font-style:normal;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row time{font-weight:650;white-space:nowrap}
+@media (max-width:480px){.row{font-size:14.5px;gap:5px}}
+.split{height:10px;margin:10px 0;border-radius:5px;overflow:hidden;background:var(--closed)}
+.split i{display:block;height:100%;background:var(--open);width:max(0%,calc(var(--o) / (var(--o) + var(--c)) * 100%))}
+.h0{display:none}
+@media (orientation:landscape){main{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);column-gap:16px;align-items:start}header{grid-column:1;grid-row:1}.today{grid-column:1;grid-row:2}.cards{grid-column:2;grid-row:1/span 2}.strip{height:48px}}
+main{position:static;padding:12px 10px 14px;gap:10px}.panel{padding:10px 10px}.cards{gap:8px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.row{font-size:13px;gap:4px}.state{font-size:28px}h2{margin-bottom:8px}</style></head><body><main><header class="closed"><span class="dot"></span><div><div class="state">closed<span><span class="h0">0h </span>20m</span></div><div class="since">since 09:52</div></div></header><section class="panel today"><h2>Today, hour by hour</h2><div class="strip" style="--s:1794117600;--now:1794154340"><i class="open" style="--t:1794117600"></i><i class="closed" style="--t:1794146991"></i><i class="open" style="--t:1794147657"></i><i class="closed" style="--t:1794147679"></i><i class="open" style="--t:1794153111"></i><i class="closed" style="--t:1794153126"></i><b class="future"></b></div><div class="ticks"><span style="left:0">12a</span><span style="left:25%">6a</span><span style="left:50%">12p</span><span style="left:75%">6p</span><span style="left:100%">12a</span></div></section><div class="cards"><section class="panel" style="--o:29428;--c:7312"><h2>Today<b>80% open</b></h2><div class="row o"><span class="k">Open</span><em>2×</em><time><span class="h8">8h </span>10m</time></div><div class="split"><i></i></div><div class="row c"><span class="k">Closed</span><em>3×</em><time><span class="h2">2h </span>2m</time></div></section><section class="panel" style="--o:29428;--c:7312"><h2>Week<b>80% open</b></h2><div class="row o"><span class="k">Open</span><em>2×</em><time><span class="h8">8h </span>10m</time></div><div class="split"><i></i></div><div class="row c"><span class="k">Closed</span><em>3×</em><time><span class="h2">2h </span>2m</time></div></section><section class="panel" style="--o:201209;--c:148929"><h2>Month<b>57% open</b></h2><div class="row o"><span class="k">Open</span><em>50×</em><time><span class="h55">55h </span>53m</time></div><div class="split"><i></i></div><div class="row c"><span class="k">Closed</span><em>51×</em><time><span class="h41">41h </span>22m</time></div></section><section class="panel" style="--o:201209;--c:148929"><h2>Year<b>57% open</b></h2><div class="row o"><span class="k">Open</span><em>50×</em><time><span class="h55">55h </span>53m</time></div><div class="split"><i></i></div><div class="row c"><span class="k">Closed</span><em>51×</em><time><span class="h41">41h </span>22m</time></div></section></div></main></body></html>
