@@ -5,142 +5,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>Folds, a free fold counter for iPhone Duo</title>
-  <meta name="description" content="Three free Shortcuts for iPhone Duo. They write down each open and each close, and one tap shows today, this week, this month, and this year.">
+  <meta name="description" content="Three free Shortcuts for iPhone Duo. They write down each open and each close. One tap shows today, this week, this month, and this year.">
   <link rel="stylesheet" href="folds.css">
 </head>
 <body>
   <header class="nav">
     <a class="brand" href="/folds/">Folds</a>
-    <nav>
-      <a href="#setup">Setup</a>
-      <a href="#atc">Approach Traffic Control</a>
-    </nav>
-    <a class="btn" href="#add">Get the shortcuts</a>
+    <a class="nav-link" href="#setup">Setup</a>
   </header>
 
   <main>
-    <section class="wrap hero">
-      <div>
-        <p class="kicker">Free for iPhone Duo</p>
-        <h1>Keep track of your folds</h1>
-        <p class="lede">Fold the phone, unfold it, and Shortcuts writes it down. One tap later you can see how long it stayed open today, this week, this month, and this year. No app and no account. The list stays in your iCloud Drive.</p>
-        <div class="cta">
-          <a class="btn" href="#add">Get the shortcuts</a>
-          <p class="fine">Free. An iPhone Duo on iOS 27.1 or later.</p>
+    <section class="hero">
+      <div class="wrap hero-in">
+        <div class="hero-copy">
+          <p class="kicker">For iPhone Duo</p>
+          <h1>Keep track of your folds</h1>
+          <p class="lede">Folds is a set of three shortcuts that keep track of your iPhone Duo folding screen.</p>
+          <div class="actions">
+            <a class="act" href="#setup">Shortcuts log the fold for free</a>
+            <a class="act game" href="https://apps.apple.com/us/app/approach-traffic-control/id6811415379">Also try Approach Traffic Control on the App Store</a>
+            <a class="act quiet" id="tip" href="#tip">Buy me a coffee</a>
+          </div>
+          <p class="fine">iOS 27.1 or later.</p>
+        </div>
+        <figure class="phone">
+          <div class="bezel">
+            <div class="screen">
+              <iframe src="preview.html" title="Fold Stats from a real iPhone Duo" scrolling="no"></iframe>
+            </div>
+          </div>
+          <ul class="legend">
+            <li><i class="open"></i>Open</li>
+            <li><i class="closed"></i>Closed</li>
+            <li><i class="none"></i>No log yet</li>
+          </ul>
+          <figcaption>A real Duo, since November 4.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="setup" id="setup">
+      <div class="wrap">
+        <h2>Three shortcuts.</h2>
+        <p class="lede">Add the three shortcuts. Then open Shortcuts and add an automation to Fold Opened and Fold Closed, so they run when the phone opens and when it closes.</p>
+        <div class="files">
+          <a href="shortcuts/Fold%20Opened.shortcut">
+            <span class="swatch open"></span>
+            <strong>Fold Opened</strong>
+            <span>When the phone opens. Off the Watch, and out of search.</span>
+          </a>
+          <a href="shortcuts/Fold%20Closed.shortcut">
+            <span class="swatch closed"></span>
+            <strong>Fold Closed</strong>
+            <span>When the phone closes. Off the Watch, and out of search.</span>
+          </a>
+          <a href="shortcuts/Fold%20Stats.shortcut">
+            <span class="swatch ink"></span>
+            <strong>Fold Stats</strong>
+            <span>The page. On your Home Screen. Off the Watch.</span>
+          </a>
+        </div>
+
+        <div class="how">
+          <div>
+            <h3>The automations</h3>
+            <p>On Fold Opened, add an automation for when the iPhone is opened. On Fold Closed, for when it closes. Let each one run right away.</p>
+            <p>Run each once and tap Always Allow. That keeps the log from stopping later.</p>
+          </div>
+          <div>
+            <h3>The page</h3>
+            <p>Put Fold Stats on the Home Screen. It shows open or closed, a bar for today, and today, this week, this month, and this year.</p>
+            <p>The log is <span class="file">duo-folds.csv</span> in Files, under iCloud Drive, then Shortcuts. It stays on your phone.</p>
+          </div>
         </div>
       </div>
-      <figure class="phone">
-        <div class="bezel">
-          <iframe src="preview.html" title="Fold Stats from a real iPhone Duo" scrolling="no"></iframe>
-        </div>
-        <ul class="legend">
-          <li><i class="open"></i>Open</li>
-          <li><i class="closed"></i>Closed</li>
-          <li><i class="none"></i>No log yet</li>
-        </ul>
-        <figcaption>A real iPhone Duo, since November 4. Today is Sunday, so the week card matches today.</figcaption>
-      </figure>
     </section>
 
-    <section class="wrap band" id="setup">
-      <h2>Add three shortcuts</h2>
-      <p class="intro">Two of them run when you fold the phone. The third is the page you open when you want the numbers. The pictures are stand-ins until the real ones are in.</p>
-
-      <article class="step" id="add">
-        <div>
-          <span class="num">1</span>
-          <h3>Add them on your iPhone</h3>
-          <p>Open this page on the Duo. Tap each shortcut, then tap Add Shortcut. The automation is not in the file. You add that next, on the shortcut itself.</p>
-          <ul class="files">
-            <li><a href="shortcuts/Fold%20Opened.shortcut">Fold Opened <small>when the phone opens</small></a></li>
-            <li><a href="shortcuts/Fold%20Closed.shortcut">Fold Closed <small>when the phone closes</small></a></li>
-            <li><a href="shortcuts/Fold%20Stats.shortcut">Fold Stats <small>the page</small></a></li>
-          </ul>
-        </div>
-        <figure class="shot">
-          <img src="img/step-add.svg" width="390" height="520" alt="Placeholder for the Add Shortcut screen">
-          <figcaption>Add Shortcut</figcaption>
-        </figure>
-      </article>
-
-      <article class="step">
-        <div>
-          <span class="num">2</span>
-          <h3>Fold Opened, when the phone opens</h3>
-          <p>Open Fold Opened and add an automation for when the iPhone is opened. Let it run right away, without asking. Turn off Show on Apple Watch, and turn off Show in Search. You do not run this one yourself.</p>
-        </div>
-        <figure class="shot">
-          <img src="img/step-opened.svg" width="390" height="520" alt="Placeholder for the Fold Opened automation">
-          <figcaption>When the iPhone is opened</figcaption>
-        </figure>
-      </article>
-
-      <article class="step">
-        <div>
-          <span class="num">3</span>
-          <h3>Fold Closed, when the phone closes</h3>
-          <p>Do the same on Fold Closed, for when the iPhone is closed. Off the Apple Watch, and out of search.</p>
-        </div>
-        <figure class="shot">
-          <img src="img/step-closed.svg" width="390" height="520" alt="Placeholder for the Fold Closed automation">
-          <figcaption>When the iPhone is closed</figcaption>
-        </figure>
-      </article>
-
-      <article class="step">
-        <div>
-          <span class="num">4</span>
-          <h3>Put Fold Stats on the Home Screen</h3>
-          <p>Leave Show in Search on. Leave Show on Apple Watch off. Add Fold Stats to the Home Screen, so the page is one tap away.</p>
-        </div>
-        <figure class="shot">
-          <img src="img/step-home.svg" width="390" height="520" alt="Placeholder for Add to Home Screen">
-          <figcaption>Add to Home Screen</figcaption>
-        </figure>
-      </article>
-
-      <article class="step">
-        <div>
-          <span class="num">5</span>
-          <h3>Allow the file once</h3>
-          <p>Run Fold Opened once, and run Fold Closed once. When the phone asks about files, tap Always Allow. If that question waits until an automation runs, the automation can stop without telling you. Those two runs add about a second to the log.</p>
-        </div>
-        <figure class="shot">
-          <img src="img/step-allow.svg" width="390" height="520" alt="Placeholder for the Always Allow prompt">
-          <figcaption>Always Allow</figcaption>
-        </figure>
-      </article>
-
-      <article class="step">
-        <div>
-          <span class="num">6</span>
-          <h3>Fold it, then look</h3>
-          <p>Fold and unfold a few times. Open Fold Stats from the Home Screen. You get one page: open or closed right now and for how long, a bar for today, and a card each for today, this week, this month, and this year.</p>
-          <p class="note">The file is duo-folds.csv in the Files app, under iCloud Drive, then Shortcuts. The first fold creates it. Nothing in that file is sent anywhere.</p>
-        </div>
-        <figure class="shot">
-          <img src="img/step-look.svg" width="390" height="520" alt="Placeholder for Fold Stats on the Home Screen">
-          <figcaption>Fold Stats on the Home Screen</figcaption>
-        </figure>
-      </article>
-    </section>
-
-    <section class="wrap band" id="free">
-      <h2>This is free</h2>
-      <p class="intro">The page, the shortcuts, and these steps are free. If it saved you some time, you can leave a tip.</p>
-    </section>
-
-    <section class="wrap band" id="atc">
-      <div class="atc">
-        <div>
-          <p class="kicker">Also from here</p>
+    <section class="atc" id="atc">
+      <div class="wrap atc-in">
+        <div class="atc-copy">
+          <p class="kicker">Approach Traffic Control</p>
           <h2>Take a seat at the radar</h2>
-          <p>Approach Traffic Control is an air traffic control game for iPhone and iPad. Planes show up at the edge of your scope and you bring them down onto the runway. San Diego is free to play, with no ads and no account.</p>
+          <p class="lede">An air traffic control game. Land the planes. San Diego is free.</p>
+          <div class="atc-actions">
+            <a class="site" href="https://approachtrafficcontrol.com">See the website</a>
+            <a class="store" href="https://apps.apple.com/us/app/approach-traffic-control/id6811415379"><img src="img/app-store.svg" alt="Download Approach Traffic Control on the App Store"></a>
+          </div>
         </div>
-        <div class="stores">
-          <a href="https://approachtrafficcontrol.com">approachtrafficcontrol.com</a>
-          <a href="https://apps.apple.com/us/app/approach-traffic-control/id6811415379"><img class="badge" src="img/app-store.svg" alt="Download Approach Traffic Control on the App Store"></a>
-        </div>
+        <img class="radar" src="img/radar.jpg?v=3" alt="The Approach Traffic Control app, showing the radar over San Diego">
       </div>
     </section>
   </main>
