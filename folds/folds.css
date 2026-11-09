@@ -125,6 +125,8 @@ h3 {
   line-height: 1.25;
 }
 .act:hover { transform: translateY(-1px); }
+.act-atc { gap: 0.6rem; }
+.act-atc img { width: 1.75rem; height: 1.75rem; border-radius: 0.45rem; flex: none; }
 .act.quiet {
   background: transparent;
   color: var(--ink);
@@ -579,7 +581,9 @@ h3 {
 }
 .atc-icon { width: 5.5rem; height: 5.5rem; border-radius: 1.3rem; align-self: start; }
 .atc .kicker { color: #8cf2d1; margin-bottom: 0.5rem; }
-.atc h2 { color: #66fa7a; max-width: none; font-size: clamp(1.9rem, 3.6vw, 2.8rem); }
+/* The name of the game is the heading, big enough to read as the name */
+.atc h2 { color: #eef6f0; max-width: none; font-size: clamp(2.3rem, 5vw, 3.8rem); letter-spacing: -0.035em; line-height: 1.02; }
+.atc-copy .atc-tag { margin: 0.5rem 0 0; font-size: clamp(1.4rem, 2.8vw, 2rem); font-weight: 760; letter-spacing: -0.03em; line-height: 1.1; }
 .atc-copy p:not(.kicker) { max-width: 32rem; margin: 0.8rem 0 0; color: #a9bdb2; font-size: 1.1rem; line-height: 1.45; }
 .atc-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem; margin: 1.3rem 0 clamp(2.5rem, 6vw, 4rem); }
 .site {
