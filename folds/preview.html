@@ -1,44 +1,102 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Fold Stats</title><style>/* Fold Stats page style. Baked into the shortcut at build time, and also copied to
-   iCloud Drive > Shortcuts > fold-stats-style.txt, which Fold Stats applies on top on
-   every run, so edits show up without re-importing the shortcut.
-   Amber = open, blue = closed, gray hatching = no data yet. */
-:root{color-scheme:light dark;--bg:#F2F2EF;--card:#FFFFFF;--ink:#15161A;--dim:#6C7078;--open:#F29A12;--closed:#4A72D9;--none:#E6E7E9}
-@media (prefers-color-scheme:dark){:root{--bg:#000;--card:#141518;--ink:#F4F2EC;--dim:#8E9198;--open:#FFB547;--closed:#5B82F0;--none:#202226}}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>Fold Stats</title><style>/* Fold Stats. Baked into the shortcut, and copied to iCloud Drive > Shortcuts >
+   fold-stats-style.txt, which every run applies on top: style edits need no re-import.
+   Amber = open, blue = closed, hatching = no log yet. Static CSS only: Quick Look runs no
+   JavaScript, and nothing animates, since the phone may be in Low Power Mode.
+   Layout follows width, never orientation: Quick Look reports portrait on both screens. */
+/* iOS system colors: on the Duo they follow Dark Mode and Increase Contrast exactly.
+   The hex values are the same colors, for browsers outside WebKit (the website preview). */
+:root{color-scheme:light dark;--bg:#F2F2F7;--card:#FFF;--ink:#000;--dim:rgba(60,60,67,.6);--open:#FF9500;--closed:#007AFF;--none:#E5E5EA}
+@media (prefers-color-scheme:dark){:root{--bg:#000;--card:#1C1C1E;--ink:#FFF;--dim:rgba(235,235,245,.6);--open:#FF9F0A;--closed:#0A84FF;--none:#2C2C2E}}
+@supports (color:-apple-system-label){:root{--bg:-apple-system-grouped-background;--card:-apple-system-secondary-grouped-background;
+  --ink:-apple-system-label;--dim:-apple-system-secondary-label;--open:-apple-system-orange;--closed:-apple-system-blue}}
+/* Dynamic Type: text follows the size set in Settings; sizes below are rem of that. */
+@supports (font:-apple-system-body){html{font:-apple-system-body}}
 *{box-sizing:border-box}
 html,body{margin:0!important;padding:0!important;width:100%!important;max-width:none!important;min-width:0!important;background:var(--bg);color:var(--ink)}
-/* Quick Look narrows <body> on the cover screen; pin the content to the full page width. */
-main{position:absolute;left:0;right:0;top:0}
-body{font:15px/1.25 -apple-system,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%}
-main{padding:16px 18px 96px;display:grid;gap:14px}
-header{display:flex;align-items:flex-start;gap:12px;padding:2px 4px 2px}
-.dot{flex:none;width:14px;height:14px;margin-top:10px;border-radius:50%;background:var(--closed)}
-header.open .dot{background:var(--open);box-shadow:0 0 0 5px color-mix(in srgb,var(--open) 25%,transparent)}
-.state{font-size:34px;font-weight:700;letter-spacing:-.02em;text-transform:capitalize;line-height:1.1}
-.state span{font-weight:500;color:var(--dim);margin-left:6px}
-.since{font-size:13px;color:var(--dim);margin-top:3px}
-.panel{background:var(--card);border-radius:20px;padding:14px 16px}
-h2{display:flex;justify-content:space-between;align-items:baseline;gap:8px;white-space:nowrap;margin:0 0 11px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
-h2 b{font-size:13.5px;letter-spacing:0;text-transform:none;color:var(--open)}
+body{font:.88rem/1.25 -apple-system,system-ui,sans-serif;font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%}
+/* Quick Look narrows <body> on the cover screen, so main pins itself to the page; the
+   bottom padding clears the Quick Look toolbar. */
+main{position:absolute;inset:0 0 auto;container-type:inline-size;display:grid;gap:10px;align-content:start;padding:14px 18px 96px;
+  background:radial-gradient(90% 50% at 0 0,color-mix(in srgb,var(--closed) 14%,transparent),transparent 70%) no-repeat}
+main:has(header.open){background-image:radial-gradient(90% 50% at 0 0,color-mix(in srgb,var(--open) 20%,transparent),transparent 70%)}
+
+/* Today leads: the screen you're on already says open or closed. */
+header{display:grid;grid-template-columns:1fr auto;align-items:baseline;padding:4px 4px 2px}
+.today-count{font-size:2.7rem;font-weight:750;letter-spacing:-.035em;line-height:1}
+.today-count span{margin-left:8px;font-size:1.12rem;font-weight:600;letter-spacing:0;color:var(--dim)}
+.today-open{font-size:1.35rem;font-weight:750;color:var(--open)}
+.since{grid-column:1/-1;margin:8px 0 0;font-size:.9rem;color:var(--dim)}
+.state{text-transform:capitalize}
+.dot{display:inline-block;width:9px;height:9px;margin-right:7px;border-radius:50%;vertical-align:0;background:var(--closed)}
+header.open .dot{background:var(--open);box-shadow:0 0 0 4px color-mix(in srgb,var(--open) 25%,transparent)}
+
+.panel{background:var(--card);border-radius:20px;padding:14px 16px;box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 5%,transparent)}
+h2,thead th{font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--dim)}
+h2{margin:0 0 11px}
+
+/* Today, hour by hour: each marker paints its state from its time onward */
 .strip{position:relative;height:40px;border-radius:10px;overflow:hidden;background:repeating-linear-gradient(135deg,var(--none) 0 4px,transparent 4px 8px)}
-.strip i{position:absolute;top:0;bottom:0;right:0;left:calc((var(--t) - var(--s)) / 864 * 1%)}
-.strip i.open{background:var(--open)}
-.strip i.closed{background:var(--closed)}
-.strip .future{position:absolute;top:0;bottom:0;right:0;left:calc((var(--now) - var(--s)) / 864 * 1%);background:var(--none);border-left:2px solid var(--ink)}
-.ticks{position:relative;height:14px;margin-top:7px;font-size:11.5px;color:var(--dim)}
-.ticks span{position:absolute;transform:translateX(-50%)}
-.ticks span:first-child{transform:none}
-.ticks span:last-child{transform:translateX(-100%)}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
-.row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:baseline;gap:6px;font-size:15.5px}
-.row .k{display:flex;align-items:center;gap:6px}
-.row .k:before{content:"";width:8px;height:8px;border-radius:2px;background:var(--c)}
-.row.o{--c:var(--open)}
-.row.c{--c:var(--closed)}
-.row em{font-style:normal;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row time{font-weight:650;white-space:nowrap}
-@media (max-width:480px){.row{font-size:14.5px;gap:5px}}
-.split{height:10px;margin:10px 0;border-radius:5px;overflow:hidden;background:var(--closed)}
-.split i{display:block;height:100%;background:var(--open);width:max(0%,calc(var(--o) / (var(--o) + var(--c)) * 100%))}
-.h0{display:none}
-@media (orientation:landscape){main{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);column-gap:16px;align-items:start}header{grid-column:1;grid-row:1}.today{grid-column:1;grid-row:2}.cards{grid-column:2;grid-row:1/span 2}.strip{height:48px}}
-main{padding-bottom:18px}</style></head><body><main><header class="closed"><span class="dot"></span><div><div class="state">closed<span><span class="h0">0h </span>44m</span></div><div class="since">since 09:52</div></div></header><section class="panel today"><h2>Today, hour by hour</h2><div class="strip" style="--s:1794117600;--now:1794155772"><i class="open" style="--t:1794117600"></i><i class="closed" style="--t:1794146991"></i><i class="open" style="--t:1794147657"></i><i class="closed" style="--t:1794147679"></i><i class="open" style="--t:1794153111"></i><i class="closed" style="--t:1794153126"></i><b class="future"></b></div><div class="ticks"><span style="left:0">12a</span><span style="left:25%">6a</span><span style="left:50%">12p</span><span style="left:75%">6p</span><span style="left:100%">12a</span></div></section><div class="cards"><section class="panel" style="--o:29428;--c:8744"><h2>Today<b>77% open</b></h2><div class="row o"><span class="k">Open</span><em>2×</em><time><span class="h8">8h </span>10m</time></div><div class="split"><i></i></div><div class="row c"><span class="k">Closed</span><em>3×</em><time><span class="h2">2h </span>26m</time></div></section><section class="panel" style="--o:29428;--c:8744"><h2>Week<b>77% open</b></h2><div class="row o"><span class="k">Open</span><em>2×</em><time><span class="h8">8h </span>10m</time></div><div class="split"><i></i></div><div class="row c"><span class="k">Closed</span><em>3×</em><time><span class="h2">2h </span>26m</time></div></section><section class="panel" style="--o:201209;--c:150361"><h2>Month<b>57% open</b></h2><div class="row o"><span class="k">Open</span><em>50×</em><time><span class="h55">55h </span>53m</time></div><div class="split"><i></i></div><div class="row c"><span class="k">Closed</span><em>51×</em><time><span class="h41">41h </span>46m</time></div></section><section class="panel" style="--o:201209;--c:150361"><h2>Year<b>57% open</b></h2><div class="row o"><span class="k">Open</span><em>50×</em><time><span class="h55">55h </span>53m</time></div><div class="split"><i></i></div><div class="row c"><span class="k">Closed</span><em>51×</em><time><span class="h41">41h </span>46m</time></div></section></div></main></body></html>
+.strip i,.strip .future{position:absolute;inset:0 0 0 auto;left:calc((var(--t) - var(--s)) / 864 * 1%)}
+.strip .open{background:var(--open)}
+.strip .closed{background:var(--closed)}
+.strip .future{left:calc((var(--now) - var(--s)) / 864 * 1%);background:var(--none);border-left:2px solid var(--ink)}
+.ticks{position:relative;height:14px;margin-top:7px;font-size:0.676rem;color:var(--dim)}
+.ticks span{position:absolute;translate:-50%}
+.ticks span:first-child{translate:0}
+.ticks span:last-child{translate:-100%}
+
+/* Every range, one row each: split bar (amber = share of time open), % open, opens, time open */
+.periods{padding:6px 16px 4px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:7px 0 7px .6em;text-align:right;white-space:nowrap;font-size:1.06rem;font-weight:600}
+th:first-child{padding-left:0;text-align:left}
+thead th{padding-block:9px 6px}
+thead th.b,td.b{width:100%;text-align:left}
+tbody tr{border-top:1px solid color-mix(in srgb,var(--ink) 9%,transparent)}
+tr[data-new="0"]{display:none} /* nothing new: no log yet, or the same span as the row it contains */
+td.b i{display:inline-block;vertical-align:middle;width:calc(100% - 2.9em);min-width:1.5em;height:10px;border-radius:5px;
+  background:linear-gradient(90deg,var(--open) calc(var(--p) * 1%),var(--closed) 0)}
+td.b span{display:inline-block;width:2.7em;text-align:right;color:var(--open);font-weight:750}
+/* Durations show their two biggest units: 45m, 8h 10m, 3d 5h, 9w 5d */
+.dur .w,.dur .d,.dur[data-h="0"] .h{display:none}
+.dur:not([data-d="0"]) .d{display:inline}
+.dur:not([data-d="0"]) .m,.dur:not([data-w="0"]) .h{display:none}
+.dur:not([data-w="0"]) .w{display:inline}
+.dur .d[data-n="0"],.dur:not([data-h="0"]) .h[data-n="0"]{display:none} /* "2w", not "2w 0d" */
+.for:has(.dur[data-h="0"][data-m="0"]){display:none} /* just opened: "Open since 20:45", not "for 0m" */
+.credit{margin:2px 0 0;font-size:0.676rem;color:var(--dim);text-align:center}
+
+/* Inner screen: a size up */
+@media (min-width:600px){
+  main{gap:18px;padding:22px 26px 96px}
+  .today-count{font-size:4rem}
+  .today-count span{font-size:1.3rem}
+  .today-open{font-size:1.6rem}
+  .since{font-size:1rem}
+  .panel{border-radius:24px;padding:18px 20px}
+  h2,thead th{font-size:.78rem}
+  .strip{height:56px;border-radius:12px}
+  .ticks{font-size:0.735rem}
+  .periods{padding:8px 20px}
+  th,td{padding-block:14px;font-size:1.25rem}
+  td.b i{height:12px;border-radius:6px}
+}
+/* Inner screen open and wide: two halves with the gap on the crease.
+   Left: today. Right: every range. */
+@media (min-width:600px) and (min-aspect-ratio:5/4){
+  main{grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr;column-gap:26px;align-items:start}
+  .today .strip{height:150px;border-radius:16px}
+  .periods{grid-column:2;grid-row:1/span 2}
+  .credit{grid-column:2}
+  th,td{padding-block:15px;font-size:1.12rem}
+}
+/* The largest accessibility text sizes: measured in em, so this follows Dynamic Type.
+   The bars step aside, the header wraps, and the table's text stops at what fits. */
+@container (max-width:22em){
+  header{grid-template-columns:1fr}
+  td.b i{display:none}
+  td.b{width:auto}
+  th,td{font-size:min(1em,4.3cqi)}
+  thead th{font-size:min(.7em,3cqi)}
+}
+main{padding-bottom:18px}:root{color-scheme:dark;--bg:#000;--card:#1C1C1E;--ink:#FFF;--dim:rgba(235,235,245,.6);--open:#FF9F0A;--closed:#0A84FF;--none:#2C2C2E}</style></head><body><main><header class="closed"><div class="today-count">9<span>opens today</span></div><div class="today-open">43% open</div><p class="since"><span class="dot"></span><span class="state">closed</span> since 18:56<span class="for"> · <span class="dur" data-w="0" data-d="0" data-h="0" data-m="4"><span class="w">0w </span><span class="d" data-n="0">0d </span><span class="h" data-n="0">0h </span><span class="m">4m</span></span></span></p></header><section class="panel today"><h2>Today, hour by hour</h2><div class="strip" style="--s:1791435600;--now:1791504000"><i class="closed" style="--t:1791435600"></i><i class="open" style="--t:1791460980"></i><i class="closed" style="--t:1791464520"></i><i class="open" style="--t:1791466740"></i><i class="closed" style="--t:1791471480"></i><i class="open" style="--t:1791473580"></i><i class="closed" style="--t:1791477960"></i><i class="open" style="--t:1791480060"></i><i class="closed" style="--t:1791481680"></i><i class="open" style="--t:1791483420"></i><i class="closed" style="--t:1791484560"></i><i class="open" style="--t:1791486180"></i><i class="closed" style="--t:1791487260"></i><i class="open" style="--t:1791488040"></i><i class="closed" style="--t:1791492600"></i><i class="open" style="--t:1791493320"></i><i class="closed" style="--t:1791495720"></i><i class="open" style="--t:1791497160"></i><i class="closed" style="--t:1791503760"></i><b class="future"></b></div><div class="ticks"><span style="left:0">12a</span><span style="left:25%">6a</span><span style="left:50%">12p</span><span style="left:75%">6p</span><span style="left:100%">12a</span></div></section><section class="panel periods"><table><thead><tr><th></th><th class="b">Open</th><th>Opens</th><th>Time open</th></tr></thead><tbody><tr data-new="68400"><th>Today</th><td class="b"><i style="--p:43"></i><span>43%</span></td><td>9</td><td><span class="dur" data-w="0" data-d="0" data-h="8" data-m="21"><span class="w">0w </span><span class="d" data-n="0">0d </span><span class="h" data-n="8">8h </span><span class="m">21m</span></span></td></tr><tr data-new="86400"><th>Yesterday</th><td class="b"><i style="--p:50"></i><span>50%</span></td><td>12</td><td><span class="dur" data-w="0" data-d="0" data-h="12" data-m="3"><span class="w">0w </span><span class="d" data-n="0">0d </span><span class="h" data-n="12">12h </span><span class="m">3m</span></span></td></tr><tr data-new="345600"><th>This week</th><td class="b"><i style="--p:47"></i><span>47%</span></td><td>61</td><td><span class="dur" data-w="0" data-d="2" data-h="54" data-m="49"><span class="w">0w </span><span class="d" data-n="2">2d </span><span class="h" data-n="6">6h </span><span class="m">49m</span></span></td></tr><tr data-new="604800"><th>Last week</th><td class="b"><i style="--p:51"></i><span>51%</span></td><td>79</td><td><span class="dur" data-w="0" data-d="3" data-h="86" data-m="40"><span class="w">0w </span><span class="d" data-n="3">3d </span><span class="h" data-n="14">14h </span><span class="m">40m</span></span></td></tr><tr data-new="259200"><th>This month</th><td class="b"><i style="--p:48"></i><span>48%</span></td><td>97</td><td><span class="dur" data-w="0" data-d="3" data-h="91" data-m="25"><span class="w">0w </span><span class="d" data-n="3">3d </span><span class="h" data-n="19">19h </span><span class="m">25m</span></span></td></tr><tr data-new="2592000"><th>Last month</th><td class="b"><i style="--p:49"></i><span>49%</span></td><td>362</td><td><span class="dur" data-w="2" data-d="14" data-h="358" data-m="57"><span class="w">2w </span><span class="d" data-n="0">0d </span><span class="h" data-n="22">22h </span><span class="m">57m</span></span></td></tr><tr data-new="23583600"><th>This year</th><td class="b"><i style="--p:48"></i><span>48%</span></td><td>3449</td><td><span class="dur" data-w="19" data-d="137" data-h="3288" data-m="8"><span class="w">19w </span><span class="d" data-n="4">4d </span><span class="h" data-n="0">0h </span><span class="m">8m</span></span></td></tr><tr data-new="8356500"><th>Last year</th><td class="b"><i style="--p:48"></i><span>48%</span></td><td>1167</td><td><span class="dur" data-w="6" data-d="47" data-h="1136" data-m="27"><span class="w">6w </span><span class="d" data-n="5">5d </span><span class="h" data-n="8">8h </span><span class="m">27m</span></span></td></tr></tbody></table></section><p class="credit">Folds by bttnns</p></main></body></html>
