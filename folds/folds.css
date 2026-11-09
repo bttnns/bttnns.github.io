@@ -126,7 +126,12 @@ h3 {
 }
 .act:hover { transform: translateY(-1px); }
 .act-atc { gap: 0.6rem; }
-.act-atc img { width: 1.75rem; height: 1.75rem; border-radius: 0.45rem; flex: none; }
+.act-atc img { width: 2.1rem; height: 2.1rem; border-radius: 0.5rem; flex: none; }
+/* Two lines, like a store badge: the game on top, the App Store under it */
+.act-two { display: grid; text-align: left; line-height: 1.15; }
+.act-two b { font-weight: 680; }
+.act-two small { display: flex; align-items: center; gap: 0.3rem; margin-top: 0.15rem; font-size: 0.8rem; font-weight: 500; color: var(--dim); }
+.act-two .apple { width: 0.75rem; height: 0.9rem; fill: currentColor; }
 .act.quiet {
   background: transparent;
   color: var(--ink);
