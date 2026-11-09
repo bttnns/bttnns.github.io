@@ -505,6 +505,8 @@ h3 {
 }
 .walk p { margin: 0.8rem 0 0; color: var(--dim); font-size: 0.98rem; line-height: 1.45; }
 .step-shot { margin: 0 0 0.9rem; max-width: 20rem; }
+/* Links that open a shortcut straight in the Shortcuts app */
+.deep { color: var(--open); font-weight: 650; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 @media (max-width: 60rem) {
   .walk { grid-template-columns: 1fr; gap: 0; max-width: 26rem; }
   .walk li:not(:last-child)::after { content: "↓"; position: static; display: block; width: auto; margin: 0.7rem 0 0.9rem; font-size: 1.3rem; }
