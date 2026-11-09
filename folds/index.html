@@ -16,7 +16,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="folds.css?v=14">
+  <link rel="stylesheet" href="folds.css?v=15">
 </head>
 <body>
   <header class="nav">
@@ -70,7 +70,7 @@
       <div class="wrap">
         <p class="kicker">Setup</p>
         <h2>Set up in two minutes.</h2>
-        <p class="lede">Three Shortcuts and two automations.</p>
+        <p class="lede">Three shortcuts, and a trigger on two of them.</p>
 
         <h3 class="step-one">Add the three shortcuts</h3>
         <!-- Tiles in each shortcut's real icon color, as they'll look in Shortcuts. -->
@@ -96,18 +96,37 @@
         </div>
         <p class="tiles-note">On your Duo, tap each one to add it.</p>
 
-        <ol class="steps">
+        <h3 class="step-n" data-n="2">Turn each one into an automation</h3>
+        <p class="step-note">A shortcut you download doesn’t come with its trigger, so it won’t run on its own until you add one. Here’s Fold Opened, start to finish.</p>
+        <ol class="walk">
           <li>
-            <h3>Add two automations</h3>
-            <p>On Fold Opened, add an automation for when the iPhone is opened. On Fold Closed, for when it closes. Let each one run right away.</p>
+            <img src="img/setup/1-automation.jpg" alt="The action search sheet at the bottom of a shortcut, with Automation, Scripting and Controls" width="760" height="410" loading="lazy">
+            <p>In Shortcuts, open <b>Fold Opened</b>. Swipe up on the search bar at the bottom and tap <b>Automation</b>.</p>
           </li>
+          <li>
+            <img src="img/setup/2-opened-or-closed.jpg" alt="Automation triggers, with Opened or Closed under Display" width="760" height="410" loading="lazy">
+            <p>Scroll to <b>Display</b> and tap <b>Opened or Closed</b>.</p>
+          </li>
+          <li>
+            <img src="img/setup/3-trigger.jpg" alt="Fold Opened with When iPhone is Opened at the top" width="760" height="270" loading="lazy">
+            <p><b>When iPhone is Opened</b> now sits at the top. That’s the automation.</p>
+          </li>
+          <li>
+            <img src="img/setup/4-locked.jpg" alt="Privacy, with Allow Running When Locked turned on" width="760" height="336" loading="lazy">
+            <p>Tap <b>ⓘ</b> at the bottom, then <b>Privacy</b>, and turn on <b>Allow Running When Locked</b>. Tap <b>✓</b> to finish.</p>
+          </li>
+        </ol>
+        <p class="step-note">Then do the same for <b>Fold Closed</b>, and tap <b>Opened</b> in its trigger to change it to <b>Closed</b>.</p>
+
+        <ol class="steps">
           <li>
             <h3>Give each one a test run</h3>
             <p>Run each once and tap Always Allow, so the counting never stops.</p>
           </li>
           <li>
             <h3>Put Fold Stats on your Home Screen</h3>
-            <p>It follows Light and Dark Mode. Your folds stay yours: the log is <span class="file">duo-folds.csv</span> in iCloud Drive, under Shortcuts.</p>
+            <img class="step-shot" src="img/setup/5-home-screen.jpg" alt="Details, with Add to Home Screen" width="760" height="222" loading="lazy">
+            <p>Open Fold Stats, tap <b>ⓘ</b>, then <b>Add to Home Screen</b>. It follows Light and Dark Mode, and your folds stay yours: the log is <span class="file">duo-folds.csv</span> in iCloud Drive, under Shortcuts.</p>
           </li>
         </ol>
 

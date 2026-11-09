@@ -464,15 +464,50 @@ h3 {
 .t-stats em { background: rgba(43, 34, 0, 0.12); }
 .tiles-note { margin: 0.9rem 0 0; color: var(--dim); font-size: 0.95rem; }
 
-/* The rest of setup, as three cards */
+/* Step 2: the automation, walked through on the real screens */
+.step-n { display: flex; align-items: center; gap: 0.7rem; margin: clamp(2.4rem, 5vw, 3.2rem) 0 0.6rem; }
+.step-n::before {
+  content: attr(data-n);
+  display: grid; place-items: center; flex: none;
+  width: 1.9rem; height: 1.9rem; border-radius: 50%;
+  background: var(--ink); color: var(--bg);
+  font-size: 0.9rem; font-weight: 700; letter-spacing: 0;
+}
+.step-note { margin: 0 0 1.2rem; max-width: 40rem; color: var(--dim); }
+.step-note b, .walk b, .steps b { color: var(--ink); font-weight: 650; }
+.walk {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.2rem;
+  margin: 0 0 1.2rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: walk;
+}
+.walk li { counter-increment: walk; }
+.walk img, .step-shot {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  background: #1C1C1E;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.walk p { margin: 0.8rem 0 0; color: var(--dim); font-size: 0.98rem; line-height: 1.45; }
+.walk p::before { content: counter(walk, lower-alpha) ". "; color: var(--ink); font-weight: 700; }
+.step-shot { margin: 0 0 0.9rem; max-width: 20rem; }
+@media (max-width: 60rem) { .walk { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 36rem) { .walk { grid-template-columns: 1fr; } .walk img { max-width: 26rem; } }
+
+/* The rest of setup */
 .steps {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.9rem;
   margin: clamp(2rem, 4vw, 2.8rem) 0 0;
   padding: 0;
   list-style: none;
-  counter-reset: step 1;
+  counter-reset: step 2;
+  align-items: start;
 }
 .steps > li {
   padding: 1.3rem 1.3rem 1.4rem;
