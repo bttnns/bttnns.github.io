@@ -16,7 +16,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="folds.css?v=19">
+  <link rel="stylesheet" href="folds.css?v=20">
 </head>
 <body>
   <header class="nav">
@@ -72,7 +72,7 @@
         <h2>Set up in two minutes.</h2>
         <p class="lede">Three shortcuts, and a trigger on two of them.</p>
 
-        <h3 class="step-one">Add the three shortcuts</h3>
+        <h3 class="step-n" data-n="1">Add the shortcuts</h3>
         <!-- Tiles in each shortcut's real icon color, as they'll look in Shortcuts. -->
         <div class="tiles">
           <a class="tile t-open" href="shortcuts/Fold%20Opened.shortcut">
@@ -94,41 +94,51 @@
             <em>Add</em>
           </a>
         </div>
-        <p class="tiles-note">On your Duo, tap each one to add it.</p>
+        <p class="step-note">On your Duo, tap each one to add it to Shortcuts.</p>
 
-        <h3 class="step-n" data-n="2">Turn each one into an automation</h3>
-        <p class="step-note">A shortcut you download doesn’t come with its trigger, so it won’t run on its own until you add one. Here’s Fold Opened, start to finish.</p>
-        <ol class="walk">
+        <h3 class="step-n" data-n="2">Turn on the automations</h3>
+        <p class="step-note">A downloaded shortcut doesn’t bring its trigger with it. Add one to Fold Opened first.</p>
+        <ol class="howto">
           <li>
-            <img src="img/setup/1-automation.jpg" alt="The action search sheet at the bottom of a shortcut, with Automation, Scripting and Controls" width="760" height="410" loading="lazy">
-            <p><a class="deep" href="shortcuts://open-shortcut?name=Fold%20Opened">Open Fold Opened</a> in Apple’s <b>Shortcuts</b> app. It’s already on your Duo; if you can’t find it, swipe down on the Home Screen and search for Shortcuts. Then swipe up on the search bar at the bottom and tap <b>Automation</b>.</p>
+            <div><p>Open the <b>Shortcuts</b> app, then open <a class="deep" href="shortcuts://open-shortcut?name=Fold%20Opened">Fold Opened</a>.</p>
+            <p class="hint">Can’t find Shortcuts? Swipe down on the Home Screen and search for it.</p></div>
           </li>
           <li>
+            <p>Swipe up on the search bar at the bottom of the shortcut, then tap <b>Automation</b>.</p>
+            <img src="img/setup/1-automation.jpg" alt="The search sheet at the bottom of a shortcut, with Automation, Scripting and Controls" width="760" height="410" loading="lazy">
+          </li>
+          <li>
+            <p>Under <b>Display</b>, tap <b>Opened or Closed</b>.</p>
             <img src="img/setup/2-opened-or-closed.jpg" alt="Automation triggers, with Opened or Closed under Display" width="760" height="410" loading="lazy">
-            <p>Scroll to <b>Display</b> and tap <b>Opened or Closed</b>.</p>
           </li>
           <li>
+            <p>Check that <b>When iPhone is Opened</b> now appears at the top of the shortcut.</p>
             <img src="img/setup/3-trigger.jpg" alt="Fold Opened with When iPhone is Opened at the top" width="760" height="270" loading="lazy">
-            <p><b>When iPhone is Opened</b> now sits at the top. That’s the automation.</p>
           </li>
           <li>
+            <div><p>Tap <b>ⓘ</b>, tap <b>Privacy</b>, then turn on <b>Allow Running When Locked</b>. Tap <b>✓</b>.</p>
+            <p class="hint">The other switches there, like Show on Apple Watch, don’t matter for Folds.</p></div>
             <img src="img/setup/4-locked.jpg" alt="Privacy, with Allow Running When Locked turned on" width="760" height="336" loading="lazy">
-            <p>Tap <b>ⓘ</b> at the bottom, then <b>Privacy</b>, and turn on <b>Allow Running When Locked</b>. Tap <b>✓</b> to finish. The other switches there, like Show on Apple Watch, don’t matter for Folds.</p>
+          </li>
+          <li>
+            <p>Repeat these steps for <a class="deep" href="shortcuts://open-shortcut?name=Fold%20Closed">Fold Closed</a>. At the end, tap <b>Opened</b> and choose <b>Closed</b>.</p>
           </li>
         </ol>
-        <p class="step-note">Then do the same for <a class="deep" href="shortcuts://open-shortcut?name=Fold%20Closed">Fold Closed</a>, and tap <b>Opened</b> in its trigger to change it to <b>Closed</b>.</p>
 
-        <ol class="steps">
+        <h3 class="step-n" data-n="3">Test them</h3>
+        <ol class="howto">
+          <li><p>Run <a class="deep" href="shortcuts://run-shortcut?name=Fold%20Opened">Fold Opened</a>, then <a class="deep" href="shortcuts://run-shortcut?name=Fold%20Closed">Fold Closed</a>.</p></li>
+          <li><p>If you’re asked for permission, tap <b>Always Allow</b>.</p></li>
+        </ol>
+
+        <h3 class="step-n" data-n="4">Add Fold Stats to your Home Screen <span class="opt">(optional)</span></h3>
+        <ol class="howto">
           <li>
-            <h3>Give each one a test run</h3>
-            <p>Run <a class="deep" href="shortcuts://run-shortcut?name=Fold%20Opened">Fold Opened</a> and <a class="deep" href="shortcuts://run-shortcut?name=Fold%20Closed">Fold Closed</a> once each and tap <b>Always Allow</b>, so the counting never stops.</p>
-          </li>
-          <li>
-            <h3>Put Fold Stats on your Home Screen</h3>
-            <img class="step-shot" src="img/setup/5-home-screen.jpg" alt="Details, with Add to Home Screen" width="760" height="222" loading="lazy">
-            <p><a class="deep" href="shortcuts://open-shortcut?name=Fold%20Stats">Open Fold Stats</a>, tap <b>ⓘ</b>, then <b>Add to Home Screen</b>. It follows Light and Dark Mode, and your folds stay yours: the log is <span class="file">duo-folds.csv</span> in iCloud Drive, under Shortcuts.</p>
+            <p>Open <a class="deep" href="shortcuts://open-shortcut?name=Fold%20Stats">Fold Stats</a>, tap <b>ⓘ</b>, then tap <b>Add to Home Screen</b>.</p>
+            <img src="img/setup/5-home-screen.jpg" alt="Details, with Add to Home Screen" width="760" height="222" loading="lazy">
           </li>
         </ol>
+        <p class="step-note">Your folds stay yours. The log is <span class="file">duo-folds.csv</span> in iCloud Drive › Shortcuts, and Fold Stats follows Light and Dark Mode.</p>
 
         <div class="coffee">
           <svg class="v60" viewBox="0 0 80 100" aria-hidden="true">
