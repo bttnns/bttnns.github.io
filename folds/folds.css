@@ -509,9 +509,17 @@ h3 {
 .step-shot { margin: 0 0 0.9rem; max-width: 20rem; }
 /* Links that open a shortcut straight in the Shortcuts app */
 .deep { color: var(--open); font-weight: 650; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
+/* Stacked: each step reads as one unit, the instruction first and then the screen it means,
+   with a clear arrow and gap before the next one so they don't run together. */
 @media (max-width: 60rem) {
   .walk { grid-template-columns: 1fr; gap: 0; max-width: 26rem; }
-  .walk li:not(:last-child)::after { content: "↓"; position: static; display: block; width: auto; margin: 0.7rem 0 0.9rem; font-size: 1.3rem; }
+  .walk li { display: flex; flex-direction: column; }
+  .walk li p { order: -1; margin: 0 0 0.7rem; color: var(--ink); font-size: 1.02rem; }
+  .walk li img { box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 22%, transparent), 0 14px 30px -18px rgba(0, 0, 0, 0.8); }
+  .walk li:not(:last-child)::after {
+    content: "↓"; position: static; display: block; width: auto; text-align: center;
+    margin: 1.1rem 0 1.3rem; font-size: 1.6rem; line-height: 1;
+  }
 }
 
 /* The rest of setup */
