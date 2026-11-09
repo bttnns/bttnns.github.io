@@ -183,5 +183,30 @@
     <a href="https://donate.stripe.com/bJe5kwfiM0Zy654a7K3wQ00">Buy me a coffee</a>
   </footer>
 
+<script>
+/* Addresses never carry a #section: opening or reloading the page starts at the top, and
+   in-page links scroll to their section without changing the address. */
+(function () {
+  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  function top() {
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+    scrollTo(0, 0);
+  }
+  top();
+  addEventListener("load", top);
+  addEventListener("pageshow", function (e) { if (e.persisted) scrollTo(0, 0); });
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a[href*=\"#\"]");
+    if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
+    var u = new URL(a.href);
+    if (u.origin !== location.origin || u.pathname !== location.pathname || !u.hash) return;
+    var t = document.getElementById(decodeURIComponent(u.hash.slice(1)));
+    if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    if (t.id === "main") { t.setAttribute("tabindex", "-1"); t.focus({ preventScroll: true }); }
+  });
+})();
+</script>
 </body>
 </html>
