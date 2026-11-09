@@ -482,9 +482,20 @@ h3 {
   margin: 0 0 1.2rem;
   padding: 0;
   list-style: none;
-  counter-reset: walk;
 }
-.walk li { counter-increment: walk; }
+.walk li { position: relative; }
+/* An arrow from each screen to the next: across on wide screens, down when they stack */
+.walk li:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  top: 2.6rem;
+  right: -1.2rem;
+  width: 1.2rem;
+  text-align: center;
+  color: var(--open);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
 .walk img, .step-shot {
   width: 100%;
   height: auto;
@@ -493,10 +504,11 @@ h3 {
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--ink) 10%, transparent);
 }
 .walk p { margin: 0.8rem 0 0; color: var(--dim); font-size: 0.98rem; line-height: 1.45; }
-.walk p::before { content: counter(walk, lower-alpha) ". "; color: var(--ink); font-weight: 700; }
 .step-shot { margin: 0 0 0.9rem; max-width: 20rem; }
-@media (max-width: 60rem) { .walk { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 36rem) { .walk { grid-template-columns: 1fr; } .walk img { max-width: 26rem; } }
+@media (max-width: 60rem) {
+  .walk { grid-template-columns: 1fr; gap: 0; max-width: 26rem; }
+  .walk li:not(:last-child)::after { content: "↓"; position: static; display: block; width: auto; margin: 0.7rem 0 0.9rem; font-size: 1.3rem; }
+}
 
 /* The rest of setup */
 .steps {
