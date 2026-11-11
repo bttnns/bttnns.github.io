@@ -16,7 +16,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="folds.css?v=22">
+  <link rel="stylesheet" href="folds.css?v=23">
 </head>
 <body>
   <header class="nav">
@@ -193,10 +193,13 @@
   var returning = !!nav && nav.type === "back_forward";
   if ("scrollRestoration" in history) history.scrollRestoration = returning ? "auto" : "manual";
   var target = null, placedAt = null, moved = returning;
+  /* A section that names nothing, or is not valid text, counts as no section. */
+  function section(hash) {
+    try { return document.getElementById(decodeURIComponent(hash.slice(1))); } catch (e) { return null; }
+  }
   function place() {
     if (location.hash) {
-      /* A section that names nothing, or is not valid text, counts as no section. */
-      try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {}
+      target = section(location.hash);
       history.replaceState(null, "", location.pathname + location.search);
     }
     /* A visitor who has moved the page since it was last placed is left where they are. The
@@ -216,12 +219,18 @@
     if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
     var u = new URL(a.href);
     if (u.origin !== location.origin || u.pathname !== location.pathname || !u.hash) return;
-    var t = document.getElementById(decodeURIComponent(u.hash.slice(1)));
+    var t = section(u.hash);
     if (!t) return;
     e.preventDefault();
     moved = true;
     t.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    if (t.id === "main") { t.setAttribute("tabindex", "-1"); t.focus({ preventScroll: true }); }
+    /* Keyboard focus goes with the page, so the next Tab carries on from the section and not
+       from the link left behind. The section can take focus only for as long as it has it. */
+    if (!t.hasAttribute("tabindex")) {
+      t.setAttribute("tabindex", "-1");
+      t.addEventListener("blur", function () { t.removeAttribute("tabindex"); }, { once: true });
+    }
+    t.focus({ preventScroll: true });
   });
 })();
 </script>

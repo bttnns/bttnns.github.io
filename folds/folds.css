@@ -29,6 +29,8 @@ a { color: inherit; }
 .act, .tile, .site, .store { transition: transform 160ms ease, box-shadow 160ms ease; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; }  .act, .tile, .site, .store { transition: none; } }
 :focus-visible { outline: 2px solid var(--open); outline-offset: 3px; }
+/* A section an in-page link has just scrolled to holds focus for the next Tab; no ring round it. */
+section:focus-visible { outline: none; }
 
 .wrap { width: min(var(--max), calc(100% - var(--gut) * 2)); margin-inline: auto; }
 
