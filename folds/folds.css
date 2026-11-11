@@ -27,6 +27,8 @@ body {
 img { max-width: 100%; display: block; }
 a { color: inherit; }
 .act, .tile, .site, .store { transition: transform 160ms ease, box-shadow 160ms ease; }
+/* The page marks what nobody can see as resting, and nothing in it moves until it is seen again. */
+.resting, .resting * { animation-play-state: paused !important; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; }  .act, .tile, .site, .store { transition: none; } }
 :focus-visible { outline: 2px solid var(--open); outline-offset: 3px; }
 /* A section an in-page link has just scrolled to holds focus for the next Tab; no ring round it. */

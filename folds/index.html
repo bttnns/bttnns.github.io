@@ -16,7 +16,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="folds.css?v=25">
+  <link rel="stylesheet" href="folds.css?v=26">
 </head>
 <body>
   <header class="nav">
@@ -41,7 +41,8 @@
       </div>
 
       <figure class="stage wrap">
-        <!-- It unfolds on its own every 10 s; a tap on a radio takes over. No JavaScript. -->
+        <!-- It unfolds on its own every 10 s; a tap on a radio takes over. No JavaScript: the
+             script at the end of the page only rests it while nobody can see it. -->
         <input class="fold" type="radio" name="fold" id="fold-open" aria-label="Open the Duo">
         <input class="fold" type="radio" name="fold" id="fold-closed" aria-label="Close the Duo">
         <div class="duo">
@@ -232,6 +233,20 @@
     }
     t.focus({ preventScroll: true });
   });
+})();
+
+/* The fold demo and the coffee drop rest while nobody can see them (scrolled out of view, or
+   the tab in the background) and carry on from where they stopped. folds.css pauses every
+   animation in or under .resting. */
+(function () {
+  function tab() { document.documentElement.classList.toggle("resting", document.hidden); }
+  tab();
+  document.addEventListener("visibilitychange", tab);
+  if (!("IntersectionObserver" in window)) return;
+  var seen = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { e.target.classList.toggle("resting", !e.isIntersecting); });
+  });
+  document.querySelectorAll(".stage, .coffee").forEach(function (el) { seen.observe(el); });
 })();
 </script>
 </body>
