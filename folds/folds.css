@@ -207,6 +207,8 @@ h3 {
   border-radius: var(--left) var(--right) var(--right) var(--left);
   transform-origin: top left;
   transform: scale(calc(var(--hs) / var(--H)));
+  -webkit-user-select: none;
+  user-select: none;
   background:
     linear-gradient(90deg, rgba(255,255,255,.18), transparent 2% 98%, rgba(255,255,255,.14)),
     linear-gradient(160deg, #6d7077 0%, #2c2e33 18%, #4a4d53 46%, #222428 70%, #5c5f66 100%);
@@ -264,8 +266,9 @@ h3 {
   opacity: var(--unfold);
   pointer-events: none;
 }
-/* each screen gets Fold Stats at its real size, crossfading as it unfolds */
-.screen iframe { position: absolute; top: var(--bar); left: 0; border: 0; background: var(--bg); }
+/* each screen gets Fold Stats at its real size, crossfading as it unfolds. They are pictures:
+   a touch on one belongs to the page, whichever of the two is showing. */
+.screen iframe { position: absolute; top: var(--bar); left: 0; border: 0; background: var(--bg); pointer-events: none; }
 .view-closed { width: 466px; height: 626px; opacity: calc(1 - var(--unfold)); }
 .view-open { width: 951px; height: 629px; opacity: var(--unfold); }
 /* status bar with the Dynamic Island */
