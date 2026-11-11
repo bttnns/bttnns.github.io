@@ -184,16 +184,30 @@
   </footer>
 
 <script>
-/* Addresses never carry a #section: opening or reloading the page starts at the top, and
-   in-page links scroll to their section without changing the address. */
+/* Addresses never carry a #section: a page opened with one goes to that section and then drops
+   it from the address, opening or reloading without one starts at the top, and in-page links
+   scroll to their section without changing the address. */
 (function () {
   if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-  function top() {
-    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
-    scrollTo(0, 0);
+  var target = null, placedAt = null, moved = false;
+  function place() {
+    if (location.hash) {
+      /* A section that names nothing, or is not valid text, counts as no section. */
+      try { target = document.getElementById(decodeURIComponent(location.hash.slice(1))); } catch (e) {}
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+    /* A visitor who has moved the page since it was last placed is left where they are. The
+       position is compared, not input listened for, because a swipe that starts on one of the
+       embedded previews never reaches this window. */
+    if (placedAt !== null && Math.abs(scrollY - placedAt) > 1) moved = true;
+    if (moved) return;
+    if (target) target.scrollIntoView({ behavior: "instant" });
+    else scrollTo(0, 0);
+    placedAt = scrollY;
   }
-  top();
-  addEventListener("load", top);
+  place();
+  /* Again once the images are in, in case they pushed the section down. */
+  addEventListener("load", place);
   addEventListener("pageshow", function (e) { if (e.persisted) scrollTo(0, 0); });
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest("a[href*=\"#\"]");
@@ -203,6 +217,7 @@
     var t = document.getElementById(decodeURIComponent(u.hash.slice(1)));
     if (!t) return;
     e.preventDefault();
+    moved = true;
     t.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
     if (t.id === "main") { t.setAttribute("tabindex", "-1"); t.focus({ preventScroll: true }); }
   });
