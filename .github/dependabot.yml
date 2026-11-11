@@ -10,3 +10,16 @@ updates:
       actions:
         patterns:
           - "*"
+
+  # Keep the build tools pinned in .github/scripts up to date, but never to a
+  # release less than two weeks old.
+  - package-ecosystem: npm
+    directory: /.github/scripts
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 14
+    groups:
+      build-tools:
+        patterns:
+          - "*"

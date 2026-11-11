@@ -5,10 +5,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Nothing here may publish the site except the deploy job, which asks for
+# that right itself. The build job runs third-party tools and only reads.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: pages
@@ -19,10 +19,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-node@v7
         with:
           node-version: 20
+
+      - name: Install the build tools
+        # Exactly the versions in .github/scripts/package-lock.json, checked
+        # against its hashes, and without running any package's install
+        # script. Nothing later in this job downloads a tool.
+        run: |
+          npm ci --prefix .github/scripts --ignore-scripts --no-audit --no-fund
+          echo "$PWD/.github/scripts/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Stage source
         run: rsync -a --exclude='.git' --exclude='.github' --exclude='Makefile' --exclude='/atc' --exclude='/privacy' --exclude='/folds' ./ stage/
@@ -39,9 +49,7 @@ jobs:
         # class attributes of the pages, and nowhere else: text, alt text,
         # meta content and scripts pass through untouched. The classes that
         # site.js needs by name are listed in the script.
-        run: |
-          npm i --no-save postcss@8.5.32 postcss-selector-parser@7.2.0 parse5@8.1.1
-          node .github/scripts/site-classes.mjs rename stage mangled class-map.json
+        run: node .github/scripts/site-classes.mjs rename stage mangled class-map.json
 
       - name: Assemble dist/ (JS obfuscation + minify, from the class-mangled tree)
         run: |
@@ -49,7 +57,7 @@ jobs:
           cp -R atc privacy folds dist/
           touch dist/.nojekyll
 
-          npx -y javascript-obfuscator mangled/a/site.js --output dist/a/site.js \
+          javascript-obfuscator mangled/a/site.js --output dist/a/site.js \
             --compact true \
             --control-flow-flattening true \
             --control-flow-flattening-threshold 0.75 \
@@ -62,10 +70,10 @@ jobs:
             --self-defending true \
             --simplify true
 
-          npx -y clean-css-cli -o dist/a/site.css mangled/a/site.css
+          cleancss -o dist/a/site.css mangled/a/site.css
 
           for f in index.html health.html; do
-            npx -y html-minifier-terser \
+            html-minifier-terser \
               --collapse-whitespace \
               --remove-comments \
               --minify-css true \
@@ -84,6 +92,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
