@@ -186,10 +186,13 @@
 <script>
 /* Addresses never carry a #section: a page opened with one goes to that section and then drops
    it from the address, opening or reloading without one starts at the top, and in-page links
-   scroll to their section without changing the address. */
+   scroll to their section without changing the address. Back and Forward are the exception:
+   they return to where the visitor was, which the browser does by itself when it is left to. */
 (function () {
-  if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-  var target = null, placedAt = null, moved = false;
+  var nav = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+  var returning = !!nav && nav.type === "back_forward";
+  if ("scrollRestoration" in history) history.scrollRestoration = returning ? "auto" : "manual";
+  var target = null, placedAt = null, moved = returning;
   function place() {
     if (location.hash) {
       /* A section that names nothing, or is not valid text, counts as no section. */
@@ -202,13 +205,12 @@
     if (placedAt !== null && Math.abs(scrollY - placedAt) > 1) moved = true;
     if (moved) return;
     if (target) target.scrollIntoView({ behavior: "instant" });
-    else scrollTo(0, 0);
+    else scrollTo({ top: 0, behavior: "instant" });
     placedAt = scrollY;
   }
   place();
   /* Again once the images are in, in case they pushed the section down. */
   addEventListener("load", place);
-  addEventListener("pageshow", function (e) { if (e.persisted) scrollTo(0, 0); });
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest("a[href*=\"#\"]");
     if (!a || e.metaKey || e.ctrlKey || e.shiftKey) return;
