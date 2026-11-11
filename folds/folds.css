@@ -93,7 +93,8 @@ h3 {
   line-height: 1.4;
 }
 
-.hero { padding: clamp(2.4rem, 7vw, 5rem) 0 clamp(1.5rem, 3vw, 2.5rem); }
+/* Clipped at the sides: on a screen under 310px the drawn Duo is a few px too wide mid-fold. */
+.hero { padding: clamp(2.4rem, 7vw, 5rem) 0 clamp(1.5rem, 3vw, 2.5rem); overflow-x: clip; }
 .hero-copy { text-align: center; }
 .hero h1 { max-width: none; font-size: clamp(3rem, 8vw, 6.4rem); }
 /* the one bright moment: open to closed, amber to blue */
@@ -154,7 +155,9 @@ h3 {
    real points, scaled so the phone is --hs px tall.
    On narrow screens the open phone is drawn shorter than the closed one so it fits the
    column. .duo always keeps room for the taller of the two (--slot) and centers the phone
-   in it, so the fold never moves the button, the caption or anything further down. */
+   in it, so the fold never moves the button, the caption or anything further down.
+   Halfway through the fold the phone is wider than at either end, and on a narrow screen
+   wider than the column: .duo's side margins keep it centered there too. */
 @property --unfold { syntax: "<number>"; inherits: true; initial-value: 0; }
 .stage {
   --unfold: 0;
@@ -176,14 +179,16 @@ h3 {
 @media (max-width: 620px) { .stage { --hs-closed: 460; --hs-open: 300; } }
 @media (max-width: 460px) { .stage { --hs-closed: 440; --hs-open: 250; } }
 @media (max-width: 380px) { .stage { --hs-closed: 400; --hs-open: 225; } }
+@media (max-width: 353px) { .stage { --hs-closed: 380; --hs-open: 200; } }
 .duo {
   --hs: calc(var(--hs-closed) + (var(--hs-open) - var(--hs-closed)) * var(--unfold));
   --slot: max(var(--hs-closed), var(--hs-open));
   --W: calc(529.2 + 463.2 * var(--unfold));
   --H: calc(741.2 - 30.8 * var(--unfold));
+  --w: calc(var(--hs) / var(--H) * var(--W) * 1px);
   position: relative;
-  margin-inline: auto;
-  width: calc(var(--hs) / var(--H) * var(--W) * 1px);
+  margin-inline: calc(50% - var(--w) / 2);
+  width: var(--w);
   height: calc(var(--slot) * 1px);
 }
 /* Night Sky titanium rails, a black glass border, then the screen */
