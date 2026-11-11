@@ -4,6 +4,6 @@
 
 ## Optional
 
-- [Home](https://bttnns.com): Brian Tannous.
+- [Home](https://bttnns.com/): Brian Tannous.
 - [Approach Traffic Control](https://approachtrafficcontrol.com): iOS ATC Simulation Game.
-- [Folds](https://bttnns.com/folds): free fold counter for iPhone Duo.
+- [Folds](https://bttnns.com/folds/): free fold counter for iPhone Duo.
