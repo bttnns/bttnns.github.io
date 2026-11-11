@@ -149,7 +149,10 @@ h3 {
    open 164.6 x 117.8 mm around a 951 x 669 pt inner screen.
    One number, --unfold (0 closed, 1 open), drives every difference. It cycles every 10 s
    until someone taps the button; then the radios hold it. Inside .duo-body everything is
-   real points, scaled so the phone is --hs px tall. */
+   real points, scaled so the phone is --hs px tall.
+   On narrow screens the open phone is drawn shorter than the closed one so it fits the
+   column. .duo always keeps room for the taller of the two (--slot) and centers the phone
+   in it, so the fold never moves the button, the caption or anything further down. */
 @property --unfold { syntax: "<number>"; inherits: true; initial-value: 0; }
 .stage {
   --unfold: 0;
@@ -173,12 +176,13 @@ h3 {
 @media (max-width: 380px) { .stage { --hs-closed: 400; --hs-open: 225; } }
 .duo {
   --hs: calc(var(--hs-closed) + (var(--hs-open) - var(--hs-closed)) * var(--unfold));
+  --slot: max(var(--hs-closed), var(--hs-open));
   --W: calc(529.2 + 463.2 * var(--unfold));
   --H: calc(741.2 - 30.8 * var(--unfold));
   position: relative;
   margin-inline: auto;
   width: calc(var(--hs) / var(--H) * var(--W) * 1px);
-  height: calc(var(--hs) * 1px);
+  height: calc(var(--slot) * 1px);
 }
 /* Night Sky titanium rails, a black glass border, then the screen */
 .duo-body {
@@ -188,7 +192,7 @@ h3 {
   --left: calc((22 + 45 * var(--unfold)) * 1px);
   --right: calc((75 - 8 * var(--unfold)) * 1px);
   position: absolute;
-  top: 0;
+  top: calc((var(--slot) - var(--hs)) / 2 * 1px);
   left: 0;
   width: calc(var(--W) * 1px);
   height: calc(var(--H) * 1px);
