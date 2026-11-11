@@ -76,6 +76,32 @@
     }
   }
 
+  // each theme has its own portrait, named by data-themes. only the one on
+  // show arrives with the page: the others are hidden and loading="lazy",
+  // which browsers leave unfetched. portraitReady() fetches one by hand and
+  // resolves once it can be painted, so a switch never fades in an empty frame.
+  var PORTRAIT_WAIT_MS = 2000; // a stalled download must not jam the toggle
+
+  function portraitReady(theme) {
+    var img = pre && pre.querySelector('img[data-themes~="' + theme + '"]');
+    if (!img || !img.decode) return Promise.resolve(true);
+    img.loading = "eager";
+    return img.decode().then(
+      function () { return true; },
+      function () { return true; } // broken image: nothing more to wait for
+    );
+  }
+
+  // resolves true when the portrait is ready, false if it is still on its way
+  function portraitSoon(theme) {
+    return Promise.race([
+      portraitReady(theme),
+      new Promise(function (done) {
+        setTimeout(function () { done(false); }, PORTRAIT_WAIT_MS);
+      })
+    ]);
+  }
+
   // wrap each line of the yaml in a .ln span so the base (non-token) text on
   // each line can take its own random colour; tokens keep their accent colours.
   function wrapLines() {
@@ -148,9 +174,7 @@
     }
   }
 
-  btn.addEventListener("click", function () {
-    var next = nextTheme();
-
+  function switchTo(next, portraitLoaded) {
     // View Transitions API: the browser snapshots the page, runs apply() to
     // swap the theme, then crossfades old -> new in one pass (CSS tunes the
     // asymmetric in/out timing). fall back to an instant swap when it's
@@ -161,8 +185,32 @@
       return;
     }
 
-    var vt = document.startViewTransition(function () { apply(next); });
+    var vt = document.startViewTransition(function () {
+      apply(next);
+      // entering and leaving night rebuilds the markup, portrait included, so
+      // hold the fade until the (already downloaded) picture is painted again
+      if (portraitLoaded) return portraitReady(next);
+    });
     vt.finished.then(afterSwitch);
+  }
+
+  // pointing at or tabbing to the button is a good sign a switch is coming:
+  // start on the next portrait now so it is usually there by the click
+  function warmNext() { portraitReady(nextTheme()); }
+  btn.addEventListener("pointerenter", warmNext);
+  btn.addEventListener("focus", warmNext);
+
+  var waiting = false; // a click is waiting for its portrait
+  btn.addEventListener("click", function () {
+    if (waiting) return;
+    var next = nextTheme();
+    waiting = true;
+    btn.setAttribute("aria-busy", "true");
+    portraitSoon(next).then(function (portraitLoaded) {
+      waiting = false;
+      btn.removeAttribute("aria-busy");
+      switchTo(next, portraitLoaded);
+    });
   });
 
   syncTitlebar();

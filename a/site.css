@@ -282,6 +282,9 @@ body::before {
   border-color: var(--key);
 }
 
+/* a click is waiting for the next theme's portrait to download */
+.theme-toggle[aria-busy="true"] { cursor: progress; }
+
 .theme-toggle:focus-visible {
   outline: 2px solid var(--key);
   outline-offset: 2px;
@@ -316,9 +319,15 @@ pre {
 
 .prompt { color: var(--key); }
 
+/* a portrait is shown as large as fits in the width and in 22rem of height.
+   the second width says the same thing as a sum over the width and height
+   attributes, which a browser can work out before the picture arrives, so
+   nothing below it jumps when it does. browsers that cannot read attributes
+   as numbers skip that line and keep the first. */
 .portrait {
   display: block;
   width: auto;
+  width: min(100%, calc(22rem * attr(width type(<number>)) / attr(height type(<number>))));
   height: auto;
   max-width: 100%;
   max-height: 22rem;
