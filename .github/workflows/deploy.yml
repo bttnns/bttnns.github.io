@@ -34,32 +34,14 @@ jobs:
           sed -i "s|/a/site\.css\"|/a/site.css?v=$SHORT\"|" stage/index.html
           sed -i "s|/a/site\.js\"|/a/site.js?v=$SHORT\"|" stage/index.html
 
-      - name: Obfuscate CSS class names
-        # Renames CSS classes to short hashes and rewrites them consistently
-        # across CSS, HTML and JS. ids:false keeps #theme-toggle/#theme-color,
-        # and the ignore list preserves the four classes site.js builds from
-        # string literals (.ln, .drift, .term-body pre) or shares with an id
-        # (theme-toggle); mangling those would break theme switching.
+      - name: Rename CSS classes
+        # Gives every class a short random name, in the stylesheet and in the
+        # class attributes of the pages, and nowhere else: text, alt text,
+        # meta content and scripts pass through untouched. The classes that
+        # site.js needs by name are listed in the script.
         run: |
-          npm i -D postcss postcss-cli postcss-obfuscator
-          cat > postcss.config.cjs <<'EOF'
-          module.exports = {
-            plugins: [
-              require('postcss-obfuscator')({
-                enable: true,
-                length: 6,
-                classMethod: 'random',
-                ids: false,
-                classIgnore: ['ln', 'drift', 'term-body', 'theme-toggle'],
-                srcPath: 'stage',
-                desPath: 'mangled',
-                extensions: ['.html', '.js'],
-                keepData: false,
-              })
-            ]
-          }
-          EOF
-          npx postcss stage/a/site.css -o mangled/a/site.css --config postcss.config.cjs
+          npm i --no-save postcss@8.5.32 postcss-selector-parser@7.2.0 parse5@8.1.1
+          node .github/scripts/site-classes.mjs rename stage mangled class-map.json
 
       - name: Assemble dist/ (JS obfuscation + minify, from the class-mangled tree)
         run: |
@@ -89,6 +71,11 @@ jobs:
               --minify-css true \
               "mangled/$f" -o "dist/$f"
           done
+
+      - name: Check that the build changed nothing a visitor reads
+        # Fails the deploy if any text, attribute or copied file in dist/
+        # differs from the source by more than a renamed class.
+        run: node .github/scripts/site-classes.mjs verify class-map.json stage dist atc privacy folds
 
       - uses: actions/upload-pages-artifact@v5
         with:
