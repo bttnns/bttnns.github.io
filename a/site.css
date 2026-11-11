@@ -13,12 +13,18 @@
   --panel-bar:   #1d2326;
   --panel-line:  #242c2f;
   --ink:         #e8e6df;
-  --comment:     #707a73;
+  --comment:     #828c85;
   --key:         #4cc69e;
-  --punct:       #57635c;
+  --punct:       #74847b;
   --string:      #e6d3a3;
   --shadow:      0 2px 6px rgba(15, 19, 17, 0.25), 0 24px 60px rgba(15, 19, 17, 0.35);
 }
+
+/* contrast: in every theme each text colour reaches WCAG AA (4.5 to 1) on the
+   surface it sits on. --comment is also the window title and the theme
+   button, so it is measured on --panel-bar, the lighter surface; --punct only
+   appears on --panel. recheck both when changing a palette. (night's rolled
+   palettes are held to the same standard by site.js.) */
 
 /* system auto-dark: follow the OS into dark mode by adopting the professional
    (dark) palette, so auto-dark and the explicit professional theme match. */
@@ -30,8 +36,8 @@
     --panel-line: #20262c;
     --ink:        #eceff2;
     --key:        #9db4c9;
-    --comment:    #6b7278;
-    --punct:      #49505a;
+    --comment:    #7b8289;
+    --punct:      #747f8e;
     --string:     #c8c2ad;
     --glitch-op:  0.33;
     --shadow:     0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);
@@ -48,8 +54,8 @@
   --panel-line: #3a2466;
   --ink:        #f6e9ff;
   --key:        #ff5fd2;
-  --comment:    #8a6bd6;
-  --punct:      #6f4fb0;
+  --comment:    #9275d9;
+  --punct:      #8c73c0;
   --string:     #36e6f0;
   --glitch-op:  0.4;
   --shadow:     0 2px 8px rgba(0, 0, 0, 0.6),
@@ -57,11 +63,14 @@
                 0 24px 60px rgba(54, 230, 240, 0.12);
 }
 
-/* light: warm off-white page, but a lifted graphite window (still dark) */
+/* light: warm off-white page, but a lifted graphite window (still dark).
+   the greys are lifted with it so they stand out as they do elsewhere. */
 :root[data-theme="light"] {
   --panel:      #2f383d;
   --panel-bar:  #39434a;
   --panel-line: #46525a;
+  --comment:    #a9b0ab;
+  --punct:      #96a39b;
 }
 
 /* professional: the dark theme. understated near-monochrome on a dark page,
@@ -73,8 +82,8 @@
   --panel-line: #20262c;
   --ink:        #eceff2;
   --key:        #9db4c9;
-  --comment:    #6b7278;
-  --punct:      #49505a;
+  --comment:    #7b8289;
+  --punct:      #747f8e;
   --string:     #c8c2ad;
   --glitch-op:  0.33;
   --shadow:     0 2px 6px rgba(0, 0, 0, 0.5), 0 24px 60px rgba(0, 0, 0, 0.6);

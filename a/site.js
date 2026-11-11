@@ -32,10 +32,41 @@
     return c + (a == null ? ")" : " / " + a + ")");
   }
 
+  // WCAG relative luminance of an hsl colour: 0 is black, 1 is white
+  function luminance(h, s, l) {
+    s /= 100;
+    l /= 100;
+    var a = s * Math.min(l, 1 - l);
+    function channel(n) {
+      var k = (n + h / 30) % 12;
+      var c = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+      return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    }
+    return 0.2126 * channel(0) + 0.7152 * channel(8) + 0.0722 * channel(4);
+  }
+
+  // a text colour: the one asked for, or that hue lightened just enough to
+  // reach WCAG AA contrast (4.5 to 1, plus a little for rounding) on a dark
+  // surface of luminance `under`. a random deep blue is otherwise unreadable.
+  function textHsl(h, s, l, under) {
+    h = Math.round(h) % 360;
+    s = Math.round(s);
+    l = Math.round(l);
+    while (l < 100 && (luminance(h, s, l) + 0.05) / (under + 0.05) < 4.6) l++;
+    return hsl(h, s, l);
+  }
+
+  var nightUnder = 0; // luminance of the lighter night surface, set per roll
+
   function nightPalette() {
-    var h = rand(0, 360);
+    var h = Math.round(rand(0, 360));
     var key = (h + rand(140, 220)) % 360;   // bold, near-complementary accent
     var str = (h + rand(80, 140)) % 360;    // a clashing second accent
+
+    // the two surfaces text sits on; text is checked against the lighter one
+    var panel = [h, Math.round(rand(55, 75)), Math.round(rand(9, 13))];
+    var bar = [h, Math.round(rand(55, 75)), Math.round(rand(13, 18))];
+    nightUnder = Math.max(luminance.apply(null, panel), luminance.apply(null, bar));
 
     // a 6-layer glow whose colour-layer alphas scale with m (the black drop
     // shadow stays put); same offsets/blur so the two pulse-ends interpolate.
@@ -51,15 +82,15 @@
     var lineSat = rand(85, 100);
     return {
       "--bg":             hsl(h, rand(60, 80), rand(5, 8)),
-      "--panel":          hsl(h, rand(55, 75), rand(9, 13)),
-      "--panel-bar":      hsl(h, rand(55, 75), rand(13, 18)),
+      "--panel":          hsl.apply(null, panel),
+      "--panel-bar":      hsl.apply(null, bar),
       "--panel-line":     hsl(key, lineSat, rand(26, 34)),  // medium border
       "--panel-line-max": hsl(key, 100, rand(52, 64)),      // peak border
       "--ink":            hsl(h, rand(35, 55), rand(90, 95)),
-      "--key":            hsl(key, 100, rand(62, 72)),
-      "--string":         hsl(str, 100, rand(58, 68)),
-      "--comment":        hsl(str, rand(60, 80), rand(58, 66)),
-      "--punct":          hsl(key, rand(65, 85), rand(46, 56)),
+      "--key":            textHsl(key, 100, rand(62, 72), nightUnder),
+      "--string":         textHsl(str, 100, rand(58, 68), nightUnder),
+      "--comment":        textHsl(str, rand(60, 80), rand(58, 66), nightUnder),
+      "--punct":          textHsl(key, rand(65, 85), rand(46, 56), nightUnder),
       "--glitch-op":      rand(0.4, 0.6).toFixed(2),
       "--shadow":         glow(0.75),  // medium glow
       "--shadow-max":     glow(1.5)    // peak glow
@@ -119,7 +150,7 @@
   function colorLines() {
     if (!pre) return;
     [].forEach.call(pre.querySelectorAll(".ln"), function (ln) {
-      ln.style.color = hsl(rand(0, 360), rand(72, 100), rand(66, 80));
+      ln.style.color = textHsl(rand(0, 360), rand(72, 100), rand(66, 80), nightUnder);
     });
   }
 
