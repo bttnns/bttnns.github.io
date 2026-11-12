@@ -59,6 +59,10 @@ section:focus-visible { outline: none; }
   -webkit-backdrop-filter: blur(18px) saturate(140%);
   backdrop-filter: blur(18px) saturate(140%);
 }
+/* Every link in the header is a 44 pt target, Apple's minimum for a finger: as tall as the
+   bar's content, and padded at the sides by as much as the gap between them gives up, so the
+   words stay where they were. On a narrow screen the game link is its icon alone. */
+.brand, .nav-link { display: inline-flex; align-items: center; min-height: 2.75rem; }
 .brand {
   font-weight: 760;
   letter-spacing: -0.04em;
@@ -66,15 +70,18 @@ section:focus-visible { outline: none; }
   font-size: 1.2rem;
 }
 .nav-link {
+  justify-content: center;
+  min-width: 2.75rem;
+  padding-inline: 0.3rem;
   color: var(--dim);
   text-decoration: none;
   font-size: 0.95rem;
 }
 .nav-link:hover { color: var(--ink); }
-.nav nav { display: flex; align-items: center; gap: 1.2rem; }
-.nav-atc { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--ink); }
+.nav nav { display: flex; align-items: center; gap: 0.6rem; margin-right: -0.3rem; }
+.nav-atc { gap: 0.45rem; color: var(--ink); }
 .nav-atc img { width: 1.4rem; height: 1.4rem; border-radius: 0.35rem; }
-@media (max-width: 30rem) { .nav-atc { font-size: 0; gap: 0; } .nav-atc img { width: 1.7rem; height: 1.7rem; } }
+@media (max-width: 30rem) { .nav-atc { font-size: 0; gap: 0; } .nav-atc img { width: 2rem; height: 2rem; border-radius: 0.5rem; } }
 
 .kicker {
   margin: 0 0 0.85rem;
