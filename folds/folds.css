@@ -35,6 +35,16 @@ a { color: inherit; }
 section:focus-visible { outline: none; }
 
 .wrap { width: min(var(--max), calc(100% - var(--gut) * 2)); margin-inline: auto; }
+/* Words for screen readers only, such as the name of a button the page shows as its symbol.
+   Placed before the symbol, so Reader view and a copy of the text read "Info ⓘ". */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 
 .nav {
   position: sticky;
